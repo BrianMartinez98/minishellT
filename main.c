@@ -1,9 +1,4 @@
 #include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <readline/readline.h>
 
 static char	*ft_getcwd(char *buf, size_t size)
 {
@@ -13,6 +8,17 @@ static char	*ft_getcwd(char *buf, size_t size)
 	if (!result)
 		perror("Getcwd failed");
 	return (result);
+}
+
+int print_tokens(char **tokens)
+{
+    if (!tokens) return 1;
+    for (size_t i = 0; tokens[i] != NULL; i++)
+    {
+        printf("Token[%zu]: '%s'\n", i, tokens[i]);
+        free(tokens[i]);
+    }
+    return 0;
 }
 
 int main()
@@ -34,18 +40,20 @@ int main()
             printf("exit\n");
             break;
         }
-        array = ft_split(line, ' ');
+        array = split_line(line);
         if (!array || !array[0])
         {
             free(line);
             continue;
         }
+        print_tokens(array);          // Comprobar que los tokens se parsean correctamente
+
+        /*                           Usar esto para ejecutar comandos como ls -la
         pid = fork();
         if (pid < 0)
         {
             perror("fork failed");
             free(line);
-            // liberar array aquí si es necesario
             continue;
         }
         else if (pid == 0)
@@ -55,12 +63,9 @@ int main()
             exit(1);
         }
         wait(&status);
+        */
         free(line);
-        // liberar array si ft_split usa malloc para cada string
-        for (int i = 0; array[i]; i++)  //Convertir esto en una funcion de limpieza
-            free(array[i]);
         free(array);
     }
-
     return 0;
 }
