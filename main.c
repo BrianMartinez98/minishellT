@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-static char	*ft_getcwd(char *buf, size_t size)
+int    ft_execute(char **array)
 {
-	char	*result;
+	int		result;
 
-	result = getcwd(buf, size);
-	if (!result)
-		perror("Getcwd failed");
+	result = 0;
+	if (ft_strcmp(array[0], "exit") == 0)
+		result = ft_exit();
 	return (result);
 }
 
@@ -27,14 +27,17 @@ int main()
     char    *line;
     char    **array;
     pid_t   pid;
-    char    cwd[1024];
+    char    cwd[1024]; // esta permitido???
     char    *prompt;
+    t_hist  **lst;
 
+    lst = (t_hist **)malloc(sizeof(t_hist));
     while (1)
     {
         ft_getcwd(cwd, sizeof(cwd));
         prompt = ft_strjoin(cwd, " > ");
         line = readline(prompt);
+        ft_add_history(lst, line);
         if (!line)
         {
             printf("exit\n");
@@ -46,7 +49,9 @@ int main()
             free(line);
             continue;
         }
-        print_tokens(array);          // Comprobar que los tokens se parsean correctamente
+        ft_execute(array);
+        print_history(lst);
+        //print_tokens(array);          // Comprobar que los tokens se parsean correctamente
 
         /*                           Usar esto para ejecutar comandos como ls -la
         pid = fork();
