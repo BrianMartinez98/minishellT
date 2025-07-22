@@ -12,11 +12,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+
+
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char	*str);
 char    **split_line(char *line);
 size_t	ft_strncpy(char *dest, const char *src, size_t size);
 int     ft_isspace(char c);
+int     ft_exit();
 
 #endif
