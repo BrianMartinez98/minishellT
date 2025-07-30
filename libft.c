@@ -34,8 +34,8 @@ size_t	ft_strncpy(char *dest, const char *src, size_t size)
 
 int ft_isspace(char c)
 {
-    return (c == ' ' || c == '\t' || c == '\n' ||
-            c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' ||
+			c == '\v' || c == '\f' || c == '\r');
 }
 
 int	ft_strcmp(const char *s1, const char *s2)

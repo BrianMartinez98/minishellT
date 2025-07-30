@@ -89,8 +89,8 @@ char	**ft_split(char const *s, char c)
 /*
 int main()
 {
-char    *S = "hello.world.my.name.is";
-char    **result = ft_split(S, '.');
+char	*S = "hello.world.my.name.is";
+char	**result = ft_split(S, '.');
 int i = 0;
 while (result[i] != '\0')
 {
