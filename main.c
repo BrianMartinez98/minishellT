@@ -23,34 +23,30 @@ int print_tokens(char **tokens)
 
 int main(int ac, char **av, char **env)
 {
+	int		status;
+	char	*line;
+	char	**array;
+	pid_t	pid;
+	t_hist	**lst;
+
 	t_shell	shell;
 
 	(void)ac; //ignoramos estos parámetros que no usamos
 	(void)av; //ignoramos estos parámetros que no usamos
 
-	env_init(&shell, env); //copiamos las variables de entorno.
+	shell.prompt = NULL;
 	shell.in = dup(STDIN);
 	shell.out = dup(STDOUT);
 	shell.exit = 0;
 	shell.ret = 0;
 	shell.no_exec = 0;
+	env_init(&shell, env); //copiamos las variables de entorno.
 	
-	int		status;
-	char	*line;
-	char	**array;
-	pid_t	pid;
-	char	cwd[1024]; // esta permitido???
-	char	*prompt;
-	t_hist	**lst;
-
 	lst = (t_hist **)malloc(sizeof(t_hist));
-	while (1)
+	while (shell.exit == 0)
 	{
-		prompt = "\001\033[0;36m\033[1m\002";
-		ft_getcwd(cwd, sizeof(cwd));
-		prompt = ft_strjoin(prompt, cwd);
-		prompt = ft_strjoin(prompt, " > \001\033[0m\002");
-		line = readline(prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
+		ft_build_prompt(&shell); // Construimos el prompt con el directorio actual
+		line = readline(shell.prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
 		
 		ft_add_history(lst, line);
 		if (!line)
@@ -87,5 +83,8 @@ int main(int ac, char **av, char **env)
 		free(line);
 		free(array);
 	}
+
+	if (shell.prompt)
+		free(shell.prompt);
 	return 0;
 }

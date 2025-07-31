@@ -35,6 +35,7 @@ typedef struct	s_shell //para los datos que necesitaremos en la minishell
 	t_token			*start;
 	t_env			*env;
 	t_env			*secret_env;
+	char			*prompt;
 	int				in;
 	int				out;
 	int				fdin;
@@ -83,7 +84,7 @@ int		ft_execute(char **array);
 char	**split_line(char *line);
 
 //utils.c
-char	*ft_getcwd(char *buf, size_t size);
+void	ft_build_prompt(t_shell *shell);
 void	ft_add_history(t_hist **lst, char *new);
 void	print_history(t_hist **lst);
 
