@@ -49,6 +49,7 @@ int main()
             free(line);
             continue;
         }
+        redirect(array);
         ft_execute(array);
         print_history(lst);
         //print_tokens(array);          // Comprobar que los tokens se parsean correctamente
