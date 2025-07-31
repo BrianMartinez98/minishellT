@@ -21,8 +21,20 @@ int print_tokens(char **tokens)
 	return 0;
 }
 
-int main()
+int main(int ac, char **av, char **env)
 {
+	t_shell	shell;
+
+	(void)ac; //ignoramos estos parámetros que no usamos
+	(void)av; //ignoramos estos parámetros que no usamos
+
+	env_init(&shell, env); //copiamos las variables de entorno.
+	shell.in = dup(STDIN);
+	shell.out = dup(STDOUT);
+	shell.exit = 0;
+	shell.ret = 0;
+	shell.no_exec = 0;
+	
 	int		status;
 	char	*line;
 	char	**array;
@@ -34,9 +46,12 @@ int main()
 	lst = (t_hist **)malloc(sizeof(t_hist));
 	while (1)
 	{
+		prompt = "\001\033[0;36m\033[1m\002";
 		ft_getcwd(cwd, sizeof(cwd));
-		prompt = ft_strjoin(cwd, " > ");
-		line = readline(prompt);
+		prompt = ft_strjoin(prompt, cwd);
+		prompt = ft_strjoin(prompt, " > \001\033[0m\002");
+		line = readline(prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
+		
 		ft_add_history(lst, line);
 		if (!line)
 		{

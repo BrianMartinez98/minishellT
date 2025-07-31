@@ -4,7 +4,7 @@ char	*ft_getcwd(char *buf, size_t size)
 {
 	char	*result;
 
-	result = getcwd(buf, size);
+	result = getcwd(buf, size); //get current working directory
 	if (!result)
 		perror("Getcwd failed");
 	return (result);

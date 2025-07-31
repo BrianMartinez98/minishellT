@@ -51,3 +51,25 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
+
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	char	*dst;
+
+	i = 0;
+	if (!(s1))
+		return (NULL);
+	while (s1[i] != '\0')
+		i++;
+	if (!(dst = malloc(sizeof(char) * (i + 1))))
+		return (NULL);
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		dst[i] = s1[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}

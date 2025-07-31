@@ -3,6 +3,10 @@
 
 # define SPACE	"\t\n\v\f\r "
 
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
+
 # include <stdio.h>
 # include <ctype.h>
 # include <string.h>
@@ -12,6 +16,40 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct	s_token //para los tokens que nos pasen
+{
+	char			*str;
+	int				type;
+	struct s_token	*prev;
+	struct s_token	*next;
+}				t_token;
+
+typedef struct	s_env //para las variables de entorno
+{
+	char			*value;
+	struct s_env	*next;
+}				t_env;
+
+typedef struct	s_shell //para los datos que necesitaremos en la minishell
+{
+	t_token			*start;
+	t_env			*env;
+	t_env			*secret_env;
+	int				in;
+	int				out;
+	int				fdin;
+	int				fdout;
+	int				pipin;
+	int				pipout;
+	int				pid;
+	int				charge;
+	int				parent;
+	int				last;
+	int				ret;
+	int				exit;
+	int				no_exec;
+}				t_shell;
+
 typedef struct s_hist
 {
 	char *line;
@@ -19,15 +57,32 @@ typedef struct s_hist
 	struct s_hist *prev;
 } t_hist;
 
+//builtin.c
+int		ft_exit();
+
+//environment.c
+int		env_init(t_shell *shell, char **env_array);
+
+//ft_split.c
 char	**ft_split(char const *s, char c);
+
+//ft_strjoin.c
 char	*ft_strjoin(char const *s1, char const *s2);
+
+//libft.c
 size_t	ft_strlen(const char	*str);
-char	**split_line(char *line);
 size_t	ft_strncpy(char *dest, const char *src, size_t size);
 int		ft_isspace(char c);
-int		ft_exit();
-int		ft_execute(char **array);
 int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strdup(const char *s1);
+
+//main.c
+int		ft_execute(char **array);
+
+//token.c
+char	**split_line(char *line);
+
+//utils.c
 char	*ft_getcwd(char *buf, size_t size);
 void	ft_add_history(t_hist **lst, char *new);
 void	print_history(t_hist **lst);
