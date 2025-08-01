@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 00:15:31 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/02 00:28:58 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_exit_shell(t_shell *shell)
 {
 	if (shell->prompt)
 		free(shell->prompt);
-	printf("Exiting minishell...\n");
+	printf("\033[1;32mExiting minishell...\033[0m\n");
 	exit(0);
 }
 

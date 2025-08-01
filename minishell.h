@@ -78,7 +78,7 @@ int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
 
 //main.c
-int		ft_execute(char **array);
+int		ft_execute(char **array, t_shell *shell);
 
 //token.c
 char	**split_line(char *line);

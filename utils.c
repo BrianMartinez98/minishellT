@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 00:13:46 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/02 00:18:16 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void ft_build_prompt(t_shell *shell)
 }
 
 
-//NOTA: esto ya no bale y habría que borralo:
+//NOTA: esto ya no vale y habría que borralo:
 void	ft_add_history(t_hist **lst, char *new)
 {
 	t_hist *node = malloc(sizeof(t_hist));
