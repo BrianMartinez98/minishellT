@@ -49,17 +49,17 @@ typedef struct	s_shell //para los datos que necesitaremos en la minishell
 	int				ret;
 	int				exit;
 	int				no_exec;
-}				t_shell;
+}	t_shell;
 
 typedef struct s_hist
 {
-	char *line;
-	struct s_hist *next;
-	struct s_hist *prev;
-} t_hist;
+	char	*line;
+	struct	s_hist *next;
+	struct	s_hist *prev;
+}	t_hist;
 
 //builtin.c
-int		ft_exit();
+int		ft_exit_shell(t_shell *shell);
 
 //environment.c
 int		env_init(t_shell *shell, char **env_array);

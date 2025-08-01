@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
+/*   Updated: 2025/08/02 00:13:46 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void ft_build_prompt(t_shell *shell)
@@ -17,11 +29,12 @@ void ft_build_prompt(t_shell *shell)
 	free(tmp); 
 	if (cwd)
 		free(cwd); //debemos liberar la memoria de cwd
-	//Nota: también deberemos liberar shell->prompt al final del programa para evitar fugas de memoria.
 
 	//IDEA: esto recalcula siempre el cwd, más adelante mirar que solo se haga esto si hay un cd exitoso.
 }
 
+
+//NOTA: esto ya no bale y habría que borralo:
 void	ft_add_history(t_hist **lst, char *new)
 {
 	t_hist *node = malloc(sizeof(t_hist));
@@ -45,6 +58,7 @@ void	ft_add_history(t_hist **lst, char *new)
 	}
 }
 
+//Nota: esto tampoco vale y habría que borrarlo:
 void print_history(t_hist **lst)
 {
 	t_hist *current;

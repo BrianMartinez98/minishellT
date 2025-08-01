@@ -1,16 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
+/*   Updated: 2025/08/02 00:12:02 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	ft_execute(char **array)
+int	ft_execute(char **array, t_shell *shell)
 {
 	int	result;
 
 	result = 0;
 	if (ft_strcmp(array[0], "exit") == 0)
-		result = ft_exit();
+		ft_exit_shell(shell);
+
 	return (result);
 }
 
-int print_tokens(char **tokens)
+int	print_tokens(char **tokens)
 {
 	if (!tokens) return 1;
 	for (size_t i = 0; tokens[i] != NULL; i++)
@@ -21,7 +34,7 @@ int print_tokens(char **tokens)
 	return 0;
 }
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
 	int		status;
 	char	*line;
@@ -47,21 +60,30 @@ int main(int ac, char **av, char **env)
 	{
 		ft_build_prompt(&shell); // Construimos el prompt con el directorio actual
 		line = readline(shell.prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
-		
-		ft_add_history(lst, line);
-		if (!line)
-		{
-			printf("exit\n");
-			break;
-		}
+		printf("estoy despues de line, se supone que se queda esperando y no se imprime esto si no escribo nada\n");
+		if (line && *line)
+			add_history(line);
+
+		//Nota: readline ya maneja la memoria de la línea introducida, no es necesario liberarla aquí.
+		// ft_add_history(lst, line);
+		// if (!line)
+		// {
+		// 	printf("exit\n");
+		// 	break;
+		// }
+
+
 		array = split_line(line);
 		if (!array || !array[0])
 		{
 			free(line);
 			continue;
 		}
-		ft_execute(array);
-		print_history(lst);
+		ft_execute(array, &shell); // Ejecutamos el comando introducido
+		
+		//print_history(lst); //esto ya no hace falta
+
+
 		//print_tokens(array);		  // Comprobar que los tokens se parsean correctamente
 
 		/*						   Usar esto para ejecutar comandos como ls -la
@@ -84,7 +106,6 @@ int main(int ac, char **av, char **env)
 		free(array);
 	}
 
-	if (shell.prompt)
-		free(shell.prompt);
+	
 	return 0;
 }
