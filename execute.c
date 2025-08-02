@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/03 01:26:19 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 01:36:04 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	ft_execute(char **array, t_shell *shell)
 	// else if (ft_strcmp(array[0], "unset") == 0) // a implementar sin opciones.
 	// 	printf("unset command not implemented yet.\n");
 	// else if (ft_strcmp(array[0], "history") == 0)
-	// 	printf("history command not implemented yet.\n");
+		// {
+		// 	print_history(lst);
+		// 	printf("history command not implemented yet.\n");
+		// }
 	// else if (ft_strcmp(array[0], "env") == 0) //a implementar sin opciones o argumentos.
 	// 	printf("env command not implemented yet.\n");
 	else

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/03 01:08:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 01:34:15 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,8 @@ int	main(int ac, char **av, char **env)
 		}
 		ft_execute(array, &shell); // Ejecutamos el comando introducido
 		
-		//print_history(lst); //esto ya no hace falta
-
-
 		//print_tokens(array);		  // Comprobar que los tokens se parsean correctamente
 
-		/*						   Usar esto para ejecutar comandos como ls -la
-		pid = fork();
-		if (pid < 0)
-		{
-			perror("fork failed");
-			free(line);
-			continue;
-		}
-		else if (pid == 0)
-		{
-			execvp(array[0], array);
-			perror("execvp failed");
-			exit(1);
-		}
-		wait(&status);
-		*/
 		free(line);
 		free(array);
 	}
