@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 13:46:57 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 00:19:12 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	ft_init_shell(t_shell *shell, char **env)
 {
 	env_init(shell, env); //copiamos las variables de entorno.
+	shell->cwd = NULL;
 	shell->prompt = NULL;
 	shell->exit = 0;
 	//revisar estas que de momento no uso
@@ -42,6 +43,8 @@ int	ft_exit_shell(t_shell *shell)
 {
 	if (shell->prompt)
 		free(shell->prompt);
+	if (shell->cwd)
+		free(shell->cwd);
 	printf("\033[1;32mExiting minishell...\033[0m\n");
 	exit(0);
 }

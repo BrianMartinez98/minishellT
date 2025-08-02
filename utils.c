@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 00:18:16 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 00:17:33 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 
 void ft_build_prompt(t_shell *shell)
 {
-	char	*cwd;
 	char	*tmp;
 
 	if (shell->prompt)
 		free(shell->prompt);
+	if (shell->cwd)
+		free(shell->cwd);
 	shell->prompt = NULL;
-	cwd = getcwd(NULL, 0); // Get current working directory - dinamic allocation
-	if (!cwd)
+	shell->cwd = getcwd(NULL, 0); // Get current working directory - dinamic allocation
+	if (!shell->cwd)
 		perror("Getcwd failed");
-	shell->prompt = ft_strjoin("\001\033[0;36m\033[1m\002", cwd); //formato negrita y cyan
+	shell->prompt = ft_strjoin("\001\033[0;36m\033[1m\002", shell->cwd); //formato negrita y cyan
 	tmp = shell->prompt;
 	shell->prompt = ft_strjoin(tmp, " > \001\033[0m\002"); //restauramos formato normal
 	free(tmp); 
-	if (cwd)
-		free(cwd); //debemos liberar la memoria de cwd
 
 	//IDEA: esto recalcula siempre el cwd, más adelante mirar que solo se haga esto si hay un cd exitoso.
 }

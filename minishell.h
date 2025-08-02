@@ -36,6 +36,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	t_token			*start;
 	t_env			*env;
 	t_env			*secret_env;
+	char			*cwd;
 	char			*prompt;
 	int				in;
 	int				out;

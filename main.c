@@ -6,22 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 19:41:43 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:48:08 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_execute(char **array, t_shell *shell)
-{
-	int	result;
-
-	result = 0;
-	if (ft_strcmp(array[0], "exit") == 0)
-		shell->exit = 1;
-
-	return (result);
-}
 
 int	print_tokens(char **tokens)
 {
