@@ -12,25 +12,26 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct	s_token //para los tokens que nos pasen
+typedef struct s_token //para los tokens que nos pasen
 {
 	char			*str;
 	int				type;
 	struct s_token	*prev;
 	struct s_token	*next;
-}				t_token;
+}	t_token;
 
-typedef struct	s_env //para las variables de entorno
+typedef struct s_env //para las variables de entorno
 {
 	char			*value;
 	struct s_env	*next;
-}				t_env;
+}	t_env;
 
-typedef struct	s_shell //para los datos que necesitaremos en la minishell
+typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
 	t_token			*start;
 	t_env			*env;
@@ -59,6 +60,7 @@ typedef struct s_hist
 }	t_hist;
 
 //builtin.c
+void	ft_init_shell(t_shell *shell, char **env);
 int		ft_exit_shell(t_shell *shell);
 
 //environment.c
@@ -79,6 +81,13 @@ char	*ft_strdup(const char *s1);
 
 //main.c
 int		ft_execute(char **array, t_shell *shell);
+
+//signals.c
+void	ft_sigint_handler(int sig);
+void	ft_sigquit_handler(int sig);
+
+void	ft_setup_signals_prompt(void);
+void	ft_setup_signals_child(void);
 
 //token.c
 char	**split_line(char *line);

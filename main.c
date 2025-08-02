@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 00:32:30 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:41:43 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,36 +40,27 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 	char	**array;
 	pid_t	pid;
-	t_hist	**lst;
+	//t_hist	**lst;
 	t_shell	shell;
 
 	(void)ac; //ignoramos estos parámetros que no usamos
 	(void)av; //ignoramos estos parámetros que no usamos
+	ft_init_shell(&shell, env); // Inicializamos la estructura shell
 
-	shell.prompt = NULL;
-	shell.in = dup(STDIN);
-	shell.out = dup(STDOUT);
-	shell.exit = 0;
-	shell.ret = 0;
-	shell.no_exec = 0;
-	env_init(&shell, env); //copiamos las variables de entorno.
-	
-	lst = (t_hist **)malloc(sizeof(t_hist));
+	//lst = (t_hist **)malloc(sizeof(t_hist));
 	while (shell.exit == 0)
 	{
 		ft_build_prompt(&shell); // Construimos el prompt con el directorio actual
+		ft_setup_signals_prompt();
 		line = readline(shell.prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
 		if (line && *line)
 			add_history(line); // si introducimos algo que no sea nulo o vacío, lo añadimos al historial.
 
 		//Nota: readline ya maneja la memoria de la línea introducida, no es necesario liberarla aquí.
 		// ft_add_history(lst, line);
-		// if (!line)
-		// {
-		// 	printf("exit\n");
-		// 	break;
-		// }
 
+		if (!line) // Ctrl+D
+			break;
 
 		array = split_line(line);
 		if (!array || !array[0])
