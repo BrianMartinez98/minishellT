@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 19:48:08 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 01:08:54 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	main(int ac, char **av, char **env)
 	int		status;
 	char	*line;
 	char	**array;
-	pid_t	pid;
 	//t_hist	**lst;
 	t_shell	shell;
 
