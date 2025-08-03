@@ -6,9 +6,15 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/03 01:34:15 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/03 17:11:57 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+// TODO:
+
+//Continuar con las señales
+
 
 #include "minishell.h"
 
@@ -28,7 +34,6 @@ int	main(int ac, char **av, char **env)
 	int		status;
 	char	*line;
 	char	**array;
-	//t_hist	**lst;
 	t_shell	shell;
 
 	(void)ac; //ignoramos estos parámetros que no usamos
@@ -42,11 +47,7 @@ int	main(int ac, char **av, char **env)
 		ft_setup_signals_prompt();
 		line = readline(shell.prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
 		if (line && *line)
-			add_history(line); // si introducimos algo que no sea nulo o vacío, lo añadimos al historial.
-
-		//Nota: readline ya maneja la memoria de la línea introducida, no es necesario liberarla aquí.
-		// ft_add_history(lst, line);
-
+			ft_add_history(line, &shell); // si introducimos algo que no sea nulo o vacío, lo añadimos al historial.
 		if (!line) // Ctrl+D
 			break;
 

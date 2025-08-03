@@ -32,11 +32,19 @@ typedef struct s_env //para las variables de entorno
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_hist //para el historial de comandos
+{
+	char			*line;
+	struct s_hist	*next;
+	struct s_hist	*prev;
+}	t_hist;
+
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
 	t_token			*start;
 	t_env			*env;
 	t_env			*secret_env;
+	t_hist			*hist;
 	char			*cwd;
 	char			*prompt;
 	int				in;
@@ -53,13 +61,6 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	int				exit;
 	int				no_exec;
 }	t_shell;
-
-typedef struct s_hist
-{
-	char	*line;
-	struct	s_hist *next;
-	struct	s_hist *prev;
-}	t_hist;
 
 //builtin.c
 void	ft_init_shell(t_shell *shell, char **env);
@@ -96,7 +97,8 @@ char	**split_line(char *line);
 
 //utils.c
 void	ft_build_prompt(t_shell *shell);
-void	ft_add_history(t_hist **lst, char *new);
-void	print_history(t_hist **lst);
+void	ft_add_history(char *line, t_shell *shell);
+void	ft_print_history(t_shell *shell);
+void	ft_free_history(t_shell *shell);
 
 #endif
