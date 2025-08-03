@@ -6,33 +6,82 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 13:46:29 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 01:50:19 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env_init(t_shell *shell, char **env_array)
+int	ft_env_init(t_shell *shell, char **env_array)
 {
-	t_env	*env;
+	t_env	*current;
 	t_env	*new;
 	int		i;
 
-	if (!(env = malloc(sizeof(t_env))))
-		return (1);
-	env->value = ft_strdup(env_array[0]);
-	env->next = NULL;
-	shell->env = env;
+	current = malloc(sizeof(t_env));
+	if (!current)
+		return (ft_error("Mem alloc failed for env node"));
+	current->value = ft_strdup(env_array[0]);
+	current->next = NULL;
+	shell->env = current;
 	i = 1;
 	while (env_array && env_array[0] && env_array[i])
 	{
-		if (!(new = malloc(sizeof(t_env))))
-			return (1);
+		new = malloc(sizeof(t_env));
+		if (!new)
+			return (ft_error("Mem alloc failed for env node"));
 		new->value = ft_strdup(env_array[i]);
 		new->next = NULL;
-		env->next = new;
-		env = new;
+		current->next = new;
+		current = new;
 		i++;
 	}
 	return (0);
+}
+
+void	ft_print_env(t_shell *shell)
+{
+	t_env	*current;
+
+	if (!shell->env)
+	{
+		printf("No environment variables set.\n");
+		return ;
+	}
+	current = shell->env;
+	while (current)
+	{
+		printf("%s\n", current->value);
+		current = current->next;
+	}
+}
+
+char	*ft_getenv(t_shell *shell, const char *key)
+{
+	t_env	*current;
+	size_t	len;
+
+	current = shell->env;
+	len = ft_strlen(key);
+	while (current)
+	{
+		if (ft_strncmp(current->value, key, len) == 0
+			&& current->value[len] == '=')
+			return (current->value + len + 1); // salta "KEY="
+		current = current->next;
+	}
+	return (NULL);
+}
+
+void	ft_free_env(t_shell *shell)
+{
+	t_env	*next;
+
+	while (shell->env)
+	{
+		next = shell->env->next;
+		free(shell->env->value);
+		free(shell->env);
+		shell->env = next;
+	}
 }

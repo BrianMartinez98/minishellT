@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/03 15:30:15 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 00:43:36 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	ft_execute(char **array, t_shell *shell)
 	pid_t	pid;
 
 	result = 0;
-	if (ft_strcmp(array[0], "exit") == 0) //sin opciones.
+	if (ft_strcmp(array[0], "exit") == 0)
 		shell->exit = 1;
-	else if (ft_strcmp(array[0], "pwd") == 0) //sin opciones.
+	else if (ft_strcmp(array[0], "pwd") == 0)
 		printf("%s\n", shell->cwd);
-	// else if (ft_strcmp(array[0], "echo") == 0) // a implementar con la opción -n.
-	// 	printf("echo command not implemented yet.\n");
+	else if (ft_strcmp(array[0], "echo") == 0)
+		ft_echo(shell, array); 
 	// else if (ft_strcmp(array[0], "cd") == 0) // a implementar solo con una ruta relativa o absoluta.
 	// 	printf("cd command not implemented yet.\n");
 	// else if (ft_strcmp(array[0], "export") == 0) // a implementar sin opciones.
@@ -32,8 +32,8 @@ int	ft_execute(char **array, t_shell *shell)
 	// 	printf("unset command not implemented yet.\n");
 	else if (ft_strcmp(array[0], "history") == 0)
 		ft_print_history(shell);
-	// else if (ft_strcmp(array[0], "env") == 0) //a implementar sin opciones o argumentos.
-	// 	printf("env command not implemented yet.\n");
+	else if (ft_strcmp(array[0], "env") == 0)
+		ft_print_env(shell);
 	else
 	{
 		pid = fork();

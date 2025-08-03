@@ -70,6 +70,18 @@ char **split_line(char *line)
 	return (tokens);
 }
 
+int	print_tokens(char **tokens)
+{
+	if (!tokens)
+		return 1;
+	for (size_t i = 0; tokens[i] != NULL; i++)
+	{
+		printf("Token[%zu]: '%s'\n", i, tokens[i]);
+		// free(tokens[i]);
+	}
+	return 0;
+}
+
 // Para probar:
 /*
 int main(void)

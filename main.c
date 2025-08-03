@@ -6,28 +6,31 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/03 17:11:57 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 01:50:21 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-// TODO:
 
-//Continuar con las señales
+//HECHO
+//Historial: funciona con flechas, con el comando history y se libera todo crrectamente al salir.
+//Ejecución de comandos externos: funciona, pero falta redirección de entrada y salida. Hace bien el fork y la ejecución de comandos externos. Los procesos hijos se cierran bien en caso de cuelgue con CTRL+D sin matar al padre
+//Salida limpia: al salir de la minishell se libera toda la memoria asignada a la estructura shell y sus componentes.
+//Builtins: 
+	//exit: funciona correctamente, libera memoria y sale de la minishell.
+	//pwd: funciona correctamente, imprime el directorio actual.
+	//history: funciona correctamente, imprime el historial de comandos y libera memoria al salir.
+	//env : funciona correctamente, imprime las variables de entorno y libera memoria al salir.
+	//echo: imprime argumentos y variables $ (faltaría posible redirección)
+
+//PENDIENTE
+//echo -n: falta implementar la opción -n para no añadir salto de línea al final.
+//$?
+//$crear y borrar variables de entorno
+//Señales. Lo tengo casi. Continuar con las señales
 
 
 #include "minishell.h"
-
-int	print_tokens(char **tokens)
-{
-	if (!tokens) return 1;
-	for (size_t i = 0; tokens[i] != NULL; i++)
-	{
-		printf("Token[%zu]: '%s'\n", i, tokens[i]);
-		free(tokens[i]);
-	}
-	return 0;
-}
 
 int	main(int ac, char **av, char **env)
 {
