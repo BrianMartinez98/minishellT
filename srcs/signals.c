@@ -6,11 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 13:27:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/02 19:43:47 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:11:26 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void ft_sigint_handler(int sig)
 {
@@ -42,7 +42,7 @@ void	ft_setup_signals_child(void)
 
 // NOTA: podemos testar la combinación de teclas haciendo desde otra terminal
 // kill -SIGINT <pid> para Ctrl+C
-// kill -SIGQUIT <pid> para Ctrl+\
+// kill -SIGQUIT <pid> para Ctrl+"\"
 // kill -SIGTERM <pid> para Ctrl+D (EOF)
 // donde <pid> es el ID del proceso de la minishell que queremos matar.
 // Para obtener el PID: ps -x | grep minishell

@@ -6,18 +6,16 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 17:57:30 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:10:16 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	ft_execute(char **array, t_shell *shell)
 {
-	int		result;
 	pid_t	pid;
 
-	result = 0;
 	if (ft_strcmp(array[0], "exit") == 0)
 		shell->exit = 1;
 	else if (ft_strcmp(array[0], "pwd") == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juancho <juancho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 16:20:20 by jarregui          #+#    #+#             */
-/*   Updated: 2023/12/14 12:17:52 by juancho          ###   ########.fr       */
+/*   Updated: 2025/08/04 20:00:11 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size);
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 size_t		ft_strlen(const char *s);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+int			ft_strcmp(const char *s1, const char *s2);
 int			ft_strncmp(const char *s1, const char *s2, unsigned int n);
 char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_strrchr(const char *s, int c);

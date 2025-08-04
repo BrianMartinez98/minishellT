@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 14:24:15 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:10:48 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@
 //Señales. Lo tengo casi. Continuar con las señales
 
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	main(int ac, char **av, char **env)
 {
-	int		status;
 	char	*line;
 	char	**array;
 	t_shell	shell;

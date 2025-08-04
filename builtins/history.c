@@ -6,11 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 01:23:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 01:23:59 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ft_add_history(char *line, t_shell *shell)
 {

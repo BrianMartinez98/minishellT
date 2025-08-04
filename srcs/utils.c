@@ -6,11 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 13:48:59 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ft_init_shell(t_shell *shell, char **env)
 {
@@ -57,8 +57,14 @@ void ft_build_prompt(t_shell *shell)
 	//IDEA: esto recalcula siempre el cwd, más adelante mirar que solo se haga esto si hay un cd exitoso.
 }
 
-int ft_error(const char *msg)
+int	ft_error(const char *msg)
 {
 	perror(msg);
 	return (1);
+}
+
+int ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' ||
+			c == '\v' || c == '\f' || c == '\r');
 }

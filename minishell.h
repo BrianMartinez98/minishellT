@@ -7,6 +7,7 @@
 # define STDOUT 1
 # define STDERR 2
 
+# include "libs/libft/libft.h"
 # include <stdio.h>
 # include <ctype.h>
 # include <string.h>
@@ -46,49 +47,46 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	char			*cwd;
 	char			*prompt;
 	int				exit;
-	int				last_status; //ara almacenar el último estado de salida de un comando $?
+	int				last_status; //para almacenar el último estado de salida de un comando $?
 }	t_shell;
 
-//builtin.c
-void	ft_init_shell(t_shell *shell, char **env);
-int		ft_exit_shell(t_shell *shell);
+//builtins/echo.c
 void	ft_echo(t_shell *shell, char **tokens);
 
-//environment.c
+
+void	ft_init_shell(t_shell *shell, char **env);
+int		ft_exit_shell(t_shell *shell);
+
+//builtins/environment.c
 int		ft_env_init(t_shell *shell, char **env_array);
 void	ft_print_env(t_shell *shell);
 char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
 
+//builtins/export.c
+int		is_valid_key(const char *key);
+void	ft_env_set(t_shell *shell, const char *entry);
 void	ft_export(t_shell *shell, char **tokens);
-void	ft_unset(t_shell *shell, char **tokens);
 
-//ft_split.c
-char	**ft_split(char const *s, char c);
-
-//ft_strjoin.c
-char	*ft_strjoin(char const *s1, char const *s2);
-
-//history.c
+//builtins/history.c
 void	ft_add_history(char *line, t_shell *shell);
 void	ft_print_history(t_shell *shell);
 void	ft_free_history(t_shell *shell);
 
-//libft.c
-size_t	ft_strlen(const char	*str);
-size_t	ft_strncpy(char *dest, const char *src, size_t size);
-int		ft_isspace(char c);
-int		ft_strcmp(const char *s1, const char *s2);
-int		ft_strncmp(const char *s1, const char *s2, unsigned int n);
-char	*ft_strdup(const char *s1);
+//builtins/unset.c
+void	ft_unset(t_shell *shell, char **tokens);
 
-//main.c
+
+//srcs/execute.c
 int		ft_execute(char **array, t_shell *shell);
+
+//srcs/redirect.c
+// static int	duplication(char *filename);
+// void		redirect(char **array);
 
 //signals.c
 void	ft_sigint_handler(int sig);
 void	ft_sigquit_handler(int sig);
-
 void	ft_setup_signals_prompt(void);
 void	ft_setup_signals_child(void);
 
@@ -97,7 +95,10 @@ char	**split_line(char *line);
 int		print_tokens(char **tokens);
 
 //utils.c
+void	ft_init_shell(t_shell *shell, char **env);
+int		ft_exit_shell(t_shell *shell);
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
+int		ft_isspace(char c);
 
 #endif
