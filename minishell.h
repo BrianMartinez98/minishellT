@@ -60,6 +60,9 @@ void	ft_print_env(t_shell *shell);
 char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
 
+void	ft_export(t_shell *shell, char **tokens);
+void	ft_unset(t_shell *shell, char **tokens);
+
 //ft_split.c
 char	**ft_split(char const *s, char c);
 

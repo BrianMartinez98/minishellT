@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 13:57:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:57:30 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	ft_execute(char **array, t_shell *shell)
 		ft_echo(shell, array); 
 	// else if (ft_strcmp(array[0], "cd") == 0) // a implementar solo con una ruta relativa o absoluta.
 	// 	printf("cd command not implemented yet.\n");
-	// else if (ft_strcmp(array[0], "export") == 0) // a implementar sin opciones.
-	// 	printf("export command not implemented yet.\n");
-	// else if (ft_strcmp(array[0], "unset") == 0) // a implementar sin opciones.
-	// 	printf("unset command not implemented yet.\n");
+	else if (ft_strcmp(array[0], "export") == 0)
+		ft_export(shell, array);
+	else if (ft_strcmp(array[0], "unset") == 0)
+		ft_unset(shell, array);
 	else if (ft_strcmp(array[0], "history") == 0)
 		ft_print_history(shell);
 	else if (ft_strcmp(array[0], "env") == 0)
