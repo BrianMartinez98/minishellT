@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 01:50:21 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:24:15 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 	//history: funciona correctamente, imprime el historial de comandos y libera memoria al salir.
 	//env : funciona correctamente, imprime las variables de entorno y libera memoria al salir.
 	//echo: imprime argumentos y variables $ (faltaría posible redirección)
+	//echo -n: implementada la opción -n para no añadir salto de línea al final.
+	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
 
 //PENDIENTE
-//echo -n: falta implementar la opción -n para no añadir salto de línea al final.
-//$?
 //$crear y borrar variables de entorno
 //Señales. Lo tengo casi. Continuar con las señales
 

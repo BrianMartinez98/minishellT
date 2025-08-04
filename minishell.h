@@ -41,28 +41,12 @@ typedef struct s_hist //para el historial de comandos
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
-	t_token			*start;
-	t_env			*secret_env;
-
-	t_env			*env;//ok
-	t_hist			*hist;//ok
-	char			*cwd;//ok
-	char			*prompt;//ok
-	int				exit;//ok
-	int				last_status; //ok para almacenar el último estado de salida de un comando
-	
-	int				in;
-	int				out;
-	int				fdin;
-	int				fdout;
-	int				pipin;
-	int				pipout;
-	int				pid;
-	int				charge;
-	int				parent;
-	int				last;
-	int				ret;
-	int				no_exec;
+	t_env			*env;
+	t_hist			*hist;
+	char			*cwd;
+	char			*prompt;
+	int				exit;
+	int				last_status; //ara almacenar el último estado de salida de un comando $?
 }	t_shell;
 
 //builtin.c

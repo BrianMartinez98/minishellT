@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 00:43:36 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/04 13:57:54 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int	ft_execute(char **array, t_shell *shell)
 		pid = fork();
 		if (pid == -1)
 		{
-			perror("fork");
-			return (1);
+			perror("Error at fork");
+			shell->last_status = 1; // Error al crear el proceso hijo
+			return (shell->last_status);
 		}
 		if (pid == 0)
 		{
@@ -51,7 +52,7 @@ int	ft_execute(char **array, t_shell *shell)
 				printf("command not found: %s\n", array[0]);
 			else
 				perror(array[0]); // imprime mensaje detallado del sistema
-			exit(127); // Código estándar: comando no encontrado
+			exit(127);// Código estándar: comando no encontrado
 		}
 		else
 		{
@@ -60,8 +61,12 @@ int	ft_execute(char **array, t_shell *shell)
 
 			ft_setup_signals_prompt(); // ← Restauras señales de minishell tras el hijo
 			waitpid(pid, &status, 0);
+			if (WIFEXITED(status))
+				shell->last_status = WEXITSTATUS(status); // ← valor real del $?
+			// si murió por señal:
+			else if (WIFSIGNALED(status))
+				shell->last_status = 128 + WTERMSIG(status);  // por ejemplo 130 si SIGINT
 		}
 	}
-		// printf("command not found: %s\n", array[0]);
-	return (result);
+	return (shell->last_status);
 }
