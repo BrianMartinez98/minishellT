@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 20:10:48 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:40:55 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,25 @@
 	//echo: imprime argumentos y variables $ (faltaría posible redirección)
 	//echo -n: implementada la opción -n para no añadir salto de línea al final.
 	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
+//Makefile y añadido libft
 
-//PENDIENTE
-//$crear y borrar variables de entorno
+
+
+//PENDIENTE BRIAN
+//builtin cd
+//redirecciones > >> < <<
+//pipes |
+//revisar tokenización y split_line
+
+//PENDIENTE JUANCHO
+//Make: que no haga RELINK el makefile
+//Make: añadir versión Debug para checar leaks y errores de memoria
+//$crear y borrar variables de entorno (revisar export)
 //Señales. Lo tengo casi. Continuar con las señales
+//Norminette: quitar comentarios y ver longitudes de funciones y num variables
 
+//PENDIENTE EXTRA
+//parseo " "\" ; `
 
 #include "../minishell.h"
 
@@ -42,7 +56,6 @@ int	main(int ac, char **av, char **env)
 	(void)av; //ignoramos estos parámetros que no usamos
 	ft_init_shell(&shell, env); // Inicializamos la estructura shell
 
-	//lst = (t_hist **)malloc(sizeof(t_hist));
 	while (shell.exit == 0)
 	{
 		ft_build_prompt(&shell); // Construimos el prompt con el directorio actual

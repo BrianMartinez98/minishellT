@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:13:21 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	ft_echo(t_shell *shell, char **tokens)
 	int	suppress_nl;
 	int	supress_first;
 
-	printf("imprimiendo tokens que nos llegan: \n");
-	print_tokens(tokens);
+	// printf("imprimiendo tokens que nos llegan: \n");
+	// print_tokens(tokens);
 
 
 	i = 1;
