@@ -7,6 +7,10 @@
 # define STDOUT 1
 # define STDERR 2
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
 # include "libs/libft/libft.h"
 # include <stdio.h>
 # include <ctype.h>
