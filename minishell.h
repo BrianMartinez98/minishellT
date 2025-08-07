@@ -51,11 +51,13 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	char			*cwd;
 	char			*prompt;
 	int				exit;
-	int				last_status; //para almacenar el último estado de salida de un comando $?
+	int				last_status;
+	char			*line;
+	char			**tokens;
 }	t_shell;
 
 //builtins/echo.c
-void	ft_echo(t_shell *shell, char **tokens);
+void	ft_echo(t_shell *shell);
 
 
 void	ft_init_shell(t_shell *shell, char **env);
@@ -70,19 +72,23 @@ void	ft_free_env(t_shell *shell);
 //builtins/export.c
 int		is_valid_key(const char *key);
 void	ft_env_set(t_shell *shell, const char *entry);
-void	ft_export(t_shell *shell, char **tokens);
+void	ft_export(t_shell *shell);
 
 //builtins/history.c
-void	ft_add_history(char *line, t_shell *shell);
+void	ft_add_history(t_shell *shell);
 void	ft_print_history(t_shell *shell);
 void	ft_free_history(t_shell *shell);
 
 //builtins/unset.c
-void	ft_unset(t_shell *shell, char **tokens);
+void	ft_unset(t_shell *shell);
 
 
 //srcs/execute.c
-int		ft_execute(char **array, t_shell *shell);
+int		ft_execute(t_shell *shell);
+
+//srcs/readline.c
+void	ft_readline(t_shell *shell);
+void	ft_free_line(t_shell *shell);
 
 //srcs/redirect.c
 // static int	duplication(char *filename);
@@ -95,8 +101,9 @@ void	ft_setup_signals_prompt(void);
 void	ft_setup_signals_child(void);
 
 //token.c
-char	**split_line(char *line);
+void	split_line(t_shell *shell);
 int		print_tokens(char **tokens);
+void	ft_free_tokens(char **tokens);
 
 //utils.c
 void	ft_init_shell(t_shell *shell, char **env);

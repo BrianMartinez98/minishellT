@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/07 01:29:52 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->hist = NULL;
 	shell->last_status = 0;
 	shell->exit = 0;
+	shell->line = NULL;
+	shell->tokens = NULL;
 }
 
 int	ft_exit_shell(t_shell *shell)
@@ -30,6 +32,8 @@ int	ft_exit_shell(t_shell *shell)
 		free(shell->cwd);
 	ft_free_history(shell);
 	ft_free_env(shell);
+	ft_free_line(shell);
+	ft_free_tokens(shell->tokens);
 	printf("\033[1;32mExiting minishell...\033[0m\n");
 	exit(0);
 }

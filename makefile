@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/08/06 18:17:52 by jarregui         ###   ########.fr        #
+#    Updated: 2025/08/07 01:51:13 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRCS 	= builtins/echo.c \
 		builtins/unset.c \
 		srcs/execute.c \
 		srcs/main.c \
+		srcs/readline.c \
 		srcs/redirect.c \
 		srcs/signals.c \
 		srcs/token.c \
@@ -83,10 +84,11 @@ debug: fclean
 	@echo "$(GREEN)DEBUG: 🔍 Launching Valgrind with debug build...$(DEF_COLOR)\n"
 	@echo "$(CYAN)💧 Valgrind launched$(DEF_COLOR)"
 	@$(VALGRIND) ./$(EXEC_FILE_NAME) 2>&1 | tee valgrind.log
+	@echo "$(YELLOW)⚠️ Note: memory still reachable is due to readline and is not considered leak$(DEF_COLOR)"
 	@echo "$(CYAN)💧 Leak Summary (if any):$(DEF_COLOR)"
-	@grep -A5 "LEAK SUMMARY:" valgrind.log > /dev/null && \
-		(echo "$(RED)❌ MEM LEAK DETECTED! Check summary at valgrind.log$(DEF_COLOR)"; grep -A5 "LEAK SUMMARY:" valgrind.log) || \
-		echo "$(GREEN)✅ No leaks detected$(DEF_COLOR)"
+	@grep -q "definitely lost: 0 bytes in 0 blocks" valgrind.log && \
+		echo "$(GREEN)✅ No memory leaks detected$(DEF_COLOR)" || \
+		(echo "$(RED)❌ MEM LEAK DETECTED! Check summary at valgrind.log$(DEF_COLOR)"; grep -A5 "LEAK SUMMARY:" valgrind.log)
 	
 clean:
 	@${RM} ${OBJS} ${OBJS_BONUS} $(OBJS:.o=.d) $(OBJS_BONUS:.o=.d) valgrind.log
