@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/06 19:09:12 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/07 02:11:02 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_execute(t_shell *shell)
 	pid_t	pid;
 	char	*command;
 
+	if (!shell->tokens || !shell->tokens[0])
+		return (0);
 	command = shell->tokens[0];
 	if (ft_strcmp(command, "exit") == 0)
 		shell->exit = 1;
