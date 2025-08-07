@@ -33,6 +33,7 @@ SRCS 	= builtins/echo.c \
 		builtins/export.c \
 		builtins/history.c \
 		builtins/unset.c \
+		builtins/cd.c \
 		srcs/execute.c \
 		srcs/main.c \
 		srcs/redirect.c \

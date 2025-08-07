@@ -50,6 +50,9 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	int				last_status; //para almacenar el último estado de salida de un comando $?
 }	t_shell;
 
+//builtins/cd.c
+void    change_path(t_shell *shell, char **tokens);
+
 //builtins/echo.c
 void	ft_echo(t_shell *shell, char **tokens);
 

@@ -22,8 +22,8 @@ int	ft_execute(char **array, t_shell *shell)
 		printf("%s\n", shell->cwd);
 	else if (ft_strcmp(array[0], "echo") == 0)
 		ft_echo(shell, array); 
-	// else if (ft_strcmp(array[0], "cd") == 0) // a implementar solo con una ruta relativa o absoluta.
-	// 	printf("cd command not implemented yet.\n");
+	else if (ft_strcmp(array[0], "cd") == 0)
+		change_path(shell, array);
 	else if (ft_strcmp(array[0], "export") == 0)
 		ft_export(shell, array);
 	else if (ft_strcmp(array[0], "unset") == 0)
