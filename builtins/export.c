@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:49:27 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,22 @@ void	ft_env_set(t_shell *shell, const char *entry)
 	shell->env = new;
 }
 
-void	ft_export(t_shell *shell, char **tokens)
+void	ft_export(t_shell *shell)
 {
-	int	i = 1;
+	int	i;
 
-	while (tokens[i])
+	i = 1;
+	while (shell->tokens[i])
 	{
-		if (!is_valid_key(tokens[i]))
+		if (!is_valid_key(shell->tokens[i]))
 		{
-			printf("export: `%s': not a valid identifier\n", tokens[i]);
+			printf("export: `%s': not a valid identifier\n", shell->tokens[i]);
 			shell->last_status = 1;
 		}
 		else
 		{
 			// busca si ya existe
-			ft_env_set(shell, tokens[i]); // actualiza o añade
+			ft_env_set(shell, shell->tokens[i]); // actualiza o añade
 			shell->last_status = 0;
 		}
 		i++;
