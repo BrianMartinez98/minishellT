@@ -6,10 +6,9 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/08/07 01:51:13 by jarregui         ###   ########.fr        #
+#    Updated: 2025/08/08 01:33:34 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 # INCLUDE COLOR VARIABLES DECLARATION:
 include libs/colors.mk

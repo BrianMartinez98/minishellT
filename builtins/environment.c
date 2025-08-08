@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/08 01:29:11 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,3 +85,25 @@ void	ft_free_env(t_shell *shell)
 		shell->env = next;
 	}
 }
+
+int	append_env(t_shell *shell, const char *entry, t_env *last)
+{
+	t_env	*new;
+
+	new = (t_env *)malloc(sizeof(t_env));
+	if (!new)
+		return (0);
+	new->value = ft_strdup(entry);
+	if (!new->value)
+	{
+		free(new);
+		return (0);
+	}
+	new->next = NULL;
+	if (last)
+		last->next = new;
+	else
+		shell->env = new;
+	return (1);
+}
+

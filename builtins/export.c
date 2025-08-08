@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/06 18:49:27 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/08 01:32:57 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,49 +28,79 @@ int	is_valid_key(const char *key)
 	return (1);
 }
 
+static t_env	*find_env_node(t_env *head, const char *key, size_t key_len,
+	t_env **plast)
+{
+	t_env	*cur;
+
+	*plast = NULL;
+	cur = head;
+	while (cur)
+	{
+		if (ft_strncmp(cur->value, key, key_len) == 0 &&
+			cur->value[key_len] == '=')
+			return (cur);
+		*plast = cur;
+		cur = cur->next;
+	}
+	return (NULL);
+}
+
+static char	*dup_key(const char *entry)
+{
+	char	*eq;
+
+	eq = ft_strchr(entry, '=');
+	if (!eq)
+		return (NULL);
+	return (ft_substr(entry, 0, eq - entry));
+}
+
 void	ft_env_set(t_shell *shell, const char *entry)
 {
-	t_env	*env = shell->env;
-	t_env	*new;
-	char	*key = ft_substr(entry, 0, ft_strchr(entry, '=') - entry);
+	t_env	*last;
+	t_env	*node;
+	char	*key;
+	size_t	key_len;
 
-	while (env)
+	key = dup_key(entry);
+	if (!key)
+		return ;
+	key_len = ft_strlen(key);
+	node = find_env_node(shell->env, key, key_len, &last);
+	if (node)
 	{
-		if (ft_strncmp(env->value, key, ft_strlen(key)) == 0 &&
-			env->value[ft_strlen(key)] == '=')
-		{
-			free(env->value);
-			env->value = ft_strdup(entry); // actualiza
-			free(key);
-			return ;
-		}
-		env = env->next;
+		free(node->value);
+		node->value = ft_strdup(entry);
+		free(key);
+		return ;
 	}
+	append_env(shell, entry, last);
 	free(key);
-	// si no existe, lo añadimos
-	new = malloc(sizeof(t_env));
-	new->value = ft_strdup(entry);
-	new->next = shell->env;
-	shell->env = new;
 }
 
 void	ft_export(t_shell *shell)
 {
-	int	i;
+	char	*equal;
+	int		i;
 
 	i = 1;
 	while (shell->tokens[i])
 	{
-		if (!is_valid_key(shell->tokens[i]))
+		equal = ft_strchr(shell->tokens[i], '=');
+		if (equal)
 		{
-			printf("export: `%s': not a valid identifier\n", shell->tokens[i]);
-			shell->last_status = 1;
-		}
-		else
-		{
-			// busca si ya existe
-			ft_env_set(shell, shell->tokens[i]); // actualiza o añade
-			shell->last_status = 0;
+			if (!is_valid_key(shell->tokens[i]))
+			{
+				printf("export: `%s': not a valid identifier\n",
+					shell->tokens[i]);
+				shell->last_status = 1;
+			}
+			else
+			{
+				ft_env_set(shell, shell->tokens[i]);
+				shell->last_status = 0;
+			}
 		}
 		i++;
 	}

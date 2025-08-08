@@ -6,11 +6,37 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/07 02:01:21 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/07 14:12:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 
+int	main(int ac, char **av, char **env)
+{
+	t_shell	shell;
+
+	(void)ac;
+	(void)av;
+	ft_init_shell(&shell, env);
+
+	while (shell.exit == 0)
+	{
+		ft_build_prompt(&shell);
+		ft_setup_signals_prompt();
+		ft_readline(&shell);
+		if (!shell.line)
+			break ;
+		if (*shell.line == '\0')
+			continue ;
+		ft_add_history(&shell);
+		split_line(&shell);
+		if (!shell.tokens || !shell.tokens[0])
+			continue ;
+		ft_execute(&shell);
+	}
+	ft_exit_shell(&shell);
+}
 
 //HECHO
 //Historial: funciona con flechas, con el comando history y se libera todo crrectamente al salir.
@@ -43,31 +69,3 @@
 
 //PENDIENTE EXTRA
 //parseo " "\" ; `
-
-#include "../minishell.h"
-
-int	main(int ac, char **av, char **env)
-{
-	t_shell	shell;
-
-	(void)ac;
-	(void)av;
-	ft_init_shell(&shell, env);
-
-	while (shell.exit == 0)
-	{
-		ft_build_prompt(&shell);
-		ft_setup_signals_prompt();
-		ft_readline(&shell);
-		if (!shell.line)
-			break ;
-		if (*shell.line == '\0')
-			continue ;
-		ft_add_history(&shell);
-		split_line(&shell);
-		if (!shell.tokens || !shell.tokens[0])
-			continue ;
-		ft_execute(&shell);
-	}
-	ft_exit_shell(&shell);
-}

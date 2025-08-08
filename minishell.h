@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
+/*   Updated: 2025/08/08 01:29:50 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL
 # define MINISHELL
 
@@ -59,15 +71,12 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 //builtins/echo.c
 void	ft_echo(t_shell *shell);
 
-
-void	ft_init_shell(t_shell *shell, char **env);
-int		ft_exit_shell(t_shell *shell);
-
 //builtins/environment.c
 int		ft_env_init(t_shell *shell, char **env_array);
 void	ft_print_env(t_shell *shell);
 char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
+int		append_env(t_shell *shell, const char *entry, t_env *last);
 
 //builtins/export.c
 int		is_valid_key(const char *key);
@@ -81,7 +90,6 @@ void	ft_free_history(t_shell *shell);
 
 //builtins/unset.c
 void	ft_unset(t_shell *shell);
-
 
 //srcs/execute.c
 int		ft_execute(t_shell *shell);
