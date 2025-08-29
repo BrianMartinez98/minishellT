@@ -8,6 +8,9 @@
 # define STDERR 2
 
 # include "libs/libft/libft.h"
+# include <fcntl.h>
+# include <unistd.h>
+# include <string.h>
 # include <stdio.h>
 # include <ctype.h>
 # include <string.h>
@@ -103,5 +106,9 @@ int		ft_exit_shell(t_shell *shell);
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
+
+//redirect.c
+int 	dupp(char *filename, int dest, int flags);
+char 	**filter_args(char **array);
 
 #endif

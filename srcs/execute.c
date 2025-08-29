@@ -17,7 +17,11 @@ int	ft_execute(char **array, t_shell *shell)
 	pid_t	pid;
 
 	if (ft_strcmp(array[0], "exit") == 0)
-		shell->exit = 1;
+		shell->exit = 1;	
+	else if (strcmp(array[0], ">") == 0)
+        dupp(array[0 + 1], STDOUT_FILENO, O_WRONLY | O_CREAT | O_TRUNC);
+    else if (strcmp(array[0], "<") == 0)
+        dupp(array[0 + 1], STDIN_FILENO, O_RDONLY);
 	else if (ft_strcmp(array[0], "pwd") == 0)
 		printf("%s\n", shell->cwd);
 	else if (ft_strcmp(array[0], "echo") == 0)
@@ -32,6 +36,7 @@ int	ft_execute(char **array, t_shell *shell)
 		ft_print_history(shell);
 	else if (ft_strcmp(array[0], "env") == 0)
 		ft_print_env(shell);
+
 	else
 	{
 		pid = fork();
