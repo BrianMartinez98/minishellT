@@ -111,4 +111,8 @@ int		ft_isspace(char c);
 int 	dupp(char *filename, int dest, int flags);
 char 	**filter_args(char **array);
 
+//redirection_utils.c
+char 	**filter_args(char **args);
+int 	handle_redirections(char **args);
+
 #endif
