@@ -72,7 +72,7 @@ int	main(int ac, char **av, char **env)
 			free(line);
 			continue;
 		}
-		ft_execute(array, &shell); // Ejecutamos el comando introducido
+		ft_execute_pipes(array, &shell); // Ejecutamos el comando introducido
 		
 		//print_tokens(array);		  // Comprobar que los tokens se parsean correctamente
 

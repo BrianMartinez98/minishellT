@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "../minishell.h"
 
 // Devuelve un nuevo array sin los tokens de redirección y sus archivos
 char **filter_args(char **args)

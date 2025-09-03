@@ -115,4 +115,7 @@ char 	**filter_args(char **array);
 char 	**filter_args(char **args);
 int 	handle_redirections(char **args);
 
+//pipes.c
+int		ft_execute_pipes(char **array, t_shell *shell);
+
 #endif
