@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/09 13:34:33 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/09 14:09:13 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ include libs/colors.mk
 # VARIABLES DECLARATION:
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-DEPENDENCY_FLAGS = -MMD -MP
 DEBUG_FLAGS = -g -DDEBUG=1
 # VALGRIND = valgrind --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all
 VALGRIND = valgrind --leak-check=summary
@@ -54,7 +53,7 @@ all: subsystems shell
 # CREACION ARCHIVOS OBJETO
 %.o : %.c
 	@echo "${ORANGE}${PROY_NAME} compiling file: $(BROWN)[$<]...${DEF_COLOR}"
-	@$(CC) $(CFLAGS) $(DEPENDENCY_FLAGS) -c -o $@ $< 
+	@$(CC) $(CFLAGS) -c -o $@ $< 
 
 subsystems:
 # Do Make only if there are changes in the libraries:
@@ -67,12 +66,12 @@ subsystems:
 	fi
 
 $(EXEC_FILE_NAME): $(OBJS) $(LIBS)
-	@$(CC) ${CFLAGS} $(DEPENDENCY_FLAGS) $(OBJS) ${LIBS} $(SYS_LIBS) -o $(EXEC_FILE_NAME)
+	@$(CC) ${CFLAGS} $(OBJS) ${LIBS} $(SYS_LIBS) -o $(EXEC_FILE_NAME)
 	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME) File$(DEF_COLOR)\n"
 shell: $(EXEC_FILE_NAME)
 
 $(EXEC_FILE_NAME_BONUS): $(OBJS_BONUS) $(LIBS)
-	@$(CC) ${CFLAGS} $(DEPENDENCY_FLAGS) srcs/server_bonus.o ${LIBS} -o $(EXEC_FILE_NAME_BONUS)
+	@$(CC) ${CFLAGS} srcs/server_bonus.o ${LIBS} -o $(EXEC_FILE_NAME_BONUS)
 	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME_BONUS) File$(DEF_COLOR)\n"
 shell_bonus: $(EXEC_FILE_NAME_BONUS)
 
@@ -106,7 +105,5 @@ fcleanlibs:
 	@${MAKE} -C $(LIBFT_DIR) fclean
 
 re: fclean all
-
--include $(OBJS:.o=.d) $(OBJS_BONUS:.o=.d)
 
 .PHONY: all bonus clean cleanlibs fclean fcleanlibs re
