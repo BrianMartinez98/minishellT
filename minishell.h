@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 13:38:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:03:44 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ void	ft_free_line(t_shell *shell);
 // static int	duplication(char *filename);
 // void		redirect(char **array);
 
+//shell.c
+t_shell	*ft_get_shell_address(t_shell *shell);
+void	ft_init_shell(t_shell *shell, char **env);
+int		ft_exit_shell(t_shell *shell);
+
 //signals.c
 void	ft_sigint_handler(int sig);
 void	ft_sigquit_handler(int sig);
@@ -114,8 +119,6 @@ int		print_tokens(char **tokens);
 void	ft_free_tokens(char **tokens);
 
 //utils.c
-void	ft_init_shell(t_shell *shell, char **env);
-int		ft_exit_shell(t_shell *shell);
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
