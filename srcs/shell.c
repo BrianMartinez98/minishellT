@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 15:05:35 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 07:53:12 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@ t_shell	*ft_get_shell_address(t_shell *new_shell)
 	return (shell_ptr);
 }
 
+void	ft_disable_echoctl(t_shell *shell)
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	shell->termios_saved = term;
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void	ft_restore_term_settings(t_shell *shell)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &shell->termios_saved);
+}
+
 void	ft_init_shell(t_shell *shell, char **env)
 {
 	ft_env_init(shell, env);
@@ -32,6 +47,7 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->line = NULL;
 	shell->tokens = NULL;
 	ft_get_shell_address(shell);
+	ft_disable_echoctl(shell);
 }
 
 int	ft_exit_shell(t_shell *shell)
@@ -44,6 +60,7 @@ int	ft_exit_shell(t_shell *shell)
 	ft_free_env(shell);
 	ft_free_line(shell);
 	ft_free_tokens(shell->tokens);
+	ft_restore_term_settings(shell);
 	printf("\033[1;32mExiting minishell...\033[0m\n");
 	exit(0);
 }

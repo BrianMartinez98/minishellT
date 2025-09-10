@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 15:03:44 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 07:56:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 #  define DEBUG 0
 # endif
 
+# ifndef ECHOCTL
+#  define ECHOCTL 0001000
+# endif
+
 # include "libs/libft/libft.h"
 # include <stdio.h>
 # include <ctype.h>
@@ -31,6 +35,7 @@
 # include <unistd.h>
 # include <signal.h>
 # include <errno.h>
+# include <termios.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -60,6 +65,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
 	t_env			*env;
 	t_hist			*hist;
+	struct termios	termios_saved;
 	char			*cwd;
 	char			*prompt;
 	int				exit;
@@ -104,6 +110,8 @@ void	ft_free_line(t_shell *shell);
 
 //shell.c
 t_shell	*ft_get_shell_address(t_shell *shell);
+void	ft_disable_echoctl(t_shell *shell);
+void	ft_restore_term_settings(t_shell *shell);
 void	ft_init_shell(t_shell *shell, char **env);
 int		ft_exit_shell(t_shell *shell);
 
