@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 10:25:55 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:30:36 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ int	main(int ac, char **av, char **env)
 	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
 //Makefile y añadido libft
 //Make: que no haga RELINK el makefile
-//Make: añadir versión Debug para checar leaks y errores de memoria
+//Make: añadida versión Debug para ver mensajes de depuración
+//Make: añadida versión Valgrind para checar leaks y errores de memoria
 //he modificado tokens y line y las he incluido en la estructura shell, para que se liberen al salir de la minishell y no haya fugas de memoria.
-//Señales: funcionan ok
+//Señales: funcionan ok, tanto con el padre como con el hijo. Por teclado y por señales kill
 
 
 //PENDIENTE BRIAN
@@ -69,5 +70,6 @@ int	main(int ac, char **av, char **env)
 //$crear y borrar variables de entorno (revisar export)
 
 //PENDIENTE EXTRA
+//Ejecución de comandos externos: falta redirección de entrada 
 //Norminette: quitar comentarios y ver longitudes de funciones y num variables
 //parseo " "\" ; `
