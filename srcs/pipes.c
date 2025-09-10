@@ -1,8 +1,15 @@
-// ...existing code...
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/10 19:14:30 by jarregui          #+#    #+#             */
+/*   Updated: 2025/09/10 19:14:39 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 // Función auxiliar para dividir por '|'
@@ -42,7 +49,7 @@ static char	***split_by_pipe(char **tokens, int *num_cmds) {
 	return cmds;
 }
 
-int	ft_execute_pipes(char **array, t_shell *shell)
+int	ft_execute_pipes(t_shell *shell)
 {
 	int num_cmds, i, status;
 	char ***cmds;
@@ -50,17 +57,17 @@ int	ft_execute_pipes(char **array, t_shell *shell)
 		
 	// Detecta si hay pipes
 	int has_pipe = 0;
-	for (i = 0; array[i]; i++)
-		if (strcmp(array[i], "|") == 0)
+	for (i = 0; shell->tokens[i]; i++)
+		if (strcmp(shell->tokens[i], "|") == 0)
 			has_pipe = 1;
 
 	if (!has_pipe)
 	{
-		return ft_execute(array, shell); // función auxiliar con tu lógica actual
+		return ft_execute(shell); // función auxiliar con tu lógica actual
 	}
 
 	// Si hay pipes:
-	cmds = split_by_pipe(array, &num_cmds);
+	cmds = split_by_pipe(shell->tokens, &num_cmds);
 	for (i = 0; i < num_cmds; i++)
 	{
 		if (i < num_cmds - 1)

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 09:43:12 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:15:16 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,6 @@ char 	**filter_args(char **args);
 int 	handle_redirections(char **args);
 
 //pipes.c
-int		ft_execute_pipes(char **array, t_shell *shell);
+int		ft_execute_pipes(t_shell *shell);
 
 #endif

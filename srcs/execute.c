@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 18:55:10 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:02:38 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_execute(t_shell *shell)
 	clean_args = filter_args(shell->tokens);
 	if (!shell->tokens || !shell->tokens[0])
 		return (0);
-
+	command = shell->tokens[0];
 	if (ft_strcmp(shell->tokens[0], "exit") == 0 || ft_strcmp(shell->tokens[0], "pwd") == 0 ||
 		ft_strcmp(shell->tokens[0], "echo") == 0 || ft_strcmp(shell->tokens[0], "cd") == 0 ||
 		ft_strcmp(shell->tokens[0], "export") == 0 || ft_strcmp(shell->tokens[0], "unset") == 0 ||
@@ -37,7 +37,6 @@ int	ft_execute(t_shell *shell)
 		stdin_save = dup(STDIN_FILENO);
 		stdout_save = dup(STDOUT_FILENO);
 		handle_redirections(shell->tokens);
-		command = shell->tokens[0];
 		if (ft_strcmp(command, "exit") == 0)
 			shell->exit = 1;
 		else if (ft_strcmp(command, "pwd") == 0)

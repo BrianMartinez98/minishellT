@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 18:34:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:17:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,13 @@ int	main(int ac, char **av, char **env)
 	//echo: imprime argumentos y variables $
 	//echo -n: implementada la opción -n para no añadir salto de línea al final.
 	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
+	//cd: funciona correctamente, cambia el directorio actual y actualiza la variable PWD. Implementado "cd -" para volver al directorio anterior.
 //Makefile y añadido libft
 //Make: que no haga RELINK el makefile
 //Make: añadida versión Debug para ver mensajes de depuración
 //Make: añadida versión Valgrind para checar leaks y errores de memoria
 //he modificado tokens y line y las he incluido en la estructura shell, para que se liberen al salir de la minishell y no haya fugas de memoria.
 //Señales: funcionan ok, tanto con el padre como con el hijo. Por teclado y por señales kill
-
-
-//PENDIENTE BRIAN
-//builtin cd
 //redirecciones > >> < <<
 //pipes |
 //revisar tokenización y split_line
@@ -72,6 +69,6 @@ int	main(int ac, char **av, char **env)
 
 //PENDIENTE EXTRA
 //Ejecución de comandos externos: falta redirección de entrada 
-//echo: altaría posible redirección
+//echo: faltaría posible redirección
 //Norminette: quitar comentarios y ver longitudes de funciones y num variables
 //parseo " "\" ; `
