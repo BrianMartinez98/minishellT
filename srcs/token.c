@@ -1,28 +1,32 @@
 #include "../minishell.h"
 
-char **split_line(char *line)
+void	split_line(t_shell *shell)
 {
 	size_t		start;
 	size_t		length;
 	size_t		token_length;
-	char 		*token;
 	size_t		end;
 	size_t		bufsize = BUFSIZ;
 	size_t		position = 0;
-	char		**tokens;
+	size_t		i;
+	char 		*token;
+	char		**new_tokens;
 
+	if (shell->tokens)
+		ft_free_tokens(shell->tokens); // Limpiar tokens anteriores
+	shell->tokens = NULL; // Inicializar tokens a NULL
 	start = 0;
-	length = ft_strlen(line);
-	tokens = malloc(bufsize * sizeof(char *));
-	if (!tokens)
+	length = ft_strlen(shell->line);
+	shell->tokens = malloc(bufsize * sizeof(char *));
+	if (!shell->tokens)
 	{
-		perror("malloc");
-		return NULL;
+		perror("malloc shell->tokens");
+		return ;
 	}
 	while (start < length)
 	{
 		// Saltar espacios en blanco
-		while (start < length && ft_isspace((unsigned char)line[start]))
+		while (start < length && ft_isspace((unsigned char)shell->line[start]))
 			start++;
 
 		/*
@@ -32,54 +36,79 @@ char **split_line(char *line)
 		*/
 
 		if (start == length)
-			break;
+			break ;
 		end = start;
-		while (end < length && !ft_isspace((unsigned char)line[end]))
+		while (end < length && !ft_isspace((unsigned char)shell->line[end]))
 			end++;
 		token_length = end - start;
 		token = malloc(token_length + 1);
 		if (!token)															   // Reconstruir esto, crear la parte de limpieza
 		{
-			perror("malloc");
-			for (size_t i = 0; i < position; i++)
-				free(tokens[i]);
-			free(tokens);
-			return NULL;
+			perror("malloc token");
+			ft_free_tokens(shell->tokens);
+			return ;
 		}
-		strncpy(token, &line[start], token_length);						   // mi ft_strcpy tiene algun fallo porque no funciona bien y por eso uso este
+		strncpy(token, &shell->line[start], token_length);						   // mi ft_strcpy tiene algun fallo porque no funciona bien y por eso uso este
 		token[token_length] = '\0';
-		tokens[position++] = token;
+		shell->tokens[position++] = token;
 		if (position >= bufsize)
 		{
 			bufsize *= 2;
-			char **new_tokens = realloc(tokens, bufsize * sizeof(char *));	 // cambiar esto, no puedo usar realloc ni for!!!!!
+			new_tokens = malloc(bufsize * sizeof(char *));
 			if (!new_tokens)
 			{
-				perror("realloc");
-				// Liberar tokens previos
-				for (size_t i = 0; i < position; i++)
-					free(tokens[i]);
-				free(tokens);
-				return NULL;
+				perror("malloc new_tokens");
+				ft_free_tokens(shell->tokens);
+				return ;
 			}
-			tokens = new_tokens;
+			i = 0;
+			while (i < position)
+			{
+				new_tokens[i] = shell->tokens[i];
+				i++;
+			}
+			free(shell->tokens);
+			shell->tokens = new_tokens;
 		}
 		start = end;
 	}
-	tokens[position] = NULL; // Terminar con NULL
-	return (tokens);
+	shell->tokens[position] = NULL; // Terminar con NULL
+	return ;
 }
 
 int	print_tokens(char **tokens)
 {
+	size_t	i;
+
 	if (!tokens)
-		return 1;
-	for (size_t i = 0; tokens[i] != NULL; i++)
+		return (1);
+	i = 0;
+	if (DEBUG)
 	{
-		printf("Token[%zu]: '%s'\n", i, tokens[i]);
-		// free(tokens[i]);
+		printf("DEBUG: imprimiendo tokens que nos llegan: \n");
+		while (tokens[i])
+		{
+			printf("Token[%zu]: '%s'\n", i, tokens[i]);
+			i++;
+		}
 	}
-	return 0;
+	return (0);
+}
+
+void	ft_free_tokens(char **tokens)
+{
+	size_t	i;
+
+	if (!tokens)
+		return;
+	i = 0;
+	while (tokens[i])
+	{
+		free(tokens[i]);
+		i++;
+	}
+	free(tokens);
+	tokens = NULL;
 }
 
 // Para probar:

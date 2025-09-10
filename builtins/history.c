@@ -6,25 +6,25 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 01:23:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/08/07 01:18:07 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_add_history(char *line, t_shell *shell)
+void	ft_add_history(t_shell *shell)
 {
 	t_hist	*new_hist;
 	t_hist	*last_hist;
 
-	add_history(line);
+	add_history(shell->line);
 	new_hist = malloc(sizeof(t_hist));
 	if (!new_hist)
 	{
 		perror("Memory allocation failed for history node");
 		return ;
 	}
-	new_hist->line = ft_strdup(line);
+	new_hist->line = ft_strdup(shell->line);
 	new_hist->next = NULL;
 	if (!shell->hist)
 		shell->hist = new_hist;

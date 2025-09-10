@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 18:46:12 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/07 14:12:45 by jarregui         ###   ########.fr       */
+/*   Created: 2025/08/07 01:24:42 by jarregui          #+#    #+#             */
+/*   Updated: 2025/08/07 01:29:31 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "../minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	ft_readline(t_shell *shell)
 {
-	size_t	i;
+	ft_free_line(shell);
+	shell->line = readline(shell->prompt);
+}
 
-	i = 0;
-	while (s1[i] == s2[i])
-	{
-		if (s1[i] == '\0' && s2[i] == '\0')
-			return (0);
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+void	ft_free_line(t_shell *shell)
+{
+	if (shell->line)
+		free(shell->line);
+	shell->line = NULL;
 }

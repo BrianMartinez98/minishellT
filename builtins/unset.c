@@ -6,45 +6,63 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/04 19:29:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/09 13:43:30 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_unset(t_shell *shell, char **tokens)
+int	is_token_valid_or_warn(char *key, t_shell *shell)
 {
-	int		i = 1;
-	t_env	*prev = NULL;
-	t_env	*curr = shell->env;
-
-	while (tokens[i])
+	if (!is_valid_key(key))
 	{
-		if (!is_valid_key(tokens[i]))
+		printf("unset: `%s': not a valid identifier\n", key);
+		shell->last_status = 1;
+		return (0);
+	}
+	return (1);
+}
+
+void	unset_key_from_env(char *key, t_shell *shell)
+{
+	t_env	*prev;
+	t_env	*curr;
+	size_t	key_len;
+
+	prev = NULL;
+	curr = shell->env;
+	key_len = ft_strlen(key);
+	while (curr)
+	{
+		if (ft_strncmp(curr->value, key, key_len) == 0
+			&& curr->value[key_len] == '=')
 		{
-			printf("unset: `%s': not a valid identifier\n", tokens[i]);
-			shell->last_status = 1;
+			if (prev)
+				prev->next = curr->next;
+			else
+				shell->env = curr->next;
+			free(curr->value);
+			free(curr);
+			return ;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+}
+
+void	ft_unset(t_shell *shell)
+{
+	int	i;
+
+	i = 1;
+	while (shell->tokens[i])
+	{
+		if (!is_token_valid_or_warn(shell->tokens[i], shell))
+		{
 			i++;
-			continue;
+			continue ;
 		}
-		prev = NULL;
-		curr = shell->env;
-		while (curr)
-		{
-			if (ft_strncmp(curr->value, tokens[i], ft_strlen(tokens[i])) == 0
-				&& curr->value[ft_strlen(tokens[i])] == '=')
-			{
-				if (prev)
-					prev->next = curr->next;
-				else
-					shell->env = curr->next;
-				free(curr->value);
-				free(curr);
-				break;
-			}
-			prev = curr;
-			curr = curr->next;
-		}
+		unset_key_from_env(shell->tokens[i], shell);
 		shell->last_status = 0;
 		i++;
 	}

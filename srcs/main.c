@@ -6,11 +6,40 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/05 17:40:55 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 18:34:50 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 
+int	main(int ac, char **av, char **env)
+{
+	t_shell	shell;
+
+	(void)ac;
+	(void)av;
+	ft_init_shell(&shell, env);
+	while (shell.exit == 0)
+	{
+		ft_build_prompt(&shell);
+		ft_setup_signals_prompt();
+		ft_readline(&shell);
+		if (!shell.line)
+		{
+			shell.eof = 1;
+			break ;
+		}
+		if (*shell.line == '\0')
+			continue ;
+		ft_add_history(&shell);
+		split_line(&shell);
+		if (!shell.tokens || !shell.tokens[0])
+			continue ;
+		// ft_execute(&shell);
+		ft_execute_pipes(&shell); // Ejecutamos el comando introducido
+	}
+	ft_exit_shell(&shell);
+}
 
 //HECHO
 //Historial: funciona con flechas, con el comando history y se libera todo crrectamente al salir.
@@ -21,11 +50,17 @@
 	//pwd: funciona correctamente, imprime el directorio actual.
 	//history: funciona correctamente, imprime el historial de comandos y libera memoria al salir.
 	//env : funciona correctamente, imprime las variables de entorno y libera memoria al salir.
-	//echo: imprime argumentos y variables $ (faltaría posible redirección)
+	//export: crea variables de entorno nuevas y modifica las existentes. No permite claves inválidas.
+	//unset: elimina variables de entorno. No permite claves inválidas.
+	//echo: imprime argumentos y variables $
 	//echo -n: implementada la opción -n para no añadir salto de línea al final.
 	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
 //Makefile y añadido libft
-
+//Make: que no haga RELINK el makefile
+//Make: añadida versión Debug para ver mensajes de depuración
+//Make: añadida versión Valgrind para checar leaks y errores de memoria
+//he modificado tokens y line y las he incluido en la estructura shell, para que se liberen al salir de la minishell y no haya fugas de memoria.
+//Señales: funcionan ok, tanto con el padre como con el hijo. Por teclado y por señales kill
 
 
 //PENDIENTE BRIAN
@@ -34,50 +69,9 @@
 //pipes |
 //revisar tokenización y split_line
 
-//PENDIENTE JUANCHO
-//Make: que no haga RELINK el makefile
-//Make: añadir versión Debug para checar leaks y errores de memoria
-//$crear y borrar variables de entorno (revisar export)
-//Señales. Lo tengo casi. Continuar con las señales
-//Norminette: quitar comentarios y ver longitudes de funciones y num variables
 
 //PENDIENTE EXTRA
+//Ejecución de comandos externos: falta redirección de entrada 
+//echo: altaría posible redirección
+//Norminette: quitar comentarios y ver longitudes de funciones y num variables
 //parseo " "\" ; `
-
-#include "../minishell.h"
-
-int	main(int ac, char **av, char **env)
-{
-	char	*line;
-	char	**array;
-	t_shell	shell;
-
-	(void)ac; //ignoramos estos parámetros que no usamos
-	(void)av; //ignoramos estos parámetros que no usamos
-	ft_init_shell(&shell, env); // Inicializamos la estructura shell
-
-	while (shell.exit == 0)
-	{
-		ft_build_prompt(&shell); // Construimos el prompt con el directorio actual
-		ft_setup_signals_prompt();
-		line = readline(shell.prompt); //aquí imprimimos el prompt y se queda a la espera para leer la línea que introduzcamos. Es una función estandar de C con readline.h
-		if (line && *line)
-			ft_add_history(line, &shell); // si introducimos algo que no sea nulo o vacío, lo añadimos al historial.
-		if (!line) // Ctrl+D
-			break;
-
-		array = split_line(line);
-		if (!array || !array[0])
-		{
-			free(line);
-			continue;
-		}
-		ft_execute_pipes(array, &shell); // Ejecutamos el comando introducido
-		
-		//print_tokens(array);		  // Comprobar que los tokens se parsean correctamente
-
-		free(line);
-		free(array);
-	}
-	ft_exit_shell(&shell);
-}
