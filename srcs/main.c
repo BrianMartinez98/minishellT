@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 15:08:04 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:25:55 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	ft_init_shell(&shell, env);
-
 	while (shell.exit == 0)
 	{
 		ft_build_prompt(&shell);
 		ft_setup_signals_prompt();
 		ft_readline(&shell);
 		if (!shell.line)
+		{
+			shell.eof = 1;
 			break ;
+		}
 		if (*shell.line == '\0')
 			continue ;
 		ft_add_history(&shell);
@@ -54,6 +56,7 @@ int	main(int ac, char **av, char **env)
 //Make: que no haga RELINK el makefile
 //Make: añadir versión Debug para checar leaks y errores de memoria
 //he modificado tokens y line y las he incluido en la estructura shell, para que se liberen al salir de la minishell y no haya fugas de memoria.
+//Señales: funcionan ok
 
 
 //PENDIENTE BRIAN
@@ -64,8 +67,7 @@ int	main(int ac, char **av, char **env)
 
 //PENDIENTE JUANCHO
 //$crear y borrar variables de entorno (revisar export)
-//Señales. Lo tengo casi. Continuar con las señales
-//Norminette: quitar comentarios y ver longitudes de funciones y num variables
 
 //PENDIENTE EXTRA
+//Norminette: quitar comentarios y ver longitudes de funciones y num variables
 //parseo " "\" ; `

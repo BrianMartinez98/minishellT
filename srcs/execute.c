@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 13:47:40 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 10:20:21 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,9 @@ int	ft_execute(t_shell *shell)
 			// Proceso padre
 			int	status;
 
-			ft_setup_signals_prompt(); // ← Restauras señales de minishell tras el hijo
+			signal(SIGINT, SIG_IGN);
 			waitpid(pid, &status, 0);
+			ft_setup_signals_prompt(); // ← Restauras señales de minishell tras el hijo
 			if (WIFEXITED(status))
 				shell->last_status = WEXITSTATUS(status); // ← valor real del $?
 			// si murió por señal:

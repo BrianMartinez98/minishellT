@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/09 15:12:06 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/10 09:12:42 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ include libs/colors.mk
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -DDEBUG=1
+VALGRIND_FLAGS = -g
 # VALGRIND = valgrind --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all
 VALGRIND = valgrind --leak-check=summary
 PROY_NAME =	MINISHELL
@@ -73,13 +74,18 @@ shell: $(EXEC_FILE_NAME)
 
 $(EXEC_FILE_NAME_BONUS): $(OBJS_BONUS) $(LIBS)
 	@$(CC) ${CFLAGS} srcs/server_bonus.o ${LIBS} -o $(EXEC_FILE_NAME_BONUS)
-	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME_BONUS) File$(DEF_COLOR)\n"
+	@echo "$(GREEN)✓ Created $(EXEC_FImakeLE_NAME_BONUS) File$(DEF_COLOR)\n"
 shell_bonus: $(EXEC_FILE_NAME_BONUS)
 
 bonus: subsystems shell_bonus
 
 debug: fclean
-	@$(MAKE) CFLAGS="$(DEBUG_FLAGS)" shell
+	@$(MAKE) CFLAGS="$(CFLAGS) $(DEBUG_FLAGS)" shell
+	@echo "$(GREEN)DEBUG: 🛠️  launching minishell with debug messages$(DEF_COLOR)"
+	@./$(EXEC_FILE_NAME)
+
+valgrind: fclean
+	@$(MAKE) CFLAGS="$(CFLAGS) $(VALGRIND_FLAGS)" shell
 	@echo "$(GREEN)DEBUG: 🔍 Launching Valgrind with debug build...$(DEF_COLOR)\n"
 	@echo "$(CYAN)💧 Valgrind launched$(DEF_COLOR)"
 	@$(VALGRIND) ./$(EXEC_FILE_NAME) 2>&1 | tee valgrind.log

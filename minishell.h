@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 07:56:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 09:43:12 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	char			*cwd;
 	char			*prompt;
 	int				exit;
+	int				eof;
 	int				last_status;
 	char			*line;
 	char			**tokens;
