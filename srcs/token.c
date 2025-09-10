@@ -48,7 +48,7 @@ void	split_line(t_shell *shell)
 			ft_free_tokens(shell->tokens);
 			return ;
 		}
-		strncpy(token, &shell->line[start], token_length);						   // mi ft_strcpy tiene algun fallo porque no funciona bien y por eso uso este
+		ft_strncpy(token, &shell->line[start], token_length);
 		token[token_length] = '\0';
 		shell->tokens[position++] = token;
 		if (position >= bufsize)
@@ -100,7 +100,7 @@ void	ft_free_tokens(char **tokens)
 	size_t	i;
 
 	if (!tokens)
-		return;
+		return ;
 	i = 0;
 	while (tokens[i])
 	{

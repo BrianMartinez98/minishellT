@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/25 15:39:13 by jarregui          #+#    #+#              #
-#    Updated: 2025/08/04 19:43:10 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/10 22:49:16 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRCS		=	$(addprefix functions/, \
 				ft_strlen.c \
 				ft_strmapi.c \
 				ft_strncmp.c \
+				ft_strncpy.c \
 				ft_strnstr.c \
 				ft_strrchr.c \
 				ft_strtrim.c \
