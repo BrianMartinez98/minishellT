@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 13:27:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 09:51:08 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:33:09 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	ft_setup_signals_child(void)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTERM, SIG_DFL);
-
 }
 
 // NOTA 1: las tres señales que debemos gestionar son:

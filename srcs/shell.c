@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 09:45:51 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:38:47 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->eof = 0;
 	shell->line = NULL;
 	shell->tokens = NULL;
+	shell->clean_args = NULL;
+	shell->child_args = NULL;
 	ft_get_shell_address(shell);
 	ft_disable_echoctl(shell);
 }
@@ -67,8 +69,3 @@ int	ft_exit_shell(t_shell *shell)
 	printf("\033[1;32mExiting minishell...\033[0m\n");
 	exit(0);
 }
-
-//IMPORTANTE: Esta función se encarga de liberar la memoria de la estructura shell y sus componentes antes de salir.
-//Pensar que más mallocs usamos. 
-//Checar los strjoin
-

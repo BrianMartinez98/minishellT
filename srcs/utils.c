@@ -6,13 +6,13 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 15:02:07 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:32:43 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void ft_build_prompt(t_shell *shell)
+void	ft_build_prompt(t_shell *shell)
 {
 	char	*tmp;
 
@@ -21,15 +21,13 @@ void ft_build_prompt(t_shell *shell)
 	if (shell->cwd)
 		free(shell->cwd);
 	shell->prompt = NULL;
-	shell->cwd = getcwd(NULL, 0); // Get current working directory - dinamic allocation
+	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
 		perror("Getcwd failed");
-	shell->prompt = ft_strjoin("\001\033[0;36m\033[1m\002", shell->cwd); //formato negrita y cyan
+	shell->prompt = ft_strjoin("\001\033[0;36m\033[1m\002", shell->cwd);
 	tmp = shell->prompt;
-	shell->prompt = ft_strjoin(tmp, " > \001\033[0m\002"); //restauramos formato normal
-	free(tmp); 
-
-	//IDEA: esto recalcula siempre el cwd, más adelante mirar que solo se haga esto si hay un cd exitoso.
+	shell->prompt = ft_strjoin(tmp, " > \001\033[0m\002");
+	free(tmp);
 }
 
 int	ft_error(const char *msg)
@@ -38,8 +36,8 @@ int	ft_error(const char *msg)
 	return (1);
 }
 
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' ||
-			c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
 }

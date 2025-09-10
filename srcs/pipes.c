@@ -6,31 +6,50 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:14:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:14:39 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 20:47:11 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 // Función auxiliar para dividir por '|'
-static int	count_pipes(char **tokens) {
-	int count = 0, i = 0;
-	while (tokens[i]) {
+static int	count_pipes(char **tokens)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (tokens[i])
+	{
 		if (strcmp(tokens[i], "|") == 0)
 			count++;
 		i++;
 	}
-	return count;
+	return (count);
 }
 
 // Divide tokens en arrays de comandos separados por '|'
-static char	***split_by_pipe(char **tokens, int *num_cmds) {
-	int pipes = count_pipes(tokens);
+static char	***split_by_pipe(char **tokens, int *num_cmds)
+{
+	int		pipes;
+	char	***cmds;
+	int		i;
+	int		j;
+	int		k;
+	int		start;
+
+	pipes = count_pipes(tokens);
 	*num_cmds = pipes + 1;
-	char ***cmds = malloc(sizeof(char **) * (*num_cmds + 1));
-	int i = 0, j = 0, k = 0, start = 0;
-	while (tokens[i]) {
-		if (strcmp(tokens[i], "|") == 0) {
+	i = 0;
+	j = 0;
+	k = 0;
+	start = 0;
+	cmds = malloc(sizeof(char **) * (*num_cmds + 1));
+	while (tokens[i])
+	{
+		if (strcmp(tokens[i], "|") == 0)
+		{
 			cmds[k] = malloc(sizeof(char *) * (i - start + 1));
 			for (j = start; j < i; j++)
 				cmds[k][j - start] = tokens[j];
@@ -46,7 +65,7 @@ static char	***split_by_pipe(char **tokens, int *num_cmds) {
 		cmds[k][j - start] = tokens[j];
 	cmds[k][i - start] = NULL;
 	cmds[k + 1] = NULL;
-	return cmds;
+	return (cmds);
 }
 
 int	ft_execute_pipes(t_shell *shell)
@@ -101,6 +120,6 @@ int	ft_execute_pipes(t_shell *shell)
 	for (i = 0; i < num_cmds; i++)
 		wait(&status);
 	// libera memoria de cmds si lo necesitas
-	return WEXITSTATUS(status);
+	return (WEXITSTATUS(status));
 }
 // ...existing code...

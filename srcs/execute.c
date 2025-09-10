@@ -6,11 +6,27 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:02:38 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:37:58 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ft_is_builtin(t_shell *shell)
+{
+	if (ft_strcmp(shell->tokens[0], "exit") == 0
+		|| ft_strcmp(shell->tokens[0], "pwd") == 0
+		|| ft_strcmp(shell->tokens[0], "echo") == 0
+		|| ft_strcmp(shell->tokens[0], "cd") == 0
+		|| ft_strcmp(shell->tokens[0], "export") == 0
+		|| ft_strcmp(shell->tokens[0], "unset") == 0
+		|| ft_strcmp(shell->tokens[0], "history") == 0
+		|| ft_strcmp(shell->tokens[0], "env") == 0)
+		return (1);
+	return (0);
+}
+
+
 
 int	ft_execute(t_shell *shell)
 {
@@ -19,19 +35,12 @@ int	ft_execute(t_shell *shell)
 	int		stdin_save;
 	int		stdout_save;
 	int		is_builtin;
-	char 	**clean_args;
 
-	is_builtin = 0;
-	clean_args = filter_args(shell->tokens);
+	shell->clean_args = filter_args(shell->tokens);
 	if (!shell->tokens || !shell->tokens[0])
 		return (0);
+	is_builtin = ft_is_builtin(shell);
 	command = shell->tokens[0];
-	if (ft_strcmp(shell->tokens[0], "exit") == 0 || ft_strcmp(shell->tokens[0], "pwd") == 0 ||
-		ft_strcmp(shell->tokens[0], "echo") == 0 || ft_strcmp(shell->tokens[0], "cd") == 0 ||
-		ft_strcmp(shell->tokens[0], "export") == 0 || ft_strcmp(shell->tokens[0], "unset") == 0 ||
-		ft_strcmp(shell->tokens[0], "history") == 0 || ft_strcmp(shell->tokens[0], "env") == 0)
-		is_builtin = 1;
-
 	if (is_builtin)
 	{
 		stdin_save = dup(STDIN_FILENO);
@@ -42,9 +51,9 @@ int	ft_execute(t_shell *shell)
 		else if (ft_strcmp(command, "pwd") == 0)
 			printf("%s\n", shell->cwd);
 		else if (ft_strcmp(command, "echo") == 0)
-			ft_echo(shell); 
+			ft_echo(shell);
 		else if (ft_strcmp(command, "cd") == 0)
-			change_path(shell, clean_args);
+			change_path(shell, shell->clean_args);
 		else if (ft_strcmp(command, "export") == 0)
 			ft_export(shell);
 		else if (ft_strcmp(command, "unset") == 0)
@@ -75,16 +84,17 @@ int	ft_execute(t_shell *shell)
 			ft_setup_signals_child(); // ← para Ctrl+C y Ctrl+\ se comporten como en bash
 			handle_redirections(shell->tokens);
 
-            char **child_args = filter_args(shell->tokens);
-			execvp(child_args[0], child_args);
-			
+			shell->child_args = filter_args(shell->tokens);
+			execvp(shell->child_args[0], shell->child_args);
+
 			// execvp(command, shell->tokens); // Busca el binario en el PATH antiguo juancho
 			if (errno == ENOENT)
 				printf("command not found: %s\n", command);
 			else
-				perror(command); // imprime mensaje detallado del sistema
-			free(child_args); //TODO: pasar a shell y limpiar en la salida??
-			exit(127);// Código estándar: comando no encontrado
+				perror(command);
+			free(shell->child_args);
+			shell->child_args = NULL;
+			exit(127);
 		}
 		else
 		{
@@ -101,6 +111,7 @@ int	ft_execute(t_shell *shell)
 				shell->last_status = 128 + WTERMSIG(status);  // por ejemplo 130 si SIGINT
 		}
 	}
-	free(clean_args); //TODO: pasar a shell y limpiar en la salida??
+	free(shell->clean_args);
+	shell->clean_args = NULL;
 	return (shell->last_status);
 }
