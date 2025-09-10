@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 01:23:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/07 01:18:07 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:33:04 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ void	ft_free_history(t_shell *shell)
 	while (shell->hist)
 	{
 		next = shell->hist->next;
-		free(shell->hist->line);   // ← liberas la línea del comando
-		free(shell->hist);         // ← liberas el nodo
+		free(shell->hist->line);
+		free(shell->hist);
 		shell->hist = next;
 	}
 }

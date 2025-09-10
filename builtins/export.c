@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 13:41:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:32:02 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static t_env	*find_env_node(t_env *head, const char *key, size_t key_len,
 	cur = head;
 	while (cur)
 	{
-		if (ft_strncmp(cur->value, key, key_len) == 0 &&
-			cur->value[key_len] == '=')
+		if (ft_strncmp(cur->value, key, key_len) == 0
+			&& cur->value[key_len] == '=')
 			return (cur);
 		*plast = cur;
 		cur = cur->next;

@@ -6,12 +6,12 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:15:16 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:30:42 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL
-# define MINISHELL
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # define SPACE	"\t\n\v\f\r "
 
@@ -79,7 +79,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 }	t_shell;
 
 //builtins/cd.c
-void    change_path(t_shell *shell, char **tokens);
+void	change_path(t_shell *shell, char **tokens);
 
 //builtins/echo.c
 void	ft_echo(t_shell *shell);
@@ -139,12 +139,12 @@ int		ft_error(const char *msg);
 int		ft_isspace(char c);
 
 //redirect.c
-int 	dupp(char *filename, int dest, int flags);
-char 	**filter_args(char **array);
+int		dupp(char *filename, int dest, int flags);
+char	**filter_args(char **array);
 
 //redirection_utils.c
-char 	**filter_args(char **args);
-int 	handle_redirections(char **args);
+char	**filter_args(char **args);
+int		handle_redirections(char **args);
 
 //pipes.c
 int		ft_execute_pipes(t_shell *shell);

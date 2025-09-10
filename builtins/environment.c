@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/08/08 01:29:11 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:34:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*ft_getenv(t_shell *shell, const char *key)
 	{
 		if (ft_strncmp(current->value, key, len) == 0
 			&& current->value[len] == '=')
-			return (current->value + len + 1); // salta "KEY="
+			return (current->value + len + 1);
 		current = current->next;
 	}
 	return (NULL);
@@ -106,4 +106,3 @@ int	append_env(t_shell *shell, const char *entry, t_env *last)
 		shell->env = new;
 	return (1);
 }
-
