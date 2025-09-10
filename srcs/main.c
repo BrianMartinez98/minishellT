@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 10:30:36 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/10 13:48:58 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ int	main(int ac, char **av, char **env)
 	//pwd: funciona correctamente, imprime el directorio actual.
 	//history: funciona correctamente, imprime el historial de comandos y libera memoria al salir.
 	//env : funciona correctamente, imprime las variables de entorno y libera memoria al salir.
-	//echo: imprime argumentos y variables $ (faltaría posible redirección)
+	//export: crea variables de entorno nuevas y modifica las existentes. No permite claves inválidas.
+	//unset: elimina variables de entorno. No permite claves inválidas.
+	//echo: imprime argumentos y variables $
 	//echo -n: implementada la opción -n para no añadir salto de línea al final.
 	//$?: actualizado en shell->last_status tras la ejecución de un comando externo y los builtins pero hay que checarlo bien
 //Makefile y añadido libft
@@ -66,10 +68,9 @@ int	main(int ac, char **av, char **env)
 //pipes |
 //revisar tokenización y split_line
 
-//PENDIENTE JUANCHO
-//$crear y borrar variables de entorno (revisar export)
 
 //PENDIENTE EXTRA
 //Ejecución de comandos externos: falta redirección de entrada 
+//echo: altaría posible redirección
 //Norminette: quitar comentarios y ver longitudes de funciones y num variables
 //parseo " "\" ; `
