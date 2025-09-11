@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:41:27 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:54:45 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->fd = 0;
 	shell->line2 = NULL;
 	shell->len = 0;
-	shell->nread = 0;
 	shell->cmds = NULL;
+	shell->nread = 0;
 	ft_get_shell_address(shell);
 	ft_disable_echoctl(shell);
 }
