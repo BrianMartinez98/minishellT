@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:41:51 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 13:26:32 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ void	ft_echo(t_shell *shell)
 	i = 1;
 	suppress_nl = 0;
 	supress_first = 1;
-	while (shell->tokens[i])
+	while (shell->clean_args[i])
 	{
-		printed = ft_echo_token(shell, shell->tokens[i],
+		printed = ft_echo_token(shell, shell->clean_args[i],
 				&suppress_nl, &supress_first);
-		if (printed && shell->tokens[i + 1])
+		if (printed && shell->clean_args[i + 1])
 			printf(" ");
 		i++;
 	}

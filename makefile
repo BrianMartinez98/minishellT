@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/11 11:55:05 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/11 13:56:13 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRCS 	= builtins/echo.c \
 		srcs/execute.c \
 		srcs/main.c \
 		srcs/readline.c \
-		srcs/redirection_utils.c \
+		srcs/redirect.c \
+		srcs/redirect_utils.c \
 		srcs/shell.c \
 		srcs/signals.c \
 		srcs/token.c \

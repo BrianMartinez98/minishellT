@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 22:38:47 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 13:53:33 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,13 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->line = NULL;
 	shell->tokens = NULL;
 	shell->clean_args = NULL;
-	shell->child_args = NULL;
+	shell->stdin_save = 0;
+	shell->stdout_save = 0;
+	shell->fd = 0;
+	shell->line2 = NULL;
+	shell->len = 0;
+	shell->nread = 0;
+	shell->cmds = NULL;
 	ft_get_shell_address(shell);
 	ft_disable_echoctl(shell);
 }
@@ -63,6 +69,7 @@ int	ft_exit_shell(t_shell *shell)
 	ft_free_env(shell);
 	ft_free_line(shell);
 	ft_free_tokens(shell->tokens);
+	ft_free_tokens(shell->clean_args);
 	ft_restore_term_settings(shell);
 	if (DEBUG && shell->eof)
 		write(1, "\n	Pulsada tecla Ctrl+D (EOF)\n", 30);
