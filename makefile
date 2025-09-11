@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
+#    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/10 18:59:57 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/11 11:55:05 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,6 @@ SRCS 	= builtins/echo.c \
 SRCS_BONUS 	= srcs/shell_bonus.c
 OBJS = $(SRCS:.c=.o)
 OBJS_BONUS = ${SRCS_BONUS:.c=.o}
-LIBS = ${LIBFT_LIB}
 
 # RULES DECLARATION:
 all: subsystems shell
@@ -59,34 +58,31 @@ all: subsystems shell
 	@echo "${ORANGE}${PROY_NAME} compiling file: $(BROWN)[$<]...${DEF_COLOR}"
 	@$(CC) $(CFLAGS) -c -o $@ $< 
 
-subsystems:
-# Do Make only if there are changes in the libraries:
-	@if [ -f $(LIBFT_LIB) ]; then \
-	if find $(LIBFT_DIR) -name "*.c" -newer $(LIBFT_LIB) | grep -q .; then \
-	${MAKE} -C $(LIBFT_DIR) all; \
-	fi; \
-	else \
-	${MAKE} -C $(LIBFT_DIR) all; \
-	fi
+# LIBFT
+subsystems: $(LIBFT_LIB)
 
-$(EXEC_FILE_NAME): $(OBJS) $(LIBS)
-	@$(CC) ${CFLAGS} $(OBJS) ${LIBS} $(SYS_LIBS) -o $(EXEC_FILE_NAME)
+$(LIBFT_LIB):
+	@$(MAKE) -C $(LIBFT_DIR) all
+
+# MINISHELL
+$(EXEC_FILE_NAME): $(OBJS) $(LIBFT_LIB)
+	@$(CC) ${CFLAGS} $(OBJS) ${LIBFT_LIB} $(SYS_LIBS) -o $(EXEC_FILE_NAME)
 	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME) File$(DEF_COLOR)\n"
 shell: $(EXEC_FILE_NAME)
 
-$(EXEC_FILE_NAME_BONUS): $(OBJS_BONUS) $(LIBS)
-	@$(CC) ${CFLAGS} srcs/server_bonus.o ${LIBS} -o $(EXEC_FILE_NAME_BONUS)
+$(EXEC_FILE_NAME_BONUS): $(OBJS_BONUS) $(LIBFT_LIB)
+	@$(CC) ${CFLAGS} srcs/server_bonus.o ${LIBFT_LIB} -o $(EXEC_FILE_NAME_BONUS)
 	@echo "$(GREEN)✓ Created $(EXEC_FImakeLE_NAME_BONUS) File$(DEF_COLOR)\n"
 shell_bonus: $(EXEC_FILE_NAME_BONUS)
 
 bonus: subsystems shell_bonus
 
-debug: fclean
+debug: fclean $(LIBFT_LIB)
 	@$(MAKE) CFLAGS="$(CFLAGS) $(DEBUG_FLAGS)" shell
 	@echo "$(GREEN)DEBUG: 🛠️  launching minishell with debug messages$(DEF_COLOR)"
 	@./$(EXEC_FILE_NAME)
 
-valgrind: fclean
+valgrind: fclean $(LIBFT_LIB)
 	@$(MAKE) CFLAGS="$(CFLAGS) $(VALGRIND_FLAGS)" shell
 	@echo "$(GREEN)DEBUG: 🔍 Launching Valgrind with debug build...$(DEF_COLOR)\n"
 	@echo "$(CYAN)💧 Valgrind launched$(DEF_COLOR)"
