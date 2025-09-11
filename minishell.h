@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 13:55:16 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:43:05 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,16 @@ int		ft_leftleft(t_shell *shell, int i);
 char	**filter_args(char **args);
 int		handle_redirections(t_shell *shell);
 
+//srcs/shell_exit.c
+void	ft_free_array(char **array);
+void	ft_free_matrix(char ***matrix);
+int		ft_exit_shell(t_shell *shell);
+
 //srcs/shell.c
 t_shell	*ft_get_shell_address(t_shell *shell);
 void	ft_disable_echoctl(t_shell *shell);
 void	ft_restore_term_settings(t_shell *shell);
 void	ft_init_shell(t_shell *shell, char **env);
-int		ft_exit_shell(t_shell *shell);
 
 //srcs/signals.c
 void	ft_sigint_handler(int sig);
@@ -148,7 +152,6 @@ void	ft_setup_signals_child(void);
 //srcs/token.c
 void	split_line(t_shell *shell);
 int		print_tokens(char **tokens);
-void	ft_free_tokens(char **tokens);
 
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);
