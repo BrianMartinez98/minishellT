@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:20:03 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:52:30 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,16 @@ char	**filter_args(char **args)
 				|| strcmp(args[i], "<<") == 0) && args[i + 1])
 			i += 2;
 		else
-			res[j++] = args[i++];
+		{
+			res[j] = ft_strdup(args[i]);   // 👈 copiar string
+			if (!res[j])
+			{
+				ft_free_array(&res);      // liberar en caso de error
+				return (NULL);
+			}
+			j++;
+			i++;
+		}
 	}
 	res[j] = NULL;
 	return (res);

@@ -6,42 +6,43 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:44:13 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:19:11 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_free_array(char **array)
+void	ft_free_array(char ***array)
 {
 	size_t	i;
 
-	if (!array)
+	if (!array || !*array)
 		return ;
 	i = 0;
-	while (array[i])
+	while ((*array)[i])
 	{
-		free(array[i]);
+		free((*array)[i]);
 		i++;
 	}
-	free(array);
+	free(*array);
+	*array = NULL;
 }
 
-void	ft_free_matrix(char ***matrix)
+void	ft_free_matrix(char ****matrix)
 {
 	size_t	i;
 
-	if (!matrix)
+	if (!matrix || !*matrix)
 		return ;
 	i = 0;
-	while (matrix[i])
+	while ((*matrix)[i])
 	{
-		ft_free_array(matrix[i]);
+		ft_free_array(&(*matrix)[i]);
 		i++;
 	}
-	free(matrix);
+	free(*matrix);
+	*matrix = NULL;
 }
-
 
 int	ft_exit_shell(t_shell *shell)
 {
@@ -49,12 +50,18 @@ int	ft_exit_shell(t_shell *shell)
 		free(shell->prompt);
 	if (shell->cwd)
 		free(shell->cwd);
-	ft_free_history(shell);
-	ft_free_env(shell);
-	ft_free_line(shell);
-	ft_free_array(shell->tokens);
-	ft_free_array(shell->clean_args);
-	ft_free_matrix(shell->cmds);
+	if (shell->hist)
+		ft_free_history(shell);
+	if (shell->env)
+		ft_free_env(shell);
+	if (shell->line)
+		ft_free_line(shell);
+	if (shell->tokens)
+		ft_free_array(&shell->tokens);
+	if (shell->clean_args)
+		ft_free_array(&shell->clean_args);
+	if (shell->cmds)
+		ft_free_matrix(&shell->cmds);
 	ft_restore_term_settings(shell);
 	if (DEBUG && shell->eof)
 		write(1, "\n	Pulsada tecla Ctrl+D (EOF)\n", 30);

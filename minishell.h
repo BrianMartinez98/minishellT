@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:43:05 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:19:47 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ char	**filter_args(char **args);
 int		handle_redirections(t_shell *shell);
 
 //srcs/shell_exit.c
-void	ft_free_array(char **array);
-void	ft_free_matrix(char ***matrix);
+void	ft_free_array(char ***array);
+void	ft_free_matrix(char ****matrix);
 int		ft_exit_shell(t_shell *shell);
 
 //srcs/shell.c

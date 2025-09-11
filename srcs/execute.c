@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:21:40 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:52:07 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static int	ft_pid_zero(t_shell *shell)
 		printf("command not found: %s\n", shell->tokens[0]);
 	else
 		perror(shell->tokens[0]);
-	free(child_args);
+	ft_free_array(&child_args);
+	// free(child_args);
 	exit(127);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:39:59 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:16:25 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	init_tokens(t_shell *shell, size_t bufsize)
 {
 	if (shell->tokens)
-		ft_free_array(shell->tokens);
+		ft_free_array(&shell->tokens);
 	shell->tokens = malloc(bufsize * sizeof(char *));
 	if (!shell->tokens)
 	{
@@ -81,7 +81,7 @@ void	split_line(t_shell *shell)
 			end++;
 		token = copy_token(shell->line, start, end);
 		if (!token)
-			return (ft_free_array(shell->tokens));
+			return (ft_free_array(&shell->tokens));
 		shell->tokens[position++] = token;
 		if (position >= bufsize)
 		{
@@ -113,79 +113,3 @@ int	print_tokens(char **tokens)
 	}
 	return (0);
 }
-
-// void	split_line(t_shell *shell)
-// {
-// 	size_t		start;
-// 	size_t		length;
-// 	size_t		token_length;
-// 	size_t		end;
-// 	size_t		bufsize = BUFSIZ;
-// 	size_t		position = 0;
-// 	size_t		i;
-// 	char 		*token;
-// 	char		**new_tokens;
-
-// 	if (shell->tokens)
-// 		ft_free_array(shell->tokens); // Limpiar tokens anteriores
-// 	shell->tokens = NULL; // Inicializar tokens a NULL
-// 	start = 0;
-// 	length = ft_strlen(shell->line);
-// 	shell->tokens = malloc(bufsize * sizeof(char *));
-// 	if (!shell->tokens)
-// 	{
-// 		perror("malloc shell->tokens");
-// 		return ;
-// 	}
-// 	while (start < length)
-// 	{
-// 		// Saltar espacios en blanco
-// 		while (start < length && ft_isspace((unsigned char)shell->line[start]))
-// 			start++;
-
-// 		/*
-// 		if (line[start] == '"' || line[start] == '\'')
-// 			while (line[start] == '"' || line[start] == '\'')					No funciona bien esta parte, deberia respetar las comillas
-// 				start++;
-// 		*/
-
-// 		if (start == length)
-// 			break ;
-// 		end = start;
-// 		while (end < length && !ft_isspace((unsigned char)shell->line[end]))
-// 			end++;
-// 		token_length = end - start;
-// 		token = malloc(token_length + 1);
-// 		if (!token)															   // Reconstruir esto, crear la parte de limpieza
-// 		{
-// 			perror("malloc token");
-// 			ft_free_array(shell->tokens);
-// 			return ;
-// 		}
-// 		ft_strncpy(token, &shell->line[start], token_length);
-// 		token[token_length] = '\0';
-// 		shell->tokens[position++] = token;
-// 		if (position >= bufsize)
-// 		{
-// 			bufsize *= 2;
-// 			new_tokens = malloc(bufsize * sizeof(char *));
-// 			if (!new_tokens)
-// 			{
-// 				perror("malloc new_tokens");
-// 				ft_free_array(shell->tokens);
-// 				return ;
-// 			}
-// 			i = 0;
-// 			while (i < position)
-// 			{
-// 				new_tokens[i] = shell->tokens[i];
-// 				i++;
-// 			}
-// 			free(shell->tokens);
-// 			shell->tokens = new_tokens;
-// 		}
-// 		start = end;
-// 	}
-// 	shell->tokens[position] = NULL; // Terminar con NULL
-// 	return ;
-// }

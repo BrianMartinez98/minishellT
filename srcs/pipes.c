@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:14:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:54:53 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:17:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ static char	***split_by_pipe(int *num_cmds, t_shell *shell)
 {
 	int pipes = count_pipes(shell);
 	*num_cmds = pipes + 1;
-	ft_free_matrix(shell->cmds);
-	shell->cmds = NULL;
+	ft_free_matrix(&shell->cmds);
 	shell->cmds = malloc(sizeof(char **) * (*num_cmds + 1));
 	int i = 0, j = 0, k = 0, start = 0;
 	while (shell->tokens[i])
