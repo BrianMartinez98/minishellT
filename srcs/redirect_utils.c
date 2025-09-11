@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 13:28:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 13:51:58 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:17:52 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_left(t_shell *shell, int i)
 	if (shell->fd < 0)
 	{
 		perror(shell->tokens[i]);
-		return (-1); 
+		return (-1);
 	}
 	dup2(shell->fd, STDIN_FILENO);
 	close(shell->fd);
@@ -54,10 +54,11 @@ int	ft_left(t_shell *shell, int i)
 int	ft_leftleft(t_shell *shell, int i)
 {
 	int pipefd[2];
+
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
-		return -1;
+		return (-1);
 	}
 	while (1)
 	{
@@ -65,14 +66,14 @@ int	ft_leftleft(t_shell *shell, int i)
 		shell->nread = getline(&shell->line2, &shell->len, stdin);
 		if (shell->nread == -1)
 			break ;
-		shell->line[shell->nread-1] = '\0';
+		shell->line[shell->nread - 1] = '\0';
 		if (strcmp(shell->line2, shell->tokens[i]) == 0)
 			break ;
 		write(pipefd[1], shell->line2, strlen(shell->line2));
 		write(pipefd[1], "\n", 1);
 	}
 	free(shell->line2);
-    shell->line2 = NULL;
+	shell->line2 = NULL;
 	close(pipefd[1]);
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);

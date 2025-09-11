@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 13:33:57 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:20:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,18 @@ char	**filter_args(char **args)
 		count++;
 	res = malloc(sizeof(char *) * (count + 1));
 	if (!res)
-		return NULL;
+		return (NULL);
 	while (args[i])
 	{
-		if ((strcmp(args[i], "<") == 0 || strcmp(args[i], ">") == 0 ||
-			 strcmp(args[i], ">>") == 0 || strcmp(args[i], "<<") == 0) && args[i+1])
+		if ((strcmp(args[i], "<") == 0 || strcmp(args[i], ">") == 0
+				|| strcmp(args[i], ">>") == 0
+				|| strcmp(args[i], "<<") == 0) && args[i + 1])
 			i += 2;
 		else
 			res[j++] = args[i++];
 	}
 	res[j] = NULL;
-	return res;
+	return (res);
 }
 
 int	handle_redirections(t_shell *shell)
@@ -48,8 +49,6 @@ int	handle_redirections(t_shell *shell)
 	value = 0;
 	while (shell->tokens[i])
 	{
-		// echo "KK" > kk.txt
-
 		if (shell->tokens[i + 1] && strcmp(shell->tokens[i], "<") == 0)
 		{
 			value = ft_left(shell, i + 1);
