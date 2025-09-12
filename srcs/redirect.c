@@ -6,43 +6,55 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 11:32:02 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:45:22 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	filter_args(char ***args, char ***filt_args)
+static int	is_redirect(char *arg)
 {
-	int		count;
-	int		i;
-	int		j;
+	if (!arg)
+		return (0);
+	if (strcmp(arg, "<") == 0
+		|| strcmp(arg, ">") == 0
+		|| strcmp(arg, ">>") == 0
+		|| strcmp(arg, "<<") == 0)
+		return (1);
+	return (0);
+}
+
+static int	safe_strdup(char ***dst, int j, char *src)
+{
+	(*dst)[j] = ft_strdup(src);
+	if (!(*dst)[j])
+	{
+		ft_free_array(dst);
+		return (0);
+	}
+	return (1);
+}
+
+static void	fill_filtered(char ***args, char ***filt_args)
+{
+	int	i;
+	int	j;
+	int	skip_done;
 
 	i = 0;
 	j = 0;
-	count = 0;
-	ft_free_array(filt_args);
-	while ((*args)[count])
-		count++;
-	if (count == 0)
-		return ;
-	*filt_args = malloc(sizeof(char *) * (count + 1));
-	if (!*filt_args )
-		return ;
+	skip_done = 0;
 	while ((*args)[i])
 	{
-		if ((strcmp((*args)[i], "<") == 0 || strcmp((*args)[i], ">") == 0
-				|| strcmp((*args)[i], ">>") == 0
-				|| strcmp((*args)[i], "<<") == 0) && (*args)[i + 1])
+		if (is_redirect((*args)[i]) && (*args)[i + 1] && !skip_done)
+		{
+			skip_done = 1;
 			i += 2;
+		}
 		else
 		{
-			(*filt_args)[j] = ft_strdup((*args)[i]);   // 👈 copiar string
-			if (!(*filt_args)[j])
-			{
-				ft_free_array(filt_args);      // liberar en caso de error
+			if (!safe_strdup(filt_args, j, (*args)[i]))
 				return ;
-			}
 			j++;
 			i++;
 		}
@@ -50,43 +62,21 @@ void	filter_args(char ***args, char ***filt_args)
 	(*filt_args)[j] = NULL;
 }
 
+void	filter_args(char ***args, char ***filt_args)
+{
+	int		count;
 
-// char	**filter_args(char **args)
-// {
-// 	char	**res;
-// 	int		count;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	count = 0;
-// 	while (args[count])
-// 		count++;
-// 	res = malloc(sizeof(char *) * (count + 1));
-// 	if (!res)
-// 		return (NULL);
-// 	while (args[i])
-// 	{
-// 		if ((strcmp(args[i], "<") == 0 || strcmp(args[i], ">") == 0
-// 				|| strcmp(args[i], ">>") == 0
-// 				|| strcmp(args[i], "<<") == 0) && args[i + 1])
-// 			i += 2;
-// 		else
-// 		{
-// 			res[j] = ft_strdup(args[i]);   // 👈 copiar string
-// 			if (!res[j])
-// 			{
-// 				ft_free_array(&res);      // liberar en caso de error
-// 				return (NULL);
-// 			}
-// 			j++;
-// 			i++;
-// 		}
-// 	}
-// 	res[j] = NULL;
-// 	return (res);
-// }
+	count = 0;
+	ft_free_array(filt_args);
+	while ((*args)[count])
+		count++;
+	if (count == 0)
+		return ;
+	*filt_args = malloc(sizeof(char *) * (count + 1));
+	if (!*filt_args)
+		return ;
+	fill_filtered(args, filt_args);
+}
 
 int	handle_redirections(t_shell *shell)
 {
@@ -97,24 +87,16 @@ int	handle_redirections(t_shell *shell)
 	value = 0;
 	while (shell->tokens[i])
 	{
-		if (shell->tokens[i + 1] && strcmp(shell->tokens[i], "<") == 0)
+		if (shell->tokens[i + 1] && is_redirect(shell->tokens[i]))
 		{
-			value = ft_left(shell, i + 1);
-			i += 2;
-		}
-		else if (shell->tokens[i + 1] && strcmp(shell->tokens[i], ">") == 0)
-		{
-			value = ft_redirect(shell, i + 1);
-			i += 2;
-		}
-		else if (shell->tokens[i + 1] && strcmp(shell->tokens[i], ">>") == 0)
-		{
-			value = ft_adding(shell, i + 1);
-			i += 2;
-		}
-		else if (shell->tokens[i + 1] && strcmp(shell->tokens[i], "<<") == 0)
-		{
-			value = ft_leftleft(shell, i + 1);
+			if (strcmp(shell->tokens[i], "<") == 0)
+				value = ft_left(shell, i + 1);
+			else if (strcmp(shell->tokens[i], ">") == 0)
+				value = ft_redirect(shell, i + 1);
+			else if (strcmp(shell->tokens[i], ">>") == 0)
+				value = ft_adding(shell, i + 1);
+			else if (strcmp(shell->tokens[i], "<<") == 0)
+				value = ft_leftleft(shell, i + 1);
 			i += 2;
 		}
 		else
