@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 11:39:15 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 13:10:56 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ typedef struct s_hist //para el historial de comandos
 	struct s_hist	*next;
 	struct s_hist	*prev;
 }	t_hist;
+
+typedef struct s_span
+{
+	size_t			start;
+	size_t			end;
+}	t_span;
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
@@ -152,11 +158,12 @@ void	ft_setup_signals_child(void);
 
 //srcs/token.c
 void	split_line(t_shell *shell);
-int		print_tokens(char **tokens);
 
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
+int		ft_next_span(char *s, size_t *i, t_span *sp);
+int		print_tokens(char **tokens);
 
 #endif

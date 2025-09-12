@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 15:16:25 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 13:12:19 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,59 +57,44 @@ static char	**resize_tokens(char **tokens, size_t old_size, size_t new_size)
 	return (new_tokens);
 }
 
-void	split_line(t_shell *shell)
+static int	add_token(t_shell *shell, size_t *pos, size_t *bs, t_span sp)
 {
-	size_t	start;
-	size_t	end;
-	size_t	position;
-	size_t	bufsize;
-	char	*token;
+	char	*tok;
 
-	bufsize = BUFSIZ;
-	position = 0;
-	if (!init_tokens(shell, bufsize))
-		return ;
-	start = 0;
-	while (shell->line[start])
+	tok = copy_token(shell->line, sp.start, sp.end);
+	if (!tok)
 	{
-		while (ft_isspace((unsigned char)shell->line[start]))
-			start++;
-		if (!shell->line[start])
-			break ;
-		end = start;
-		while (shell->line[end] && !ft_isspace((unsigned char)shell->line[end]))
-			end++;
-		token = copy_token(shell->line, start, end);
-		if (!token)
-			return (ft_free_array(&shell->tokens));
-		shell->tokens[position++] = token;
-		if (position >= bufsize)
-		{
-			bufsize *= 2;
-			shell->tokens = resize_tokens(shell->tokens, position, bufsize);
-			if (!shell->tokens)
-				return (perror("malloc new_tokens"));
-		}
-		start = end;
+		ft_free_array(&shell->tokens);
+		return (0);
 	}
-	shell->tokens[position] = NULL;
+	shell->tokens[(*pos)++] = tok;
+	if (*pos >= *bs)
+	{
+		*bs *= 2;
+		shell->tokens = resize_tokens(shell->tokens, *pos, *bs);
+		if (!shell->tokens)
+		{
+			perror("malloc new_tokens");
+			return (0);
+		}
+	}
+	return (1);
 }
 
-int	print_tokens(char **tokens)
+void	split_line(t_shell *shell)
 {
+	size_t	pos;
+	size_t	bs;
 	size_t	i;
+	t_span	sp;
 
-	if (!tokens)
-		return (1);
+	bs = BUFSIZ;
+	pos = 0;
 	i = 0;
-	if (DEBUG)
-	{
-		printf("DEBUG: imprimiendo tokens que nos llegan: \n");
-		while (tokens[i])
-		{
-			printf("Token[%zu]: '%s'\n", i, tokens[i]);
-			i++;
-		}
-	}
-	return (0);
+	if (!init_tokens(shell, bs))
+		return ;
+	while (ft_next_span(shell->line, &i, &sp))
+		if (!add_token(shell, &pos, &bs, sp))
+			return ;
+	shell->tokens[pos] = NULL;
 }

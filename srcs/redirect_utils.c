@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 13:28:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:17:52 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:54:17 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_left(t_shell *shell, int i)
 
 int	ft_leftleft(t_shell *shell, int i)
 {
-	int pipefd[2];
+	int	pipefd[2];
 
 	if (pipe(pipefd) == -1)
 	{

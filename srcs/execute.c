@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 11:43:29 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:54:34 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	ft_pid_zero(t_shell *shell)
 	handle_redirections(shell);
 	execvp(shell->child_args[0], shell->child_args);
 	if (errno == ENOENT)
-	printf("command not found: %s\n", shell->tokens[0]);
+		printf("command not found: %s\n", shell->tokens[0]);
 	else
 		perror(shell->tokens[0]);
 	ft_free_array(&shell->child_args);
