@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/12 10:45:41 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/12 11:59:45 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -DDEBUG=1
 VALGRIND_FLAGS = -g
-# VALGRIND = valgrind --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
 # VALGRIND = valgrind --leak-check=summary
 PROY_NAME =	MINISHELL
@@ -87,15 +86,15 @@ debug: fclean $(LIBFT_LIB)
 
 valgrind: fclean $(LIBFT_LIB)
 	@$(MAKE) CFLAGS="$(CFLAGS) $(VALGRIND_FLAGS)" shell
-	@echo "$(GREEN)DEBUG: 🔍 Launching Valgrind with debug build...$(DEF_COLOR)\n"
-	@echo "$(CYAN)💧 Valgrind launched$(DEF_COLOR)"
-	@$(VALGRIND) ./$(EXEC_FILE_NAME) 2>&1 | tee valgrind.log
+	@echo "$(GREEN)DEBUG: 🔍 Launching Valgrind with full leak check...$(DEF_COLOR)\n"
+	@$(VALGRIND) ./$(EXEC_FILE_NAME)
 	@echo "$(YELLOW)⚠️ Note: memory still reachable is due to readline and is not considered leak$(DEF_COLOR)"
-	@echo "$(CYAN)💧 Leak Summary (if any):$(DEF_COLOR)"
-	@grep -q "definitely lost: 0 bytes in 0 blocks" valgrind.log && \
-		echo "$(GREEN)✅ No memory leaks detected$(DEF_COLOR)" || \
-		(echo "$(RED)❌ MEM LEAK DETECTED! Check summary at valgrind.log$(DEF_COLOR)"; grep -A5 "LEAK SUMMARY:" valgrind.log)
-	
+	@echo "$(CYAN)💧 Leak Summary (from valgrind.log):$(DEF_COLOR)"
+	@grep -A5 "LEAK SUMMARY:" valgrind.log
+	@grep "definitely lost:" valgrind.log | grep -v "0 bytes" && \
+		(echo "$(RED)❌ MEM LEAK DETECTED!$(DEF_COLOR)"; exit 1) || \
+		echo "$(GREEN)✅ No memory leaks detected$(DEF_COLOR)"
+		
 clean:
 	@${RM} ${OBJS} ${OBJS_BONUS} $(OBJS:.o=.d) $(OBJS_BONUS:.o=.d) valgrind.log
 	@echo "\n$(GREEN)✓ All objects from ${PROY_NAME} cleaned successfully$(DEF_COLOR)"
