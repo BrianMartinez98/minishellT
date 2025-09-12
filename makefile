@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
+#    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/11 14:48:07 by jarregui         ###   ########.fr        #
+#    Updated: 2025/09/12 10:45:41 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -DDEBUG=1
 VALGRIND_FLAGS = -g
 # VALGRIND = valgrind --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all
-VALGRIND = valgrind --leak-check=summary
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
+# VALGRIND = valgrind --leak-check=summary
 PROY_NAME =	MINISHELL
 EXEC_FILE_NAME = minishell
 EXEC_FILE_NAME_BONUS = minishell_bonus

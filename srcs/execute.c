@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 15:52:07 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:43:29 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,15 @@ static void	ft_pid(pid_t pid, t_shell *shell)
 
 static int	ft_pid_zero(t_shell *shell)
 {
-	char	**child_args;
-
-	child_args = filter_args(shell->tokens);
+	filter_args(&shell->tokens, &shell->child_args);
 	ft_setup_signals_child();
 	handle_redirections(shell);
-	execvp(child_args[0], child_args);
+	execvp(shell->child_args[0], shell->child_args);
 	if (errno == ENOENT)
-		printf("command not found: %s\n", shell->tokens[0]);
+	printf("command not found: %s\n", shell->tokens[0]);
 	else
 		perror(shell->tokens[0]);
-	ft_free_array(&child_args);
-	// free(child_args);
+	ft_free_array(&shell->child_args);
 	exit(127);
 }
 
@@ -58,7 +55,7 @@ int	ft_is_builtin(t_shell *shell)
 
 static void	ft_execute_std(t_shell *shell)
 {
-	shell->clean_args = filter_args(shell->tokens);
+	filter_args(&shell->tokens, &shell->clean_args);
 	shell->stdin_save = dup(STDIN_FILENO);
 	shell->stdout_save = dup(STDOUT_FILENO);
 	handle_redirections(shell);

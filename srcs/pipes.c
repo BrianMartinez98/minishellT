@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:14:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 15:17:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:37:17 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_execute_pipes(t_shell *shell)
 				close(fd[1]);
 			}
 			handle_redirections(shell);
-			shell->clean_args = filter_args(shell->cmds[i]);
+			filter_args(&shell->cmds[i], &shell->clean_args);
 			execvp(shell->clean_args[0], shell->clean_args);
 			perror(shell->clean_args[0]);
 			free(shell->clean_args);

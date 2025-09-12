@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 15:19:11 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:40:33 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	ft_exit_shell(t_shell *shell)
 		ft_free_array(&shell->tokens);
 	if (shell->clean_args)
 		ft_free_array(&shell->clean_args);
+	if (shell->child_args)
+		ft_free_array(&shell->child_args);	
 	if (shell->cmds)
 		ft_free_matrix(&shell->cmds);
 	ft_restore_term_settings(shell);

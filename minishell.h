@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 15:19:47 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:39:15 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	char			*line;
 	char			**tokens;
 	char			**clean_args;
+	char			**child_args;
 	int				stdin_save;
 	int				stdout_save;
 	int				fd;
@@ -129,7 +130,7 @@ int		ft_left(t_shell *shell, int i);
 int		ft_leftleft(t_shell *shell, int i);
 
 //srcs/redirect.c
-char	**filter_args(char **args);
+void	filter_args(char ***args, char ***filt_args);
 int		handle_redirections(t_shell *shell);
 
 //srcs/shell_exit.c

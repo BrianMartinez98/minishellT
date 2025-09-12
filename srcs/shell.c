@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 14:54:45 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:39:43 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->line = NULL;
 	shell->tokens = NULL;
 	shell->clean_args = NULL;
+	shell->child_args = NULL;
 	shell->stdin_save = 0;
 	shell->stdout_save = 0;
 	shell->fd = 0;
