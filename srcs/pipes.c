@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:14:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 11:37:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/12 13:44:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 static int	count_pipes(t_shell *shell)
 {
-	int count = 0, i = 0;
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
 	while (shell->tokens[i])
 	{
 		if (strcmp(shell->tokens[i], "|") == 0)
 			count++;
 		i++;
 	}
-	return count;
+	return (count);
 }
 
 // Divide tokens en arrays de comandos separados por '|'
