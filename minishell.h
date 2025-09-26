@@ -13,7 +13,10 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define SPACE	"\t\n\v\f\r "
+# define SPACE			"\t\n\v\f\r "
+# define REDIRECTION	"<><<>>"
+
+# define MAX_TOKENS 256
 
 # define STDIN 0
 # define STDOUT 1
@@ -70,6 +73,20 @@ typedef struct s_span
 	size_t			end;
 }	t_span;
 
+typedef enum 
+{
+    PIPES,
+    MALLOCERROR,
+    FD,
+    GETCWD,
+	MSG,
+	NOTWALLS,
+	NOTPOSSIBLE,
+	BER,
+	INVALID_CHARS,
+	INVALID_PE
+} 		t_errorlst;
+
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
 	t_env			*env;
@@ -81,23 +98,20 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	int				eof;
 	int				last_status;
 	char			*line;
-	char			**tokens;
-	char			**clean_args;
-	char			**child_args;
+	char			*line2;
 	int				stdin_save;
 	int				stdout_save;
 	int				fd;
-	char			*line2;
 	size_t			len;
 	ssize_t			nread;
 	char			***cmds;
 }	t_shell;
 
 //builtins/cd.c
-void	change_path(t_shell *shell, char **tokens);
+void	change_path(char **tokens, t_shell *shell);
 
 //builtins/echo.c
-void	ft_echo(t_shell *shell);
+void	ft_echo(char **tokens, t_shell *shell);
 
 //builtins/environment.c
 int		ft_env_init(t_shell *shell, char **env_array);
@@ -109,7 +123,7 @@ int		append_env(t_shell *shell, const char *entry, t_env *last);
 //builtins/export.c
 int		is_valid_key(const char *key);
 void	ft_env_set(t_shell *shell, const char *entry);
-void	ft_export(t_shell *shell);
+void	ft_export(char **tokens, t_shell *shell);
 
 //builtins/history.c
 void	ft_add_history(t_shell *shell);
@@ -117,32 +131,27 @@ void	ft_print_history(t_shell *shell);
 void	ft_free_history(t_shell *shell);
 
 //builtins/unset.c
-void	ft_unset(t_shell *shell);
+void	ft_unset(char **tokens, t_shell *shell);
 
 //srcs/execute.c
-int		ft_execute(t_shell *shell);
+int		ft_execute(char **tokens, t_shell *shell, char **cmd);
 
 //srcs/pipes.c
-int		ft_execute_pipes(t_shell *shell);
+void	ft_execute_pipes(t_shell *shell);
 
 //srcs/readline.c
 void	ft_readline(t_shell *shell);
 void	ft_free_line(t_shell *shell);
 
-//srcs/redirect_utils.c
-int		ft_redirect(t_shell *shell, int i);
-int		ft_adding(t_shell *shell, int i);
-int		ft_left(t_shell *shell, int i);
-int		ft_leftleft(t_shell *shell, int i);
-
 //srcs/redirect.c
-void	filter_args(char ***args, char ***filt_args);
-int		handle_redirections(t_shell *shell);
+int		handle_redirections(char **cmd, t_shell *shell);
+void	restore_std(t_shell *shell);
 
 //srcs/shell_exit.c
 void	ft_free_array(char ***array);
 void	ft_free_matrix(char ****matrix);
 int		ft_exit_shell(t_shell *shell);
+void	handle_error(t_errorlst error, t_shell *shell);
 
 //srcs/shell.c
 t_shell	*ft_get_shell_address(t_shell *shell);
@@ -159,11 +168,27 @@ void	ft_setup_signals_child(void);
 //srcs/token.c
 void	split_line(t_shell *shell);
 
+//srcs/util_redirects.c
+int		ft_redirect(t_shell *shell, char **cmd, int i);
+int		ft_adding(t_shell *shell, char **cmd, int i);
+int		ft_left(t_shell *shell, char **cmd, int i);
+int		ft_leftleft(t_shell *shell, char **cmd, int i);
+
+//srcs/utils_token.c
+int		count_pipes(t_shell *shell);
+char	*copy_token(char *line, t_span sp);
+void	add_token(char **cmds, int *token_idx, char *line, t_span sp);
+int		ft_next_span(char *s, size_t *i, t_span *sp);
+size_t	alloc_tokens(char **cmds, char *line);
+
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
-int		ft_next_span(char *s, size_t *i, t_span *sp);
 int		print_tokens(char **tokens);
+void	filter_args(char **args, char ***tokens, t_shell *shell);
+
+void	print_cmds(char ***cmds);
+
 
 #endif

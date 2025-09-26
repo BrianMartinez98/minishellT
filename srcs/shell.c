@@ -46,13 +46,11 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->exit = 0;
 	shell->eof = 0;
 	shell->line = NULL;
-	shell->tokens = NULL;
-	shell->clean_args = NULL;
-	shell->child_args = NULL;
-	shell->stdin_save = 0;
-	shell->stdout_save = 0;
-	shell->fd = 0;
 	shell->line2 = NULL;
+	shell->stdin_save = STDIN_FILENO;
+	shell->stdout_save = STDOUT_FILENO;
+	restore_std(shell);
+	shell->fd = 0;
 	shell->len = 0;
 	shell->cmds = NULL;
 	shell->nread = 0;

@@ -50,19 +50,19 @@ void	unset_key_from_env(char *key, t_shell *shell)
 	}
 }
 
-void	ft_unset(t_shell *shell)
+void	ft_unset(char **tokens, t_shell *shell)
 {
 	int	i;
 
 	i = 1;
-	while (shell->tokens[i])
+	while (tokens[i])
 	{
-		if (!is_token_valid_or_warn(shell->tokens[i], shell))
+		if (!is_token_valid_or_warn(tokens[i], shell))
 		{
 			i++;
 			continue ;
 		}
-		unset_key_from_env(shell->tokens[i], shell);
+		unset_key_from_env(tokens[i], shell);
 		shell->last_status = 0;
 		i++;
 	}

@@ -79,26 +79,26 @@ void	ft_env_set(t_shell *shell, const char *entry)
 	free(key);
 }
 
-void	ft_export(t_shell *shell)
+void	ft_export(char **tokens, t_shell *shell)
 {
 	char	*equal;
 	int		i;
 
 	i = 1;
-	while (shell->tokens[i])
+	while (tokens[i])
 	{
-		equal = ft_strchr(shell->tokens[i], '=');
+		equal = ft_strchr(tokens[i], '=');
 		if (equal)
 		{
-			if (!is_valid_key(shell->tokens[i]))
+			if (!is_valid_key(tokens[i]))
 			{
 				printf("export: `%s': not a valid identifier\n",
-					shell->tokens[i]);
+					tokens[i]);
 				shell->last_status = 1;
 			}
 			else
 			{
-				ft_env_set(shell, shell->tokens[i]);
+				ft_env_set(shell, tokens[i]);
 				shell->last_status = 0;
 			}
 		}

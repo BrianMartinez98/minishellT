@@ -12,12 +12,12 @@
 
 #include "../minishell.h"
 
-int	ft_redirect(t_shell *shell, int i)
+int	ft_redirect(t_shell *shell, char **cmd, int i)
 {
-	shell->fd = open(shell->tokens[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	shell->fd = open(cmd[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (shell->fd < 0)
 	{
-		perror(shell->tokens[i]);
+		perror(cmd[i]);
 		return (-1);
 	}
 	dup2(shell->fd, STDOUT_FILENO);
@@ -25,12 +25,12 @@ int	ft_redirect(t_shell *shell, int i)
 	return (0);
 }
 
-int	ft_adding(t_shell *shell, int i)
+int	ft_adding(t_shell *shell, char **cmd, int i)
 {
-	shell->fd = open(shell->tokens[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	shell->fd = open(cmd[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (shell->fd < 0)
 	{
-		perror(shell->tokens[i]);
+		perror(cmd[i]);
 		return (-1);
 	}
 	dup2(shell->fd, STDOUT_FILENO);
@@ -38,12 +38,12 @@ int	ft_adding(t_shell *shell, int i)
 	return (0);
 }
 
-int	ft_left(t_shell *shell, int i)
+int	ft_left(t_shell *shell, char **cmd, int i)
 {
-	shell->fd = open(shell->tokens[i], O_RDONLY);
+	shell->fd = open(cmd[i], O_RDONLY);
 	if (shell->fd < 0)
 	{
-		perror(shell->tokens[i]);
+		perror(cmd[i]);
 		return (-1);
 	}
 	dup2(shell->fd, STDIN_FILENO);
@@ -51,7 +51,7 @@ int	ft_left(t_shell *shell, int i)
 	return (0);
 }
 
-int	ft_leftleft(t_shell *shell, int i)
+int	ft_leftleft(t_shell *shell, char **cmd, int i)
 {
 	int	pipefd[2];
 
@@ -67,7 +67,7 @@ int	ft_leftleft(t_shell *shell, int i)
 		if (shell->nread == -1)
 			break ;
 		shell->line[shell->nread - 1] = '\0';
-		if (strcmp(shell->line2, shell->tokens[i]) == 0)
+		if (strcmp(shell->line2, cmd[i]) == 0)
 			break ;
 		write(pipefd[1], shell->line2, strlen(shell->line2));
 		write(pipefd[1], "\n", 1);

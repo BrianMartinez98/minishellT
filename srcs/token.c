@@ -1,100 +1,89 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 13:12:19 by jarregui         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
-static int	init_tokens(t_shell *shell, size_t bufsize)
+static void init_cmds(t_shell *shell)
 {
-	if (shell->tokens)
-		ft_free_array(&shell->tokens);
-	shell->tokens = malloc(bufsize * sizeof(char *));
-	if (!shell->tokens)
-	{
-		perror("malloc shell->tokens");
-		return (0);
-	}
-	return (1);
+	size_t	n;
+
+	ft_free_matrix(&shell->cmds);
+	n = count_pipes(shell) + 2;
+	shell->cmds = malloc(n * sizeof(char **));
+	if (!shell->cmds)
+		handle_error(MALLOCERROR, shell);
 }
 
-static char	*copy_token(char *line, size_t start, size_t end)
+static void fill_cmds(t_shell *shell)
 {
-	size_t	len;
-	char	*token;
-
-	len = end - start;
-	token = malloc(len + 1);
-	if (!token)
-		return (NULL);
-	ft_strncpy(token, &line[start], len);
-	token[len] = '\0';
-	return (token);
-}
-
-static char	**resize_tokens(char **tokens, size_t old_size, size_t new_size)
-{
-	char	**new_tokens;
 	size_t	i;
+	int		j;
 
-	new_tokens = malloc(new_size * sizeof(char *));
-	if (!new_tokens)
-		return (NULL);
 	i = 0;
-	while (i < old_size)
+	j = 0;
+	while (shell->line[i])
 	{
-		new_tokens[i] = tokens[i];
-		i++;
-	}
-	free(tokens);
-	return (new_tokens);
-}
-
-static int	add_token(t_shell *shell, size_t *pos, size_t *bs, t_span sp)
-{
-	char	*tok;
-
-	tok = copy_token(shell->line, sp.start, sp.end);
-	if (!tok)
-	{
-		ft_free_array(&shell->tokens);
-		return (0);
-	}
-	shell->tokens[(*pos)++] = tok;
-	if (*pos >= *bs)
-	{
-		*bs *= 2;
-		shell->tokens = resize_tokens(shell->tokens, *pos, *bs);
-		if (!shell->tokens)
+		while (shell->line[i] == ' ')
+			i++;
+		if (shell->line[i] == '|')
 		{
-			perror("malloc new_tokens");
-			return (0);
+			i++;
+			j++;
+			continue;
 		}
+		if (!shell->cmds[j])
+		{
+			shell->cmds[j] = malloc(sizeof(char *) * (MAX_TOKENS + 1));
+			if (!shell->cmds[j])
+				handle_error(MALLOCERROR, shell);
+		}
+		i += alloc_tokens(shell->cmds[j], &shell->line[i]);
 	}
-	return (1);
+	shell->cmds[j + 1] = NULL;
 }
+
+void split_line(t_shell *shell)
+{
+	init_cmds(shell);
+	fill_cmds(shell);
+}
+
+/*
+#### Original version ########
 
 void	split_line(t_shell *shell)
 {
-	size_t	pos;
-	size_t	bs;
 	size_t	i;
-	t_span	sp;
+	int		j;
 
-	bs = BUFSIZ;
-	pos = 0;
 	i = 0;
-	if (!init_tokens(shell, bs))
-		return ;
-	while (ft_next_span(shell->line, &i, &sp))
-		if (!add_token(shell, &pos, &bs, sp))
-			return ;
-	shell->tokens[pos] = NULL;
+	j = 0;
+	ft_free_matrix(&shell->cmds);
+	shell->cmds = calloc(count_pipes(shell) + 2, sizeof(char **));
+	if (!shell->cmds)
+	{
+		perror("calloc cmds");
+		exit(1);
+	}
+	while (shell->line[i])
+	{
+		while (shell->line[i] == ' ')
+			i++;
+		if (shell->line[i] == '|')
+		{
+			i++;
+			j++;
+			continue;
+		}
+		if (!shell->cmds[j])
+		{
+			shell->cmds[j] = malloc(sizeof(char *) * (MAX_TOKENS + 1));
+			if (!shell->cmds[j])
+			{
+				perror("malloc");
+				exit(1);
+			}
+		}
+		i += alloc_tokens(shell->cmds[j], &shell->line[i]);
+	}
+	shell->cmds[j + 1] = NULL;
 }
+
+*/

@@ -42,7 +42,7 @@ static int	ft_echo_token(t_shell *shell, char *token, int *suppress_nl,
 	return (1);
 }
 
-void	ft_echo(t_shell *shell)
+void	ft_echo(char **tokens, t_shell *shell)
 {
 	int		i;
 	int		suppress_nl;
@@ -52,11 +52,11 @@ void	ft_echo(t_shell *shell)
 	i = 1;
 	suppress_nl = 0;
 	supress_first = 1;
-	while (shell->clean_args[i])
+	while (tokens[i])
 	{
-		printed = ft_echo_token(shell, shell->clean_args[i],
+		printed = ft_echo_token(shell, tokens[i],
 				&suppress_nl, &supress_first);
-		if (printed && shell->clean_args[i + 1])
+		if (printed && tokens[i + 1])
 			printf(" ");
 		i++;
 	}

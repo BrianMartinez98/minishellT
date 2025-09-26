@@ -39,15 +39,18 @@ SRCS 	= builtins/echo.c \
 		builtins/cd.c \
 		srcs/execute.c \
 		srcs/main.c \
+		srcs/pipes.c \
 		srcs/readline.c \
 		srcs/redirect.c \
-		srcs/redirect_utils.c \
 		srcs/shell_exit.c \
 		srcs/shell.c \
 		srcs/signals.c \
 		srcs/token.c \
+		srcs/utils_token.c \
 		srcs/utils.c \
-		srcs/pipes.c
+		srcs/utils_redirect.c \
+		srcs/print_cmds.c \
+		
 SRCS_BONUS 	= srcs/shell_bonus.c
 OBJS = $(SRCS:.c=.o)
 OBJS_BONUS = ${SRCS_BONUS:.c=.o}

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	change_path(t_shell *shell, char **tokens)
+void	change_path(char **tokens, t_shell *shell)
 {
 	const char	*path;
 

@@ -23,7 +23,7 @@ void	ft_build_prompt(t_shell *shell)
 	shell->prompt = NULL;
 	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
-		perror("Getcwd failed");
+		handle_error(GETCWD, shell);
 	shell->prompt = ft_strjoin("\001\033[0;36m\033[1m\002", shell->cwd);
 	tmp = shell->prompt;
 	shell->prompt = ft_strjoin(tmp, " > \001\033[0m\002");
@@ -32,7 +32,8 @@ void	ft_build_prompt(t_shell *shell)
 
 int	ft_error(const char *msg)
 {
-	perror(msg);
+	if (msg)
+		handle_error(MSG, NULL);
 	return (1);
 }
 
@@ -40,19 +41,6 @@ int	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n'
 		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-int	ft_next_span(char *s, size_t *i, t_span *sp)
-{
-	while (s[*i] && ft_isspace((unsigned char)s[*i]))
-		(*i)++;
-	if (!s[*i])
-		return (0);
-	sp->start = *i;
-	while (s[*i] && !ft_isspace((unsigned char)s[*i]))
-		(*i)++;
-	sp->end = *i;
-	return (1);
 }
 
 int	print_tokens(char **tokens)
@@ -72,4 +60,33 @@ int	print_tokens(char **tokens)
 		}
 	}
 	return (0);
+}
+
+void	filter_args(char **args, char ***tokens, t_shell *shell)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (args[i])
+		i++;
+	*tokens = malloc(sizeof(char *) * (i + 1));
+	if (!*tokens)
+		handle_error(MALLOCERROR, shell);
+	i = 0;
+	while (args[i])
+	{
+
+		if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
+			|| !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
+			i += 2;
+		else
+		{
+			(*tokens)[j++] = args[i]; // apuntar directamente, no copiar
+		}
+
+		i++;
+	}
+	(*tokens)[j] = NULL;
 }

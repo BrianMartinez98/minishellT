@@ -32,10 +32,10 @@ int	main(int ac, char **av, char **env)
 		if (*shell.line == '\0')
 			continue ;
 		ft_add_history(&shell);
-		split_line(&shell);
-		if (!shell.tokens || !shell.tokens[0])
+		split_line(&shell); // DONE
+		if (!shell.cmds || !shell.cmds[0])
 			continue ;
-		ft_execute_pipes(&shell);
+		ft_execute_pipes(&shell); // wORKING hERE; pANDORA
 	}
 	ft_exit_shell(&shell);
 }
