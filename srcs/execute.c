@@ -35,7 +35,7 @@ static int	ft_execute_builtin(char **tokens, t_shell *shell)
 	return (1);
 }
 
-static void	pid_child(char **tokens, t_shell *shell, char **cmd)
+static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 {
 	ft_setup_signals_child();
 	if (shell->stdin_save != STDIN_FILENO)
@@ -44,14 +44,14 @@ static void	pid_child(char **tokens, t_shell *shell, char **cmd)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
 	if (ft_execute_builtin(tokens, shell))
-		exit(127);										//puede dar problemas??
+		exit(127);
 	execvp(tokens[0], tokens);
 	perror(tokens[0]);
 	exit(127);
 
 }
 
-int	ft_execute(char **tokens, t_shell *shell, char **cmd)
+static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
@@ -66,7 +66,7 @@ int	ft_execute(char **tokens, t_shell *shell, char **cmd)
 		return 1;
 	}
 	if (pid == 0)
-		pid_child(tokens, shell, cmd);
+		pid_child(tokens, cmd, shell);
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -76,4 +76,31 @@ int	ft_execute(char **tokens, t_shell *shell, char **cmd)
 			shell->last_status = 128 + WTERMSIG(status);
 	}
 	return (shell->last_status);
+}
+
+void	ft_execute_pipes(t_shell *shell)
+{
+	int		fd[2];
+	char	**tokens;
+	int		i;
+
+	i = 0;
+	while (shell->cmds[i])
+	{
+		if (shell->cmds[i + 1])
+		{
+			if (pipe(fd) == -1)
+				handle_error(PIPES, shell);
+			shell->stdout_save = fd[1];
+		}
+		filter_args(shell->cmds[i], &tokens, shell);
+		ft_execute(tokens, shell->cmds[i], shell);
+		free(tokens);
+		if (shell->cmds[i + 1])
+		{
+			close(fd[1]);
+			shell->stdin_save = fd[0];
+		}
+		i++;
+	}
 }

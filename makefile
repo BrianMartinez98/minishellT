@@ -39,7 +39,6 @@ SRCS 	= builtins/echo.c \
 		builtins/cd.c \
 		srcs/execute.c \
 		srcs/main.c \
-		srcs/pipes.c \
 		srcs/readline.c \
 		srcs/redirect.c \
 		srcs/shell_exit.c \

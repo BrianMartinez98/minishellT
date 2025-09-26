@@ -6,7 +6,7 @@ static void init_cmds(t_shell *shell)
 
 	ft_free_matrix(&shell->cmds);
 	n = count_pipes(shell) + 2;
-	shell->cmds = malloc(n * sizeof(char **));
+	shell->cmds = ft_calloc(n, sizeof(char **));
 	if (!shell->cmds)
 		handle_error(MALLOCERROR, shell);
 }

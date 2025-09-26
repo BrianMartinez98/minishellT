@@ -80,11 +80,6 @@ typedef enum
     FD,
     GETCWD,
 	MSG,
-	NOTWALLS,
-	NOTPOSSIBLE,
-	BER,
-	INVALID_CHARS,
-	INVALID_PE
 } 		t_errorlst;
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
@@ -134,9 +129,6 @@ void	ft_free_history(t_shell *shell);
 void	ft_unset(char **tokens, t_shell *shell);
 
 //srcs/execute.c
-int		ft_execute(char **tokens, t_shell *shell, char **cmd);
-
-//srcs/pipes.c
 void	ft_execute_pipes(t_shell *shell);
 
 //srcs/readline.c

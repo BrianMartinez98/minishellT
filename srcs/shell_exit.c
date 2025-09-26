@@ -91,11 +91,6 @@ void	handle_error(t_errorlst error, t_shell *shell)
 	error_msg[FD] = "Fallo en el fd!\n";
 	error_msg[GETCWD] = "Error en GETCWD!\n";
 	error_msg[MSG] = "Error en el MSG!\n";
-	error_msg[NOTWALLS] = "El mapa no esta rodeado de muros!\n";
-	error_msg[NOTPOSSIBLE] = "No es un mapa posible!\n";
-	error_msg[BER] = "It is not a .ber!\n";
-	error_msg[INVALID_CHARS] = "Not correct characters!\n";
-	error_msg[INVALID_PE] = "Not correct number of player or exit!\n";
 	print_errors(error, error_msg);
 	ft_exit_shell(shell);
 	exit(1);
