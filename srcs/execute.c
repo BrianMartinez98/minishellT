@@ -6,34 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 12:54:34 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:44:10 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static int	ft_execute_builtin(char **tokens, t_shell *shell)
-{
-	if (ft_strcmp(tokens[0], "exit") == 0)
-		shell->exit = 1;
-	else if (ft_strcmp(tokens[0], "pwd") == 0)
-		printf("%s\n", shell->cwd);
-	else if (ft_strcmp(tokens[0], "echo") == 0)
-		ft_echo(tokens, shell);
-	else if (ft_strcmp(tokens[0], "cd") == 0)
-		change_path(tokens, shell);
-	else if (ft_strcmp(tokens[0], "export") == 0)
-		ft_export(tokens, shell);
-	else if (ft_strcmp(tokens[0], "unset") == 0)
-		ft_unset(tokens, shell);
-	else if (ft_strcmp(tokens[0], "history") == 0)
-		ft_print_history(shell);
-	else if (ft_strcmp(tokens[0], "env") == 0)
-		ft_print_env(shell);
-	else
-		return (0);
-	return (1);
-}
 
 static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 {
@@ -43,12 +20,9 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	if (shell->stdout_save != STDOUT_FILENO)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
-	if (ft_execute_builtin(tokens, shell))
-		exit(127);
 	execvp(tokens[0], tokens);
 	perror(tokens[0]);
 	exit(127);
-
 }
 
 static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
@@ -57,13 +31,13 @@ static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
 	int		status;
 
 	if (!tokens || !tokens[0])
-		return 0;
+		return (0);
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("fork");
 		shell->last_status = 1;
-		return 1;
+		return (1);
 	}
 	if (pid == 0)
 		pid_child(tokens, cmd, shell);
@@ -78,15 +52,38 @@ static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
 	return (shell->last_status);
 }
 
+static void	execute_command(t_shell *shell, char **cmd,
+	char **tokens, int has_next)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+
+	if (is_builtin(tokens) && !has_next)
+	{
+		saved_stdin = dup(STDIN_FILENO);
+		saved_stdout = dup(STDOUT_FILENO);
+		handle_redirections(cmd, shell);
+		ft_execute_builtin(tokens, shell);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
+	}
+	else
+		ft_execute(tokens, cmd, shell);
+}
+
 void	ft_execute_pipes(t_shell *shell)
 {
 	int		fd[2];
 	char	**tokens;
 	int		i;
+	int		has_next;
 
 	i = 0;
 	while (shell->cmds[i])
 	{
+		has_next = (shell->cmds[i + 1] != NULL);
 		if (shell->cmds[i + 1])
 		{
 			if (pipe(fd) == -1)
@@ -94,7 +91,7 @@ void	ft_execute_pipes(t_shell *shell)
 			shell->stdout_save = fd[1];
 		}
 		filter_args(shell->cmds[i], &tokens, shell);
-		ft_execute(tokens, shell->cmds[i], shell);
+		execute_command(shell, shell->cmds[i], tokens, has_next);
 		free(tokens);
 		if (shell->cmds[i + 1])
 		{

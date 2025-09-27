@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 13:10:29 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:26:53 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,13 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 	i = 0;
 	while (args[i])
 	{
-
 		if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
 			|| !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
 			i += 2;
 		else
 		{
-			(*tokens)[j++] = args[i]; // apuntar directamente, no copiar
+			(*tokens)[j++] = args[i];
 		}
-
 		i++;
 	}
 	(*tokens)[j] = NULL;

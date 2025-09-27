@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   utils_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 13:12:19 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:27:58 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	add_token(char **cmds, int *token_idx, char *line, t_span sp)
 	if (!tok)
 	{
 		perror("malloc token");
-		return;
+		return ;
 	}
 	cmds[(*token_idx)++] = tok;
 	cmds[*token_idx] = NULL;
@@ -80,7 +80,7 @@ size_t	alloc_tokens(char **cmds, char *line)
 	while (line[i] && line[i] != '|')
 	{
 		if (!ft_next_span(line, &i, &sp))
-			break;
+			break ;
 		add_token(cmds, &token_idx, line, sp);
 	}
 	cmds[token_idx] = NULL;

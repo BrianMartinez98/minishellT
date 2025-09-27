@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
+/*   Updated: 2025/09/26 18:30:11 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static void init_cmds(t_shell *shell)
+static void	init_cmds(t_shell *shell)
 {
 	size_t	n;
 
@@ -11,7 +23,7 @@ static void init_cmds(t_shell *shell)
 		handle_error(MALLOCERROR, shell);
 }
 
-static void fill_cmds(t_shell *shell)
+static void	fill_cmds(t_shell *shell)
 {
 	size_t	i;
 	int		j;
@@ -26,7 +38,7 @@ static void fill_cmds(t_shell *shell)
 		{
 			i++;
 			j++;
-			continue;
+			continue ;
 		}
 		if (!shell->cmds[j])
 		{
@@ -39,7 +51,7 @@ static void fill_cmds(t_shell *shell)
 	shell->cmds[j + 1] = NULL;
 }
 
-void split_line(t_shell *shell)
+void	split_line(t_shell *shell)
 {
 	init_cmds(shell);
 	fill_cmds(shell);

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 12:55:12 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:26:10 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_exit_shell(t_shell *shell)
 	return (0);
 }
 
-static void print_errors(t_errorlst error, char *error_msg[])
+static void	print_errors(t_errorlst error, char *error_msg[])
 {
 	write(2, "ERROR: ", 7);
 	if (error == FD)

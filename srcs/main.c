@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:49:34 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:57:27 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	main(int ac, char **av, char **env)
 		if (*shell.line == '\0')
 			continue ;
 		ft_add_history(&shell);
-		split_line(&shell); // DONE
+		split_line(&shell);
 		if (!shell.cmds || !shell.cmds[0])
 			continue ;
-		ft_execute_pipes(&shell); // wORKING hERE; pANDORA
+		ft_execute_pipes(&shell);
 	}
 	ft_exit_shell(&shell);
 }

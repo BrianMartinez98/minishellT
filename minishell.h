@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 13:10:56 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/26 18:41:50 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ typedef struct s_span
 	size_t			end;
 }	t_span;
 
-typedef enum 
+typedef enum e_errorlst //para los errores que pueden surgir
 {
-    PIPES,
-    MALLOCERROR,
-    FD,
-    GETCWD,
+	PIPES,
+	MALLOCERROR,
+	FD,
+	GETCWD,
 	MSG,
-} 		t_errorlst;
+}	t_errorlst;
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
@@ -127,6 +127,10 @@ void	ft_free_history(t_shell *shell);
 
 //builtins/unset.c
 void	ft_unset(char **tokens, t_shell *shell);
+
+//srcs/execute_builtin.c
+int		is_builtin(char **tokens);
+int		ft_execute_builtin(char **tokens, t_shell *shell);
 
 //srcs/execute.c
 void	ft_execute_pipes(t_shell *shell);
@@ -181,6 +185,5 @@ int		print_tokens(char **tokens);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
 
 void	print_cmds(char ***cmds);
-
 
 #endif
