@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/11 13:26:32 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/28 23:35:34 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,33 @@ static int	ft_echo_token(t_shell *shell, char *token, int *suppress_nl,
 	return (1);
 }
 
+static void	ft_strip_quotes(char **tokens)
+{
+	size_t	num_t;
+	size_t	len;
+	size_t	i;
+
+	num_t = 0;
+	len = 0;
+	while (tokens[num_t])
+		num_t++;
+	if (num_t >= 2)
+	{
+		len = ft_strlen(tokens[num_t - 1]);
+		if ((tokens[1][0] == '"' && tokens[num_t - 1][len - 1] == '"')
+				|| (tokens[1][0] == '\'' && tokens[num_t - 1][len - 1] == '\''))
+		{
+			i = 0;
+			while (tokens[1][i])
+			{
+				tokens[1][i] = tokens[1][i + 1];
+				i++;
+			}
+			tokens[num_t - 1][len - 1] = '\0';
+		}
+	}
+}
+
 void	ft_echo(char **tokens, t_shell *shell)
 {
 	int		i;
@@ -52,6 +79,7 @@ void	ft_echo(char **tokens, t_shell *shell)
 	i = 1;
 	suppress_nl = 0;
 	supress_first = 1;
+	ft_strip_quotes(tokens);
 	while (tokens[i])
 	{
 		printed = ft_echo_token(shell, tokens[i],
@@ -63,43 +91,3 @@ void	ft_echo(char **tokens, t_shell *shell)
 	if (!suppress_nl)
 		printf("\n");
 }
-
-// void	ft_echo(t_shell *shell)
-// {
-// 	int		i;
-// 	int		suppress_nl;
-// 	int		supress_first;
-// 	char	*val;
-
-// 	print_tokens(shell->tokens);
-// 	i = 1;
-// 	suppress_nl = 0;
-// 	supress_first = 1;
-// 	while (shell->tokens[i])
-// 	{
-// 		if (ft_strcmp(shell->tokens[i], "-n") == 0 && supress_first)
-// 			suppress_nl = 1;
-// 		else
-// 		{
-// 			supress_first = 0;
-// 			if (shell->tokens[i][0] == '$')
-// 			{
-// 				if (shell->tokens[i][1] == '?' && shell->tokens[i][2] == '\0')
-// 					printf("%d", shell->last_status);
-// 				else
-// 				{
-// 					val = ft_getenv(shell, shell->tokens[i] + 1);
-// 					if (val)
-// 						printf("%s", val);
-// 				}
-// 			}
-// 			else
-// 				printf("%s", shell->tokens[i]);
-// 			if (shell->tokens[i + 1])
-// 				printf(" ");
-// 		}
-// 		i++;
-// 	}
-// 	if (!suppress_nl)
-// 		printf("\n");
-// }
