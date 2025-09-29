@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 17:57:27 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:52:01 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ int	main(int ac, char **av, char **env)
 		ft_build_prompt(&shell);
 		ft_setup_signals_prompt();
 		ft_readline(&shell);
-		if (!shell.line)
-		{
+		if (!shell.line && !shell.exit)
 			shell.eof = 1;
+		if (!shell.line || shell.exit)
 			break ;
-		}
 		if (*shell.line == '\0')
 			continue ;
 		ft_add_history(&shell);

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 18:26:10 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:06:16 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void	ft_free_matrix(char ****matrix)
 
 int	ft_exit_shell(t_shell *shell)
 {
+	if (DEBUG && shell->eof)
+		printf("\033[1;33m\n\t   ↳ Pulsada tecla Ctrl+D (EOF)\n\033[0m");
+	printf("\033[1;32mExiting minishell...\033[0m\n");
 	if (shell->prompt)
 		free(shell->prompt);
 	if (shell->cwd)
@@ -65,9 +68,6 @@ int	ft_exit_shell(t_shell *shell)
 	if (shell->stdout_save != -1)
 		close(shell->stdout_save);
 	ft_restore_term_settings(shell);
-	if (DEBUG && shell->eof)
-		write(1, "\n	Pulsada tecla Ctrl+D (EOF)\n", 30);
-	printf("\033[1;32mExiting minishell...\033[0m\n");
 	return (0);
 }
 

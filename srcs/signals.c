@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 13:27:30 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 22:33:09 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:52:53 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_sigint_handler(int sig)
 {
 	(void)sig;
 	if (DEBUG)
-		write(1, "\n	Pulsada tecla Ctrl+C\n", 24);
+		printf("\033[1;33m\n\t   ↳ Pulsada tecla Ctrl+C\n\033[0m");
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -27,7 +27,7 @@ void	ft_sigquit_handler(int sig)
 {
 	(void)sig;
 	if (DEBUG)
-		write(1, "\n	Pulsada tecla Ctrl+\\\n", 24);
+		printf("\033[1;33m\n\t   ↳ Pulsada tecla Ctrl+\\\n\033[0m");
 }
 
 void	ft_sigterm_handler(int sig)
@@ -37,8 +37,8 @@ void	ft_sigterm_handler(int sig)
 	(void)sig;
 	shell = ft_get_shell_address(NULL);
 	if (DEBUG)
-		write(1, "\n	Recibida señal Ctrl+D (EOF)\n", 32);
-	ft_exit_shell(shell);
+		printf("\033[1;33m\n\t   ▶ Recibida señal Ctrl+D (EOF)\n\033[0m");
+	shell->exit = 1;
 }
 
 void	ft_setup_signals_prompt(void)
