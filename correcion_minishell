@@ -1,0 +1,35 @@
+echo -nnnn hhola -> -nnnn hhola
+
+no esta implementado el builtin exit
+
+solo expande variables en el echo
+
+cat + ctrl C -> muestra 2 prompts
+
+echo "cat makefile | cat > makefile" -> crash
+echo 'cat makefile | cat > makefile' -> crash
+
+expande variables aun con comillas simples
+
+export A="hola B=asdasda"
+    A="hola
+    B=asdasda"
+
+
+mkdir -p a/b/c/d
+/tmp/pepese > cd a/b/c/d/
+Changed directory to /tmp/pepese/a/b/c/d
+/tmp/pepese/a/b/c/d > rm -rf ../../../../
+
+!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe
+
+env > salida
+
+unset PATH -> ls -> sigue funcionando?
+
+execvp en vez de execve
+
+redirecion de entrada no funciona
+here_doc hace cosas raras
+
+estan esperando a cada hijo en vez de esperar al final a todos
