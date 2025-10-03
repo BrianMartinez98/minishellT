@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect_utils.c                                   :+:      :+:    :+:   */
+/*   utils_redirect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 13:28:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 12:54:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:38:52 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ int	ft_leftleft(t_shell *shell, char **cmd, int i)
 		shell->nread = getline(&shell->line2, &shell->len, stdin);
 		if (shell->nread == -1)
 			break ;
-		if (shell->line2[shell->nread - 1] == '\n')
-			shell->line2[shell->nread - 1] = '\0';
+		shell->line2[shell->nread - 1] = '\0';
 		if (ft_strcmp(shell->line2, cmd[i]) == 0)
 			break ;
 		write(pipefd[1], shell->line2, ft_strlen(shell->line2));

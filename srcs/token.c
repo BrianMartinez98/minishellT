@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 18:30:11 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:38:22 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,25 @@ static void	init_cmds(t_shell *shell)
 		handle_error(MALLOCERROR, shell);
 }
 
-// Inserta "cat" como primer token si el comando empieza por "<<"
-void fix_heredoc_no_command(char **cmd_tokens)
+void	fix_heredoc_no_command(char **cmd_tokens, t_shell *shell)
 {
-	int i;
+	int	i;
 
 	if (!cmd_tokens)
-		return;
+		return ;
 	if (cmd_tokens[0] && ft_strcmp(cmd_tokens[0], "<<") == 0)
 	{
-		// Cuenta tokens
 		i = 0;
 		while (cmd_tokens[i])
 			i++;
-		
-		// Mueve punteros de derecha a izquierda (sin sobreescribir)
 		while (i > 0)
 		{
 			cmd_tokens[i] = cmd_tokens[i - 1];
 			i--;
 		}
-
-		// Duplica "cat" para evitar problemas con free
-		cmd_tokens[0] = strdup("cat");
+		cmd_tokens[0] = ft_strdup("cat");
 		if (!cmd_tokens[0])
-			// Manejar error malloc
-			exit(1);
+			handle_error(MALLOCERROR, shell);
 	}
 }
 
@@ -76,7 +69,7 @@ static void	fill_cmds(t_shell *shell)
 				handle_error(MALLOCERROR, shell);
 		}
 		i += alloc_tokens(shell->cmds[j], &shell->line[i]);
-		fix_heredoc_no_command(shell->cmds[j]);
+		fix_heredoc_no_command(shell->cmds[j], shell);
 	}
 	shell->cmds[j + 1] = NULL;
 }
