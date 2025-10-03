@@ -1,6 +1,8 @@
 echo -nnnn hhola -> -nnnn hhola
 
 no esta implementado el builtin exit
+exit tiene q matar al hijo o proceso en el quue este.
+si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
 
 solo expande variables en el echo
 
@@ -33,3 +35,16 @@ redirecion de entrada no funciona
 here_doc hace cosas raras
 
 estan esperando a cada hijo en vez de esperar al final a todos
+
+quitar el printf de "changed directory"
+
+
+
+
+usar flags -g3 fsantizer=address
+
+las variables de entorno en llos pipes deben ser también las nuestras )ahora mismo coge las env globales
+
+si hacemos unset de path ls no debería funcionar
+
+
