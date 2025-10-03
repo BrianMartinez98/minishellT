@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/28 23:35:34 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:59:05 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static void	ft_strip_quotes(char **tokens)
 				tokens[1][i] = tokens[1][i + 1];
 				i++;
 			}
+			len = ft_strlen(tokens[num_t - 1]);
 			tokens[num_t - 1][len - 1] = '\0';
 		}
 	}
