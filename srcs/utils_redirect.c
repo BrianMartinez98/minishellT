@@ -66,10 +66,11 @@ int	ft_leftleft(t_shell *shell, char **cmd, int i)
 		shell->nread = getline(&shell->line2, &shell->len, stdin);
 		if (shell->nread == -1)
 			break ;
-		shell->line[shell->nread - 1] = '\0';
-		if (strcmp(shell->line2, cmd[i]) == 0)
+		if (shell->line2[shell->nread - 1] == '\n')
+			shell->line2[shell->nread - 1] = '\0';
+		if (ft_strcmp(shell->line2, cmd[i]) == 0)
 			break ;
-		write(pipefd[1], shell->line2, strlen(shell->line2));
+		write(pipefd[1], shell->line2, ft_strlen(shell->line2));
 		write(pipefd[1], "\n", 1);
 	}
 	free(shell->line2);

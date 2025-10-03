@@ -16,10 +16,10 @@ static int	is_redirect(char *arg)
 {
 	if (!arg)
 		return (0);
-	if (strcmp(arg, "<") == 0
-		|| strcmp(arg, ">") == 0
-		|| strcmp(arg, ">>") == 0
-		|| strcmp(arg, "<<") == 0)
+	if (ft_strcmp(arg, "<") == 0
+		|| ft_strcmp(arg, ">") == 0
+		|| ft_strcmp(arg, ">>") == 0
+		|| ft_strcmp(arg, "<<") == 0)
 		return (1);
 	return (0);
 }
