@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/03 13:38:22 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/06 11:54:48 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,6 @@ void	split_line(t_shell *shell)
 {
 	init_cmds(shell);
 	fill_cmds(shell);
+	if (DEBUG)
+		print_tokens_array(shell);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 18:41:50 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/06 11:47:24 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ size_t	alloc_tokens(char **cmds, char *line);
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
+void	print_tokens_array(t_shell *shell);
 int		print_tokens(char **tokens);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 18:26:53 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/06 11:54:04 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,31 @@ int	ft_isspace(char c)
 		|| c == '\v' || c == '\f' || c == '\r');
 }
 
+void	print_tokens_array(t_shell *shell)
+{
+	size_t	i;
+
+	if (DEBUG)
+	{
+		if (!shell->cmds)
+			printf("DEBUG: No hay array de tokens!\n");
+		else
+		{
+			printf("DEBUG: imprimiendo tokens que nos llegan:\n");
+			printf("shell->cmds = \n[\n");
+			i = 0;
+			while (shell->cmds[i])
+			{
+				printf("	[\n");
+				print_tokens(shell->cmds[i]);
+				printf("	]\n");
+				i++;
+			}
+			printf("];\n\n");
+		}
+	}
+}
+
 int	print_tokens(char **tokens)
 {
 	size_t	i;
@@ -50,14 +75,10 @@ int	print_tokens(char **tokens)
 	if (!tokens)
 		return (1);
 	i = 0;
-	if (DEBUG)
+	while (tokens[i])
 	{
-		printf("DEBUG: imprimiendo tokens que nos llegan: \n");
-		while (tokens[i])
-		{
-			printf("Token[%zu]: '%s'\n", i, tokens[i]);
-			i++;
-		}
+		printf("		Token[%zu]: '%s'\n", i, tokens[i]);
+		i++;
 	}
 	return (0);
 }

@@ -1,10 +1,24 @@
+HECHO:
+Makefile con la M en mayúscula
+
+
+
+
+
+
+
+PENDIENTE:
+
 echo -nnnn hhola -> -nnnn hhola
 
 no esta implementado el builtin exit
 exit tiene q matar al hijo o proceso en el quue este.
 si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
 
+
+
 solo expande variables en el echo
+
 
 cat + ctrl C -> muestra 2 prompts
 
