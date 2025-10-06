@@ -20,9 +20,20 @@ HECHO:
 		]
 	];
 
-- Sustituido execvp (prohibido) por execve
+
+A MEDIO HACER:
+- Sustituido execvp (prohibido) por execve --> da error de formato pq execve espera otro formato diferente que nuestra lista enlazada que tenemos en shell->env
 
 
+export A=1 B=1
+expr $A + $B  ---> debe dar 2
+expr "$A" + "$B"  ---> debe dar 2
+expr '$A' + '$B'  ---> debe dar error expr: non-integer argument
+
+solo expande variables en el echo
+	export $A=hola
+	export kk=$A
+	echo $kk ---> debe imprimir hola
 
 
 PENDIENTE:
@@ -35,10 +46,6 @@ si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
 
 
 
-solo expande variables en el echo
-	export $A=hola
-	export kk=$A
-	echo $kk ---> debe imprimir hola
 
 
 cat + ctrl C -> muestra 2 prompts

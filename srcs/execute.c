@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/06 23:50:58 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 00:05:46 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	if (shell->stdout_save != STDOUT_FILENO)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
-	execvp(tokens[0], tokens);
+	// execvp(tokens[0], tokens);
+	execve(tokens[0], tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);
+
+
 }
 
 static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
