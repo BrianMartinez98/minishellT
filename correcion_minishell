@@ -1,8 +1,26 @@
 HECHO:
-Makefile con la M en mayúscula
+- Makefile con la M en mayúscula
 
+- Gestión de comillas OK. convierte lo que este entre comillas en un solo token
+	echo "cat makefile | cat > makefile"
+	OK: shell->cmds = 
+	[
+			[
+					Token[0]: 'echo'
+					Token[1]: '"cat makefile | cat > makefile"'
+			]
+	];
 
+	export A="hola B=asdasda"
+	OK: shell->cmds = 
+	[
+		[
+				Token[0]: 'export'
+				Token[1]: 'A="hola B=asdasda"'
+		]
+	];
 
+- Sustituido execvp (prohibido) por execve
 
 
 
@@ -18,6 +36,9 @@ si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
 
 
 solo expande variables en el echo
+	export $A=hola
+	export kk=$A
+	echo $kk ---> debe imprimir hola
 
 
 cat + ctrl C -> muestra 2 prompts
@@ -26,10 +47,6 @@ echo "cat makefile | cat > makefile" -> crash
 echo 'cat makefile | cat > makefile' -> crash
 
 expande variables aun con comillas simples
-
-export A="hola B=asdasda"
-    A="hola
-    B=asdasda"
 
 
 mkdir -p a/b/c/d
@@ -43,7 +60,7 @@ env > salida
 
 unset PATH -> ls -> sigue funcionando?
 
-execvp en vez de execve
+
 
 redirecion de entrada no funciona
 here_doc hace cosas raras

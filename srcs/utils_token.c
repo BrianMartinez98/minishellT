@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/26 18:27:58 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/06 23:34:07 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 int	count_pipes(t_shell *shell)
 {
-	int	count;
-	int	i;
+	int		count;
+	int		i;
 
 	i = 0;
 	count = 0;
 	while (shell->line[i])
 	{
-		if (shell->line[i] == '|')
+		if (shell->line[i] == '"' || shell->line[i] == '\'')
+			i = closed_quotes(shell->line, i);
+		else if (shell->line[i] == '|')
 			count++;
 		i++;
 	}
@@ -63,8 +65,22 @@ int	ft_next_span(char *s, size_t *i, t_span *sp)
 	if (!s[*i] || s[*i] == '|')
 		return (0);
 	sp->start = *i;
+	if (s[*i] == '"' || s[*i] == '\'')
+	{
+		*i = closed_quotes(s, *i);
+		if (*i != sp->start)
+		{
+			(*i)++;
+			sp->end = *i;
+			return (1);
+		}
+	}
 	while (s[*i] && !ft_isspace((unsigned char)s[*i]) && s[*i] != '|')
+	{
+		if (s[*i] == '"' || s[*i] == '\'')
+			*i = closed_quotes(s, *i);
 		(*i)++;
+	}
 	sp->end = *i;
 	return (1);
 }

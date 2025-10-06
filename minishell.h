@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/06 11:47:24 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/06 23:09:12 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,12 @@ void	ft_setup_signals_child(void);
 //srcs/token.c
 void	split_line(t_shell *shell);
 
+//src/utils_print.c
+void	print_tokens_array(t_shell *shell);
+
+//srcs/utils_quotes.c
+int		closed_quotes(char *line, int i);
+
 //srcs/util_redirects.c
 int		ft_redirect(t_shell *shell, char **cmd, int i);
 int		ft_adding(t_shell *shell, char **cmd, int i);
@@ -181,10 +187,6 @@ size_t	alloc_tokens(char **cmds, char *line);
 void	ft_build_prompt(t_shell *shell);
 int		ft_error(const char *msg);
 int		ft_isspace(char c);
-void	print_tokens_array(t_shell *shell);
-int		print_tokens(char **tokens);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
-
-void	print_cmds(char ***cmds);
 
 #endif

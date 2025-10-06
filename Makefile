@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/09/26 18:40:33 by jarregui         ###   ########.fr        #
+#    Updated: 2025/10/06 23:14:13 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ include libs/colors.mk
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -DDEBUG=1
+SANITIZE_FLAGS = -g3 -fsanitize=address
 VALGRIND_FLAGS = -g
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
 # VALGRIND = valgrind --leak-check=summary
@@ -46,10 +47,11 @@ SRCS 	= builtins/echo.c \
 		srcs/shell.c \
 		srcs/signals.c \
 		srcs/token.c \
+		srcs/utils_print.c \
+		srcs/utils_quotes.c \
+		srcs/utils_redirect.c \
 		srcs/utils_token.c \
 		srcs/utils.c \
-		srcs/utils_redirect.c \
-		srcs/print_cmds.c \
 		
 SRCS_BONUS 	= srcs/shell_bonus.c
 OBJS = $(SRCS:.c=.o)
@@ -82,8 +84,8 @@ shell_bonus: $(EXEC_FILE_NAME_BONUS)
 
 bonus: subsystems shell_bonus
 
-debug: fclean $(LIBFT_LIB)
-	@$(MAKE) CFLAGS="$(CFLAGS) $(DEBUG_FLAGS)" shell
+debug: $(LIBFT_LIB)
+	@$(MAKE) CFLAGS="$(CFLAGS) $(DEBUG_FLAGS) $(SANITIZE_FLAGS)" shell
 	@echo "$(GREEN)DEBUG: 🛠️  launching minishell with debug messages$(DEF_COLOR)"
 	@./$(EXEC_FILE_NAME)
 
