@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/06 23:09:12 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:48:35 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef enum e_errorlst //para los errores que pueden surgir
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
 {
-	t_env			*env;
+	char			**env;
 	t_hist			*hist;
 	struct termios	termios_saved;
 	char			*cwd;
@@ -113,7 +113,7 @@ int		ft_env_init(t_shell *shell, char **env_array);
 void	ft_print_env(t_shell *shell);
 char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
-int		append_env(t_shell *shell, const char *entry, t_env *last);
+int		append_env(t_shell *shell, const char *entry);
 
 //builtins/export.c
 int		is_valid_key(const char *key);

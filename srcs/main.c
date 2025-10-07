@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 23:47:36 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/29 12:52:01 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 23:12:23 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,15 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+
+
+	printf("ANTES DE INICIAR SHELL\n");
+
 	ft_init_shell(&shell, env);
+
+	printf("DESPUES DE INICIAR SHELL\n");
+
+
 	while (shell.exit == 0)
 	{
 		ft_build_prompt(&shell);

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/09 13:43:30 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 23:05:28 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,29 @@ int	is_token_valid_or_warn(char *key, t_shell *shell)
 
 void	unset_key_from_env(char *key, t_shell *shell)
 {
-	t_env	*prev;
-	t_env	*curr;
+	int		i;
+	int		j;
 	size_t	key_len;
 
-	prev = NULL;
-	curr = shell->env;
+	if (!shell || !shell->env || !key)
+		return ;
 	key_len = ft_strlen(key);
-	while (curr)
+	i = 0;
+	while (shell->env[i])
 	{
-		if (ft_strncmp(curr->value, key, key_len) == 0
-			&& curr->value[key_len] == '=')
+		if (ft_strncmp(shell->env[i], key, key_len) == 0
+			&& shell->env[i][key_len] == '=')
 		{
-			if (prev)
-				prev->next = curr->next;
-			else
-				shell->env = curr->next;
-			free(curr->value);
-			free(curr);
+			free(shell->env[i]);
+			j = i;
+			while (shell->env[j])
+			{
+				shell->env[j] = shell->env[j + 1];
+				j++;
+			}
 			return ;
 		}
-		prev = curr;
-		curr = curr->next;
+		i++;
 	}
 }
 

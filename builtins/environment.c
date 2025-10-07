@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:34:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 23:47:32 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,95 +14,117 @@
 
 int	ft_env_init(t_shell *shell, char **env_array)
 {
-	t_env	*current;
-	t_env	*new;
+	int		num_variables;
 	int		i;
 
-	current = malloc(sizeof(t_env));
-	if (!current)
-		return (ft_error("Mem alloc failed for env node"));
-	current->value = ft_strdup(env_array[0]);
-	current->next = NULL;
-	shell->env = current;
-	i = 1;
-	while (env_array && env_array[0] && env_array[i])
+	num_variables = 0;
+	i = 0;
+	if (!env_array)
+		shell->env = NULL;
+	else
 	{
-		new = malloc(sizeof(t_env));
-		if (!new)
-			return (ft_error("Mem alloc failed for env node"));
-		new->value = ft_strdup(env_array[i]);
-		new->next = NULL;
-		current->next = new;
-		current = new;
-		i++;
+		while (env_array[num_variables])
+			num_variables++;
+		shell->env = malloc(sizeof(char *) * (num_variables + 1));
+		if (!shell->env)
+			return (ft_error("Memory allocation failed for env copy"));
+		while (i < num_variables)
+		{
+			shell->env[i] = strdup(env_array[i]);
+			if (!shell->env[i])
+				return (ft_error("Memory allocation failed for env entry"));
+			i++;
+		}
+		shell->env[num_variables] = NULL;
 	}
-	return (0);
+	if (DEBUG)
+		ft_print_env(shell);
+	return (num_variables);
 }
 
 void	ft_print_env(t_shell *shell)
 {
-	t_env	*current;
+	int	i;
 
 	if (!shell->env)
 	{
 		printf("No environment variables set.\n");
 		return ;
 	}
-	current = shell->env;
-	while (current)
+	i = 0;
+	printf("[\n");
+	while (shell->env[i])
 	{
-		printf("%s\n", current->value);
-		current = current->next;
+		printf("  \"%s\",\n", shell->env[i]);
+		i++;
 	}
+	printf("  NULL\n");
+	printf("]\n");
 }
 
 char	*ft_getenv(t_shell *shell, const char *key)
 {
-	t_env	*current;
+	int		i;
 	size_t	len;
 
-	current = shell->env;
+	if (!shell || !shell->env || !key)
+		return (NULL);
+	i = 0;
 	len = ft_strlen(key);
-	while (current)
+	while (shell->env[i])
 	{
-		if (ft_strncmp(current->value, key, len) == 0
-			&& current->value[len] == '=')
-			return (current->value + len + 1);
-		current = current->next;
+		if (ft_strncmp(shell->env[i], key, len) == 0
+			&& shell->env[i][len] == '=')
+			return (shell->env[i] + len + 1);
+		i++;
 	}
 	return (NULL);
 }
 
 void	ft_free_env(t_shell *shell)
 {
-	t_env	*next;
+	int	i;
 
-	while (shell->env)
+	if (!shell->env)
+		return ;
+	i = 0;
+	while (shell->env[i])
 	{
-		next = shell->env->next;
-		free(shell->env->value);
-		free(shell->env);
-		shell->env = next;
+		free(shell->env[i]);
+		i++;
 	}
+	free(shell->env);
+	shell->env = NULL;
 }
 
-int	append_env(t_shell *shell, const char *entry, t_env *last)
+int	append_env(t_shell *shell, const char *entry)
 {
-	t_env	*new;
+	size_t	count;
+	char	**new_vars;
+	size_t	i;
 
-	new = (t_env *)malloc(sizeof(t_env));
-	if (!new)
+	if (!shell || !entry)
 		return (0);
-	new->value = ft_strdup(entry);
-	if (!new->value)
+	count = 0;
+	while (shell->env && shell->env[count])
+		count++;
+	new_vars = malloc(sizeof(char *) * (count + 2));
+	if (!new_vars)
+		return (ft_error("Malloc failed for append_env"));
+	i = 0;
+	while (i < count)
 	{
-		free(new);
-		return (0);
+		new_vars[i] = shell->env[i];
+		i++;
 	}
-	new->next = NULL;
-	if (last)
-		last->next = new;
-	else
-		shell->env = new;
+	new_vars[count] = ft_strdup(entry);
+	if (!new_vars[count])
+	{
+		free(new_vars);
+		return (ft_error("Malloc failed for append_env"));
+	}
+	new_vars[count + 1] = NULL;
+	free(shell->env);
+	shell->env = new_vars;
 	return (1);
 }

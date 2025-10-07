@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/10 19:32:02 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/07 23:01:29 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,22 @@ int	is_valid_key(const char *key)
 	return (1);
 }
 
-static t_env	*find_env_node(t_env *head, const char *key, size_t key_len,
-	t_env **plast)
+static int	find_env_index(char **envp, const char *key)
 {
-	t_env	*cur;
+	int	i;
+	size_t	key_len;
 
-	*plast = NULL;
-	cur = head;
-	while (cur)
+	if (!envp)
+	return (-1);
+	i = 0;
+	key_len = ft_strlen(key);
+	while (envp[i])
 	{
-		if (ft_strncmp(cur->value, key, key_len) == 0
-			&& cur->value[key_len] == '=')
-			return (cur);
-		*plast = cur;
-		cur = cur->next;
+		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
+			return (i);
+		i++;
 	}
-	return (NULL);
+	return (-1);
 }
 
 static char	*dup_key(const char *entry)
@@ -58,24 +58,22 @@ static char	*dup_key(const char *entry)
 
 void	ft_env_set(t_shell *shell, const char *entry)
 {
-	t_env	*last;
-	t_env	*node;
+	int		index;
 	char	*key;
-	size_t	key_len;
 
+	if (!shell || !entry)
+		return ;
 	key = dup_key(entry);
 	if (!key)
 		return ;
-	key_len = ft_strlen(key);
-	node = find_env_node(shell->env, key, key_len, &last);
-	if (node)
+	index = find_env_index(shell->env, key);
+	if (index != -1)
 	{
-		free(node->value);
-		node->value = ft_strdup(entry);
-		free(key);
-		return ;
+		free(shell->env[index]);
+		shell->env[index] = ft_strdup(entry);
 	}
-	append_env(shell, entry, last);
+	else
+		append_env(shell, entry);
 	free(key);
 }
 
