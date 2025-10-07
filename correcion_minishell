@@ -24,6 +24,9 @@ HECHO:
 - Nuevo formato de shell->env, con un array y no una lista enlazada, para cumplir con lo que pide execve
 
 
+A CORREGIR:
+desde que he cambiado a execve parece que no funciona bien el execute. En debug muestra bien los tokens, pero
+al ejecutarlos para todo dice: "No such file or directory"
 
 
 
