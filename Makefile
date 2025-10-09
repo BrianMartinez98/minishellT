@@ -47,6 +47,7 @@ SRCS 	= builtins/echo.c \
 		srcs/shell.c \
 		srcs/signals.c \
 		srcs/token.c \
+		srcs/utils_pipex.c \
 		srcs/utils_print.c \
 		srcs/utils_quotes.c \
 		srcs/utils_redirect.c \

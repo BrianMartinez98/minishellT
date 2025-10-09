@@ -68,7 +68,7 @@ mkdir -p a/b/c/d
 Changed directory to /tmp/pepese/a/b/c/d
 /tmp/pepese/a/b/c/d > rm -rf ../../../../
 
-!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe
+!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe -> deberiamos crear una especie de built in para que no llamar getcwd en cada iteraccion
 
 env > salida
 
@@ -93,3 +93,5 @@ las variables de entorno en llos pipes deben ser también las nuestras )ahora mi
 si hacemos unset de path ls no debería funcionar
 
 
+
+Revisa la parte de las redirrecciones ya que si tiene varias se hace mal (BRIAN)

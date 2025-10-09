@@ -19,9 +19,9 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	ft_init_shell(&shell, env);
+	ft_build_prompt(&shell);
 	while (shell.exit == 0)
 	{
-		ft_build_prompt(&shell);
 		ft_setup_signals_prompt();
 		ft_readline(&shell);
 		if (!shell.line && !shell.exit)

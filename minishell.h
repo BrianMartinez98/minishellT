@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # define SPACE			"\t\n\v\f\r "
-# define REDIRECTION	"<><<>>"
 
 # define MAX_TOKENS 256
 
@@ -80,6 +79,7 @@ typedef enum e_errorlst //para los errores que pueden surgir
 	FD,
 	GETCWD,
 	MSG,
+	NCMD,
 }	t_errorlst;
 
 typedef struct s_shell //para los datos que necesitaremos en la minishell
@@ -163,6 +163,10 @@ void	ft_setup_signals_child(void);
 
 //srcs/token.c
 void	split_line(t_shell *shell);
+
+//src/utils_pipex.c
+char *command_finder(char **command, char **paths);
+char **paths_finder(char **env);
 
 //src/utils_print.c
 void	print_tokens_array(t_shell *shell);

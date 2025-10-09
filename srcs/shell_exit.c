@@ -91,6 +91,7 @@ void	handle_error(t_errorlst error, t_shell *shell)
 	error_msg[FD] = "Fallo en el fd!\n";
 	error_msg[GETCWD] = "Error en GETCWD!\n";
 	error_msg[MSG] = "Error en el MSG!\n";
+	error_msg[NCMD] = "Command not found!\n";
 	print_errors(error, error_msg);
 	ft_exit_shell(shell);
 	exit(1);

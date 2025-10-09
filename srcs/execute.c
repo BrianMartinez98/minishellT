@@ -14,16 +14,26 @@
 
 static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 {
+	char **paths;
+
 	ft_setup_signals_child();
 	if (shell->stdin_save != STDIN_FILENO)
 		dup2(shell->stdin_save, STDIN_FILENO);
 	if (shell->stdout_save != STDOUT_FILENO)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
-
+	paths = paths_finder(shell->env);
+	for (int i = 0; paths[i]; i++)
+	{
+		printf("%s\n", paths[i]);
+	}
+	if (!command_finder(tokens, paths) && !is_builtin(tokens))
+	{
+		printf("minishell: Error: Command not found!\n");
+		exit(0);
+	}
 	// execvp(tokens[0], tokens);
-	execve(tokens[0], tokens, shell->env);
-	
+	execve(command_finder(tokens, paths), tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);
 }

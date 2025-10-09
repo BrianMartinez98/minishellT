@@ -14,11 +14,11 @@
 
 int	ft_env_init(t_shell *shell, char **env_array)
 {
-	int		num_variables;
 	int		i;
-
-	num_variables = 0;
+	int		num_variables;
+	
 	i = 0;
+	num_variables = 0;
 	if (!env_array)
 		shell->env = NULL;
 	else
@@ -30,7 +30,7 @@ int	ft_env_init(t_shell *shell, char **env_array)
 			return (ft_error("Memory allocation failed for env copy"));
 		while (i < num_variables)
 		{
-			shell->env[i] = strdup(env_array[i]);
+			shell->env[i] = ft_strdup(env_array[i]);
 			if (!shell->env[i])
 				return (ft_error("Memory allocation failed for env entry"));
 			i++;

@@ -30,6 +30,5 @@ void	change_path(char **tokens, t_shell *shell)
 		free(shell->cwd);
 	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
-		perror("getcwd failed");
-	printf("Changed directory to %s\n", shell->cwd);
+		perror("getcwd failed");// debo guardar el anterior en alguna parte y usarlo en caso de que falle el nuevo
 }
