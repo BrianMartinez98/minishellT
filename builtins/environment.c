@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/07 23:47:32 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/20 22:45:52 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_env_init(t_shell *shell, char **env_array)
 {
 	int		i;
 	int		num_variables;
-	
+
 	i = 0;
 	num_variables = 0;
 	if (!env_array)
@@ -37,8 +37,6 @@ int	ft_env_init(t_shell *shell, char **env_array)
 		}
 		shell->env[num_variables] = NULL;
 	}
-	if (DEBUG)
-		ft_print_env(shell);
 	return (num_variables);
 }
 
@@ -52,14 +50,20 @@ void	ft_print_env(t_shell *shell)
 		return ;
 	}
 	i = 0;
-	printf("[\n");
+	if (DEBUG)
+		printf("\033[0;35m[\033[0m\n");
 	while (shell->env[i])
 	{
-		printf("  \"%s\",\n", shell->env[i]);
+		if (DEBUG)
+			printf("\033[0;35m  \"\033[0m");
+		if (DEBUG)
+			printf("%s\033[0;35m\"\033[0m\n", shell->env[i]);
+		else
+			printf("%s\n", shell->env[i]);
 		i++;
 	}
-	printf("  NULL\n");
-	printf("]\n");
+	if (DEBUG)
+		printf("\033[0;35m  NULL\n]\033[0m\n");
 }
 
 char	*ft_getenv(t_shell *shell, const char *key)

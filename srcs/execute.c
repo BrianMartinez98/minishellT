@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/07 19:41:45 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:11:14 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 {
-	char **paths;
+	char	**paths;
+	char	*pathname;
 
 	ft_setup_signals_child();
 	if (shell->stdin_save != STDIN_FILENO)
@@ -27,13 +28,33 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	{
 		printf("%s\n", paths[i]);
 	}
-	if (!command_finder(tokens, paths) && !is_builtin(tokens))
+	pathname = command_finder(tokens, paths);
+
+	//DEBUG
+	printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
+	for (int j = 0; tokens[j]; j++)
+		printf("  argv[%d] = '%s'\n", j, tokens[j]);
+	printf("\033[0m\n");
+	//DEBUG
+
+
+
+	if (!pathname && !is_builtin(tokens))
 	{
 		printf("minishell: Error: Command not found!\n");
 		exit(0);
 	}
 	// execvp(tokens[0], tokens);
-	execve(command_finder(tokens, paths), tokens, shell->env);
+
+
+
+
+
+
+
+
+
+	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);
 }

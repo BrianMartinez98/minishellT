@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/07 19:53:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:17:09 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	ft_restore_term_settings(t_shell *shell)
 
 void	ft_init_shell(t_shell *shell, char **env)
 {
-	ft_env_init(shell, env);
+	if (ft_env_init(shell, env) && DEBUG)
+		printf("\033[0;35mDEBUG: Environment initialized OK\033[0m\n");
 	shell->cwd = NULL;
 	shell->prompt = NULL;
 	shell->hist = NULL;

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 22:59:24 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/06 23:06:18 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/20 22:50:25 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	print_tokens(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		printf("		Token[%zu]: '%s'\n", i, tokens[i]);
+		printf("\033[0;35m		Token[%zu]: '\033[0m%s", i, tokens[i]);
+		printf("\033[0;35m'\033[0m\n");
 		i++;
 	}
 	return (0);
@@ -33,6 +34,7 @@ void	print_tokens_array(t_shell *shell)
 
 	if (DEBUG)
 	{
+		printf("\033[0;35m");
 		if (!shell->cmds)
 			printf("\nDEBUG: No hay array de tokens!\n");
 		else
@@ -42,12 +44,13 @@ void	print_tokens_array(t_shell *shell)
 			i = 0;
 			while (shell->cmds[i])
 			{
-				printf("	[\n");
+				printf("	[\033[0m\n");
 				print_tokens(shell->cmds[i]);
-				printf("	]\n");
+				printf("\033[0;35m	]\n");
 				i++;
 			}
 			printf("];\n\n");
 		}
+		printf("\033[0m");
 	}
 }
