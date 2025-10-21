@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 22:59:24 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/21 09:27:21 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/21 10:19:19 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,9 @@ void	print_tokens_array(t_shell *shell)
 	{
 		printf("\033[0;35m");
 		if (!shell->cmds)
-			printf("\nDEBUG: No hay array de tokens!\033[0m\n");
+			printf("\nDEBUG: split_line, no hay array de tokens!\033[0m\n");
 		else
 		{
-			printf("DEBUG: imprimiendo tokens que nos llegan:\n");
 			printf("shell->cmds = \n[\n");
 			i = 0;
 			while (shell->cmds[i])

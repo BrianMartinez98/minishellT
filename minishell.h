@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/20 22:36:32 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:57:17 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,15 @@ void	ft_setup_signals_child(void);
 //srcs/token.c
 void	split_line(t_shell *shell);
 
+//srcs/utils_expand.c
+int		is_single_quoted(char *cmd);
+int		is_double_quoted(char *cmd);
+void	remove_quotes(char *cmd);
+int		expand_var(t_shell *shell, char **cmd);
+
 //src/utils_pipex.c
-char *command_finder(char **command, char **paths);
-char **paths_finder(char **env);
+char	*command_finder(char **command, char **paths);
+char	**paths_finder(char **env);
 
 //src/utils_print.c
 void	print_tokens_array(t_shell *shell);

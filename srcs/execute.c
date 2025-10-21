@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/21 09:47:33 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/21 09:59:56 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	if (!pathname && !is_builtin(tokens))
 	{
 		printf("minishell: Error: Command not found!\n");
-		exit(0);
+		exit(127);
 	}
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);

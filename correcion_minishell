@@ -23,17 +23,12 @@ HECHO:
 - Sustituido execvp (prohibido) por execve
 - Nuevo formato de shell->env, con un array y no una lista enlazada, para cumplir con lo que pide execve
 
+- Expansión de variables OK
+	export A=1 B=1
+	echo $A $B  ---> debe imprimir 1 1
+	echo "$A $B"  ---> debe imprimir 1 1
+	echo '$A $B'  ---> debe imprimir $A $B
 
-A CORREGIR:
-
-Esto da un memory leak:
-echo hola | grep h
-
-
-
-
-desde que he cambiado a execve parece que no funciona bien el execute. En debug muestra bien los tokens, pero
-al ejecutarlos para todo dice: "No such file or directory"
 
 
 
@@ -50,7 +45,13 @@ solo expande variables en el echo
 	export kk=$A
 	echo $kk ---> debe imprimir hola
 
+export CMD="echo hola"
+$CMD  ---> command not found: echo hola
+eval $CMD ---> debe imprimir hola
+echo "$CMD" ---> debe imprimir echo hola
 
+export A=ls
+$A -l  ---> debería listar directorio
 
 echo -nnnn hhola -> -nnnn hhola
 

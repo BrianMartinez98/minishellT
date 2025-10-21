@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/03 13:59:05 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:42:49 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +42,6 @@ static int	ft_echo_token(t_shell *shell, char *token, int *suppress_nl,
 	return (1);
 }
 
-static void	ft_strip_quotes(char **tokens)
-{
-	size_t	num_t;
-	size_t	len;
-	size_t	i;
-
-	num_t = 0;
-	len = 0;
-	while (tokens[num_t])
-		num_t++;
-	if (num_t >= 2)
-	{
-		len = ft_strlen(tokens[num_t - 1]);
-		if ((tokens[1][0] == '"' && tokens[num_t - 1][len - 1] == '"')
-				|| (tokens[1][0] == '\'' && tokens[num_t - 1][len - 1] == '\''))
-		{
-			i = 0;
-			while (tokens[1][i])
-			{
-				tokens[1][i] = tokens[1][i + 1];
-				i++;
-			}
-			len = ft_strlen(tokens[num_t - 1]);
-			tokens[num_t - 1][len - 1] = '\0';
-		}
-	}
-}
-
 void	ft_echo(char **tokens, t_shell *shell)
 {
 	int		i;
@@ -80,7 +52,6 @@ void	ft_echo(char **tokens, t_shell *shell)
 	i = 1;
 	suppress_nl = 0;
 	supress_first = 1;
-	ft_strip_quotes(tokens);
 	while (tokens[i])
 	{
 		printed = ft_echo_token(shell, tokens[i],
