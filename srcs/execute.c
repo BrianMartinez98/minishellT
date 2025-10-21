@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/20 23:11:14 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/21 09:47:33 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,12 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
 	paths = paths_finder(shell->env);
-	for (int i = 0; paths[i]; i++)
-	{
-		printf("%s\n", paths[i]);
-	}
 	pathname = command_finder(tokens, paths);
-
-	//DEBUG
-	printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
-	for (int j = 0; tokens[j]; j++)
-		printf("  argv[%d] = '%s'\n", j, tokens[j]);
-	printf("\033[0m\n");
-	//DEBUG
-
-
-
 	if (!pathname && !is_builtin(tokens))
 	{
 		printf("minishell: Error: Command not found!\n");
 		exit(0);
 	}
-	// execvp(tokens[0], tokens);
-
-
-
-
-
-
-
-
-
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);

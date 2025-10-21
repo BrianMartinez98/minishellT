@@ -14,7 +14,10 @@ char	**paths_finder(char **env)
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
 			if (DEBUG)
-				printf("%s\n", env[i]);
+			{
+				printf("\033[0;35mDEBUG: PATH found:\033[0m\n");
+				printf("\033[0;35m%s\033[0m\n\n", env[i]);
+			}
 			return (ft_split(env[i] + 5, ':'));
 		}
 		i++;
@@ -26,17 +29,18 @@ char	*command_finder(char **command, char **paths)
 {
 	int		i;
 	char	*pathname;
+	char	*trim;
 	char	*temp;
 
-	if (!paths)
+	if (!command || !command[0] || !paths)
 		return (NULL);
 	i = 0;
-	while (paths[i] != NULL)
+	while (paths[i])
 	{
-		temp = ft_strjoin(ft_strtrim(paths[i], "\n"), "/");
-		if (!temp)
-			return (NULL);
-		pathname = ft_strjoin(temp, command[i]);
+		trim = ft_strtrim(paths[i], "\n");
+		temp = ft_strjoin(trim, "/");
+		free(trim);
+		pathname = ft_strjoin(temp, command[0]);
 		free(temp);
 		if (!pathname)
 			return (NULL);
