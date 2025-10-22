@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/21 22:57:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/22 11:15:05 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 void	change_path(char **tokens, t_shell *shell);
 
 //builtins/echo.c
-void	ft_echo(char **tokens, t_shell *shell);
+void	ft_echo(char **tokens);
 
 //builtins/environment.c
 int		ft_env_init(t_shell *shell, char **env_array);
@@ -117,7 +117,6 @@ int		append_env(t_shell *shell, const char *entry);
 
 //builtins/export.c
 int		is_valid_key(const char *key);
-void	ft_env_set(t_shell *shell, const char *entry);
 void	ft_export(char **tokens, t_shell *shell);
 
 //builtins/history.c
@@ -165,9 +164,6 @@ void	ft_setup_signals_child(void);
 void	split_line(t_shell *shell);
 
 //srcs/utils_expand.c
-int		is_single_quoted(char *cmd);
-int		is_double_quoted(char *cmd);
-void	remove_quotes(char *cmd);
 int		expand_var(t_shell *shell, char **cmd);
 
 //src/utils_pipex.c
@@ -179,6 +175,9 @@ void	print_tokens_array(t_shell *shell);
 
 //srcs/utils_quotes.c
 int		closed_quotes(char *line, int i);
+int		is_quoted(char *cmd);
+void	remove_quotes(char *cmd);
+char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 
 //srcs/util_redirects.c
 int		ft_redirect(t_shell *shell, char **cmd, int i);

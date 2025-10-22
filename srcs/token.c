@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/21 23:37:19 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/22 11:09:54 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static int	expand_variables(t_shell *shell)
 		j = 0;
 		while (shell->cmds[i][j])
 		{
-			if (is_single_quoted(shell->cmds[i][j]))
+			if (is_quoted(shell->cmds[i][j]) == 1)
 				remove_quotes(shell->cmds[i][j]);
 			else
 			{
-				if (is_double_quoted(shell->cmds[i][j]))
+				if (is_quoted(shell->cmds[i][j]) == 2)
 					remove_quotes(shell->cmds[i][j]);
 				expanded += expand_var(shell, &shell->cmds[i][j]);
 			}

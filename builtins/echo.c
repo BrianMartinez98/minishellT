@@ -6,28 +6,13 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:14:01 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/21 23:42:49 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/22 09:47:53 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	ft_echo_var(t_shell *shell, char *token)
-{
-	char	*val;
-
-	if (token[1] == '?' && token[2] == '\0')
-		printf("%d", shell->last_status);
-	else
-	{
-		val = ft_getenv(shell, token + 1);
-		if (val)
-			printf("%s", val);
-	}
-}
-
-static int	ft_echo_token(t_shell *shell, char *token, int *suppress_nl,
-		int *supress_first)
+static int	ft_echo_token(char *token, int *suppress_nl, int *supress_first)
 {
 	if (ft_strcmp(token, "-n") == 0 && *supress_first)
 	{
@@ -35,14 +20,11 @@ static int	ft_echo_token(t_shell *shell, char *token, int *suppress_nl,
 		return (0);
 	}
 	*supress_first = 0;
-	if (token[0] == '$')
-		ft_echo_var(shell, token);
-	else
-		printf("%s", token);
+	printf("%s", token);
 	return (1);
 }
 
-void	ft_echo(char **tokens, t_shell *shell)
+void	ft_echo(char **tokens)
 {
 	int		i;
 	int		suppress_nl;
@@ -54,8 +36,7 @@ void	ft_echo(char **tokens, t_shell *shell)
 	supress_first = 1;
 	while (tokens[i])
 	{
-		printed = ft_echo_token(shell, tokens[i],
-				&suppress_nl, &supress_first);
+		printed = ft_echo_token(tokens[i], &suppress_nl, &supress_first);
 		if (printed && tokens[i + 1])
 			printf(" ");
 		i++;

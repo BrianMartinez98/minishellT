@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/07 23:01:29 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/22 11:36:56 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int	is_valid_key(const char *key)
 
 static int	find_env_index(char **envp, const char *key)
 {
-	int	i;
+	int		i;
 	size_t	key_len;
 
 	if (!envp)
-	return (-1);
+		return (-1);
 	i = 0;
 	key_len = ft_strlen(key);
 	while (envp[i])
@@ -46,7 +46,7 @@ static int	find_env_index(char **envp, const char *key)
 	return (-1);
 }
 
-static char	*dup_key(const char *entry)
+static char	*get_key(const char *entry)
 {
 	char	*eq;
 
@@ -56,16 +56,26 @@ static char	*dup_key(const char *entry)
 	return (ft_substr(entry, 0, eq - entry));
 }
 
-void	ft_env_set(t_shell *shell, const char *entry)
+void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 {
 	int		index;
 	char	*key;
+	char	*value;
+	char	*new_entry;
 
 	if (!shell || !entry)
 		return ;
-	key = dup_key(entry);
+	key = get_key(entry);
 	if (!key)
 		return ;
+	value = ft_strdup(equal + 1);
+	new_entry = NULL;
+	if (is_quoted(value))
+	{
+		remove_quotes(value);
+		new_entry = ft_strjoin3(key, "=", value);
+		entry = new_entry;
+	}
 	index = find_env_index(shell->env, key);
 	if (index != -1)
 	{
@@ -74,7 +84,9 @@ void	ft_env_set(t_shell *shell, const char *entry)
 	}
 	else
 		append_env(shell, entry);
+	free(value);
 	free(key);
+	free(new_entry);
 }
 
 void	ft_export(char **tokens, t_shell *shell)
@@ -96,7 +108,7 @@ void	ft_export(char **tokens, t_shell *shell)
 			}
 			else
 			{
-				ft_env_set(shell, tokens[i]);
+				ft_env_set(shell, tokens[i], equal);
 				shell->last_status = 0;
 			}
 		}
