@@ -15,6 +15,7 @@
 void	change_path(char **tokens, t_shell *shell)
 {
 	const char	*path;
+	char		*temp;
 
 	if (tokens[1] == NULL)
 	{
@@ -28,7 +29,13 @@ void	change_path(char **tokens, t_shell *shell)
 		perror("cd");
 	if (shell->cwd)
 		free(shell->cwd);
+	temp = shell->cwd;
 	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
-		perror("getcwd failed");// debo guardar el anterior en alguna parte y usarlo en caso de que falle el nuevo
+	{
+		perror("getcwd failed");
+		shell->cwd = temp;
+		temp = NULL;
+	}
+	ft_build_prompt(shell);
 }

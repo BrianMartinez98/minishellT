@@ -112,3 +112,107 @@ si hacemos unset de path ls no debería funcionar
 
 
 Revisa la parte de las redirrecciones ya que si tiene varias se hace mal (BRIAN)
+
+
+
+
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+// lo que cambio Brian
+
+
+
+
+
+
+
+
+HECHO:
+- Makefile con la M en mayúscula
+
+- Gestión de comillas OK. convierte lo que este entre comillas en un solo token
+	echo "cat makefile | cat > makefile"
+	OK: shell->cmds = 
+	[
+			[
+					Token[0]: 'echo'
+					Token[1]: '"cat makefile | cat > makefile"'
+			]
+	];
+
+	export A="hola B=asdasda"
+	OK: shell->cmds = 
+	[
+		[
+				Token[0]: 'export'
+				Token[1]: 'A="hola B=asdasda"'
+		]
+	];
+
+- Sustituido execvp (prohibido) por execve
+- Nuevo formato de shell->env, con un array y no una lista enlazada, para cumplir con lo que pide execve
+
+quitar el printf de "changed directory"
+
+# creo que ya esta esto
+mkdir -p a/b/c/d
+/tmp/pepese > cd a/b/c/d/
+Changed directory to /tmp/pepese/a/b/c/d
+/tmp/pepese/a/b/c/d > rm -rf ../../../../
+!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe -> deberiamos crear una especie de built in para que no llamar getcwd en cada iteraccion
+
+A CORREGIR:
+
+Esto da un memory leak:
+echo hola | grep h
+
+desde que he cambiado a execve parece que no funciona bien el execute. En debug muestra bien los tokens, pero
+al ejecutarlos para todo dice: "No such file or directory"
+
+PENDIENTE:
+
+export A=1 B=1
+expr $A + $B  ---> debe dar 2
+expr "$A" + "$B"  ---> debe dar 2
+expr '$A' + '$B'  ---> debe dar error expr: non-integer argument
+
+solo expande variables en el echo
+	export $A=hola
+	export kk=$A
+	echo $kk ---> debe imprimir hola
+
+
+
+echo -nnnn hhola -> -nnnn hhola
+
+no esta implementado el builtin exit
+exit tiene q matar al hijo o proceso en el que este.
+si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
+
+cat + ctrl C -> muestra 2 prompts
+
+echo "cat makefile | cat > makefile" -> crash
+echo 'cat makefile | cat > makefile' -> crash
+
+expande variables aun con comillas simples
+
+env > salida
+
+unset PATH -> ls -> sigue funcionando?
+
+usar flags -g3 fsantizer=address
+
+si hacemos unset de path ls no debería funcionar
+
+Revisa la parte de las redirrecciones ya que si tiene varias se hace mal (BRIAN)
+redirecion de entrada no funciona
+here_doc hace cosas raras
+
+estan esperando a cada hijo en vez de esperar al final a todos
+
+las variables de entorno en los pipes deben ser también las nuestras )ahora mismo coge las env globales
