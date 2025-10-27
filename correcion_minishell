@@ -1,4 +1,17 @@
 HECHO:
+
+-no esta implementado el builtin exit
+
+-!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe -> deberiamos crear una especie de built in para que no llamar getcwd en cada iteraccion
+
+-estan esperando a cada hijo en vez de esperar al final a todos
+
+-quitar el printf de "changed directory"
+
+-Revisa la parte de las redirrecciones ya que si tiene varias se hace mal (BRIAN)
+
+-usar flags -g3 fsantizer=address
+
 - Makefile con la M en mayúscula
 
 - Gestión de comillas OK. convierte lo que este entre comillas en un solo token
@@ -50,9 +63,7 @@ HECHO:
 	export A=ls
 	$A -l  ---> debería listar directorio
 
-
-
-PENDIENTE:
+PENDIENTEs
 NOTA: eval de arror pq no reconoce el comando. Chatgpt dice que es normal pq es un builtin del shell y no un comando externo
 Y que como no nos piden que lo implementemos pues que es normal que no funcione. CHECAR????
 export CMD="echo hola"
@@ -60,60 +71,30 @@ $CMD  ---> command not found: echo hola
 eval $CMD ---> debe imprimir hola
 echo "$CMD" ---> debe imprimir echo hola
 
-
 echo -nnnn hhola -> -nnnn hhola
 
-
-
-no esta implementado el builtin exit
 exit tiene q matar al hijo o proceso en el quue este.
 si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
 
-
-
-
-
 cat + ctrl C -> muestra 2 prompts
-
-
-
-
-
 
 mkdir -p a/b/c/d
 /tmp/pepese > cd a/b/c/d/
 Changed directory to /tmp/pepese/a/b/c/d
 /tmp/pepese/a/b/c/d > rm -rf ../../../../
 
-!!SALE de minishell al intentar hacer getcwd en una carpeta que no existe -> deberiamos crear una especie de built in para que no llamar getcwd en cada iteraccion
-
 env > salida
 
 unset PATH -> ls -> sigue funcionando?
 
-
-
-redirecion de entrada no funciona
-here_doc hace cosas raras
-
-estan esperando a cada hijo en vez de esperar al final a todos
-
-quitar el printf de "changed directory"
-
-
-
-
-usar flags -g3 fsantizer=address
-
-las variables de entorno en llos pipes deben ser también las nuestras )ahora mismo coge las env globales
+las variables de entorno en los pipes deben ser también las nuestras (ahora mismo coge las env globales)
 
 si hacemos unset de path ls no debería funcionar
 
+Quitar las redirecciones raras para que las ignore, no hay que implementarlas
 
-
-Revisa la parte de las redirrecciones ya que si tiene varias se hace mal (BRIAN)
-
-
+redirecion de entrada no funciona
+here_doc hace cosas raras
 
 
 // lo que cambio Brian

@@ -140,6 +140,7 @@ void	ft_free_line(t_shell *shell);
 
 //srcs/redirect.c
 int		handle_redirections(char **cmd, t_shell *shell);
+int		check_heredoc(char **cmd, t_shell *shell);
 void	restore_std(t_shell *shell);
 
 //srcs/shell_exit.c
@@ -184,6 +185,7 @@ int		ft_redirect(t_shell *shell, char **cmd, int i);
 int		ft_adding(t_shell *shell, char **cmd, int i);
 int		ft_left(t_shell *shell, char **cmd, int i);
 int		ft_leftleft(t_shell *shell, char **cmd, int i);
+int		is_redir_token(const char *t);
 
 //srcs/utils_token.c
 int		count_pipes(t_shell *shell);

@@ -24,23 +24,19 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
 	paths = paths_finder(shell->env);
-	for (int i = 0; paths[i]; i++)
-	{
-		printf("%s\n", paths[i]);
-	}
 	pathname = command_finder(tokens, paths);
 	//DEBUG
-	printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
-	for (int j = 0; tokens[j]; j++)
-		printf("  argv[%d] = '%s'\n", j, tokens[j]);
-	printf("\033[0m\n");
+	if (DEBUG)
+	{
+		printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
+		printf("\033[0m\n");
+	}
 	//DEBUG
 	if (!pathname && !is_builtin(tokens))
 	{
 		printf("minishell: Error: Command not found!\n");
 		exit(127);
 	}
-	// execvp(tokens[0], tokens);
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);
@@ -49,7 +45,6 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
 
 	if (!tokens || !tokens[0])
 		return (0);
@@ -62,23 +57,19 @@ static int	ft_execute(char **tokens, char **cmd, t_shell *shell)
 	}
 	if (pid == 0)
 		pid_child(tokens, cmd, shell);
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->last_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			shell->last_status = 128 + WTERMSIG(status);
-	}
-	return (shell->last_status);
+	return (pid);
 }
 
-static void	execute_command(t_shell *shell, char **cmd,
+static pid_t	execute_command(t_shell *shell, char **cmd,
 	char **tokens, int has_next)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	int		saved_stdin;
+	int		saved_stdout;
+	pid_t	pid;
 
+	pid = -1;
+	if (!tokens || !tokens[0])
+		return (-1);
 	if (is_builtin(tokens) && !has_next)
 	{
 		saved_stdin = dup(STDIN_FILENO);
@@ -91,15 +82,21 @@ static void	execute_command(t_shell *shell, char **cmd,
 		close(saved_stdout);
 	}
 	else
-		ft_execute(tokens, cmd, shell);
+		pid = ft_execute(tokens, cmd, shell);
+	return (pid);
 }
+
 
 void	ft_execute_pipes(t_shell *shell)
 {
 	int		fd[2];
 	char	**tokens;
 	int		i;
+	int		n;
 	int		has_next;
+	int		status = 0;
+	pid_t	pids[256] = {0};
+
 
 	i = 0;
 	while (shell->cmds[i])
@@ -111,8 +108,12 @@ void	ft_execute_pipes(t_shell *shell)
 				handle_error(PIPES, shell);
 			shell->stdout_save = fd[1];
 		}
+		if (check_heredoc(shell->cmds[i], shell) == -1)
+			return ;
 		filter_args(shell->cmds[i], &tokens, shell);
-		execute_command(shell, shell->cmds[i], tokens, has_next);
+		pid_t pid = execute_command(shell, shell->cmds[i], tokens, has_next);
+		if (pid > 0)
+			pids[n++] = pid;
 		free(tokens);
 		if (shell->cmds[i + 1])
 		{
@@ -121,4 +122,10 @@ void	ft_execute_pipes(t_shell *shell)
 		}
 		i++;
 	}
+	for (int j = 0; j < n; j++)
+		waitpid(pids[j], &status, 0);
+	if (WIFEXITED(status))
+		shell->last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		shell->last_status = 128 + WTERMSIG(status);
 }

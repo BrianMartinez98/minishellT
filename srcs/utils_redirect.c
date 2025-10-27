@@ -79,3 +79,14 @@ int	ft_leftleft(t_shell *shell, char **cmd, int i)
 	close(pipefd[0]);
 	return (0);
 }
+
+int is_redir_token(const char *t)
+{
+    if (!t) return 0;
+    return (strcmp(t, "<") == 0
+         || strcmp(t, ">") == 0
+         || strcmp(t, "<<") == 0
+         || strcmp(t, ">>") == 0
+         || strcmp(t, "2>") == 0
+         || strcmp(t, "|") == 0);
+}
