@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/20 23:11:14 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:45:25 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,11 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	handle_redirections(cmd, shell);
 	paths = paths_finder(shell->env);
 	pathname = command_finder(tokens, paths);
-	//DEBUG
 	if (DEBUG)
 	{
 		printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
 		printf("\033[0m\n");
 	}
-	//DEBUG
 	if (!pathname && !is_builtin(tokens))
 	{
 		printf("minishell: Error: Command not found!\n");
@@ -97,7 +95,7 @@ void	ft_execute_pipes(t_shell *shell)
 	int		status = 0;
 	pid_t	pids[256] = {0};
 
-
+	n = 0;
 	i = 0;
 	while (shell->cmds[i])
 	{
