@@ -33,6 +33,10 @@ HECHO:
 		]
 	];
 
+	echo "$USER"'$USER'$?_adios -> juancho$USER0_adios
+
+	echo "hola 'mundo'" -> hola 'mundo'
+
 - Sustituido execvp (prohibido) por execve
 
 - Nuevo formato de shell->env, con un array y no una lista enlazada, para cumplir con lo que pide execve
@@ -63,6 +67,12 @@ HECHO:
 	export A=ls
 	$A -l  ---> debería listar directorio
 
+- echo
+	echo -nnnn hhola -> hhola% (CORREGIDO que ahora también acepta -nnnnnnnnnnn)
+	echo -n -n -nnnnn adios -> adios% (ahora acepta todas las primeras flags que sean -n o -nnnn)
+	echo -n -n -nnnnn adios -n -> adios -n%
+	echo hola $kk -n adios -> hola -n adios (ok. no imprime si el string es "", antes añadíamos un espacio extra)
+
 PENDIENTEs
 NOTA: eval de arror pq no reconoce el comando. Chatgpt dice que es normal pq es un builtin del shell y no un comando externo
 Y que como no nos piden que lo implementemos pues que es normal que no funcione. CHECAR????
@@ -71,7 +81,7 @@ $CMD  ---> command not found: echo hola
 eval $CMD ---> debe imprimir hola
 echo "$CMD" ---> debe imprimir echo hola
 
-echo -nnnn hhola -> -nnnn hhola
+
 
 exit tiene q matar al hijo o proceso en el quue este.
 si haces exit 11 al salir al salir tiene que mostrar $interrogacion = 11
@@ -168,8 +178,6 @@ solo expande variables en el echo
 	echo $kk ---> debe imprimir hola
 
 
-
-echo -nnnn hhola -> -nnnn hhola
 
 no esta implementado el builtin exit
 exit tiene q matar al hijo o proceso en el que este.

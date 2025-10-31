@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:38:39 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/22 09:48:14 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/31 09:09:37 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_execute_builtin(char **tokens, t_shell *shell)
 	else if (ft_strcmp(tokens[0], "pwd") == 0)
 		printf("%s\n", shell->cwd);
 	else if (ft_strcmp(tokens[0], "echo") == 0)
-		ft_echo(tokens);
+		ft_echo(tokens, shell);
 	else if (ft_strcmp(tokens[0], "cd") == 0)
 		change_path(tokens, shell);
 	else if (ft_strcmp(tokens[0], "export") == 0)

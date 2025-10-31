@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_quotes.c                                     :+:      :+:    :+:   */
+/*   tokens_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:08:35 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/22 11:16:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/31 08:50:49 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,27 @@ int	closed_quotes(char *line, int i)
 	return (i);
 }
 
-int	is_quoted(char *cmd)
+size_t	remove_quotes(char **cmd, t_span span)
 {
-	size_t	len;
+	char	*value;
+	char	*prefix;
+	char	*suffix;
+	char	*tmp;
+	char	*new_cmd;
 
-	len = ft_strlen(cmd);
-	if (len > 1 && cmd[0] == '\'' && cmd[len - 1] == '\'')
-		return (1);
-	else if (len > 1 && cmd[0] == '"' && cmd[len - 1] == '"')
-		return (2);
-	return (0);
-}
-
-void	remove_quotes(char *cmd)
-{
-	size_t	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		cmd[i] = cmd[i + 1];
-		i++;
-	}
-	cmd[i - 2] = '\0';
+	value = ft_substr(*cmd, span.start + 1, span.end - span.start - 1);
+	prefix = ft_substr(*cmd, 0, span.start);
+	suffix = ft_substr(*cmd, span.end + 1, ft_strlen(*cmd) - span.end);
+	tmp = ft_strjoin(prefix, value);
+	span.end = ft_strlen(tmp);
+	new_cmd = ft_strjoin(tmp, suffix);
+	free(value);
+	free(*cmd);
+	free(prefix);
+	free(suffix);
+	free(tmp);
+	*cmd = new_cmd;
+	return (span.end - 1);
 }
 
 char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)

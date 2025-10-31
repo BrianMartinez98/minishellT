@@ -1,44 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/22 11:09:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/31 08:51:15 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static int	expand_variables(t_shell *shell)
-{
-	size_t	i;
-	size_t	j;
-	int		expanded;
-
-	expanded = 0;
-	i = 0;
-	while (shell->cmds[i])
-	{
-		j = 0;
-		while (shell->cmds[i][j])
-		{
-			if (is_quoted(shell->cmds[i][j]) == 1)
-				remove_quotes(shell->cmds[i][j]);
-			else
-			{
-				if (is_quoted(shell->cmds[i][j]) == 2)
-					remove_quotes(shell->cmds[i][j]);
-				expanded += expand_var(shell, &shell->cmds[i][j]);
-			}
-			j++;
-		}
-		i++;
-	}
-	return (expanded);
-}
 
 static void	init_cmds(t_shell *shell)
 {
@@ -104,8 +76,6 @@ static void	fill_cmds(t_shell *shell)
 
 void	split_line(t_shell *shell)
 {
-	// int	expanded;
-
 	init_cmds(shell);
 	fill_cmds(shell);
 	if (DEBUG)
@@ -113,12 +83,10 @@ void	split_line(t_shell *shell)
 		printf("\033[0;35mDEBUG: split_line, tokens que nos llegan:\033[0m\n");
 		print_tokens_array(shell);
 	}
-	expand_variables(shell);
-	// expanded = expand_variables(shell);
-	// if (DEBUG && expanded)
+	parse_cmds(shell);
 	if (DEBUG)
 	{
-		printf("\033[0;35mExpansión de variables:\033[0m\n");
+		printf("\033[0;35mTras Elimin Quotes & Expan Variables:\033[0m\n");
 		print_tokens_array(shell);
 	}
 }

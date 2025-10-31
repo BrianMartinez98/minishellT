@@ -14,7 +14,7 @@ char	**paths_finder(char **env)
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
 			if (DEBUG)
-				printf("%s\n", env[i]);
+				printf("\033[0;35m%s\033[0m\n", env[i]);
 			return (ft_split(env[i] + 5, ':'));
 		}
 		i++;

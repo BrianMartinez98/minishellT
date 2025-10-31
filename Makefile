@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/10/21 22:36:07 by jarregui         ###   ########.fr        #
+#    Updated: 2025/10/31 08:53:52 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,13 +46,14 @@ SRCS 	= builtins/echo.c \
 		srcs/shell_exit.c \
 		srcs/shell.c \
 		srcs/signals.c \
-		srcs/token.c \
-		srcs/utils_expand.c \
+		srcs/tokens_expand.c \
+		srcs/tokens_parse.c \
+		srcs/tokens_print.c \
+		srcs/tokens_quotes.c \
+		srcs/tokens_utils.c \
+		srcs/tokens.c \
 		srcs/utils_pipex.c \
-		srcs/utils_print.c \
-		srcs/utils_quotes.c \
 		srcs/utils_redirect.c \
-		srcs/utils_token.c \
 		srcs/utils.c \
 		
 SRCS_BONUS 	= srcs/shell_bonus.c

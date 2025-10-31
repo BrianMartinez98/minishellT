@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/22 11:36:56 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:01:36 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,17 @@ void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 		return ;
 	value = ft_strdup(equal + 1);
 	new_entry = NULL;
-	if (is_quoted(value))
-	{
-		remove_quotes(value);
-		new_entry = ft_strjoin3(key, "=", value);
-		entry = new_entry;
-	}
+
+	//REVISAR AQUIIIII
+
+	// if (is_quoted(value))
+	// {
+	// 	remove_quotes(value, is_quoted(value));
+	// 	new_entry = ft_strjoin3(key, "=", value);
+	// 	entry = new_entry;
+	// }
+
+	
 	index = find_env_index(shell->env, key);
 	if (index != -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/22 11:15:05 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/31 09:10:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 void	change_path(char **tokens, t_shell *shell);
 
 //builtins/echo.c
-void	ft_echo(char **tokens);
+void	ft_echo(char **tokens, t_shell *shell);
 
 //builtins/environment.c
 int		ft_env_init(t_shell *shell, char **env_array);
@@ -161,24 +161,33 @@ void	ft_sigquit_handler(int sig);
 void	ft_setup_signals_prompt(void);
 void	ft_setup_signals_child(void);
 
-//srcs/token.c
-void	split_line(t_shell *shell);
+//srcs/tokens_expand.c
+size_t	expand_var(t_shell *shell, char **cmd, t_span span);
 
-//srcs/utils_expand.c
-int		expand_var(t_shell *shell, char **cmd);
+//srcs/tokens_parse.c
+void	parse_cmds(t_shell *shell);
+
+//src/tokens_print.c
+void	print_tokens_array(t_shell *shell);
+
+//srcs/tokens_quotes.c
+int		closed_quotes(char *line, int i);
+size_t	remove_quotes(char **cmd, t_span span);
+char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
+
+//srcs/tokens_utils.c
+int		count_pipes(t_shell *shell);
+char	*copy_token(char *line, t_span sp);
+void	add_token(char **cmds, int *token_idx, char *line, t_span sp);
+int		ft_next_span(char *s, size_t *i, t_span *sp);
+size_t	alloc_tokens(char **cmds, char *line);
+
+//srcs/tokens.c
+void	split_line(t_shell *shell);
 
 //src/utils_pipex.c
 char	*command_finder(char **command, char **paths);
 char	**paths_finder(char **env);
-
-//src/utils_print.c
-void	print_tokens_array(t_shell *shell);
-
-//srcs/utils_quotes.c
-int		closed_quotes(char *line, int i);
-int		is_quoted(char *cmd);
-void	remove_quotes(char *cmd);
-char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 
 //srcs/util_redirects.c
 int		ft_redirect(t_shell *shell, char **cmd, int i);
@@ -186,13 +195,6 @@ int		ft_adding(t_shell *shell, char **cmd, int i);
 int		ft_left(t_shell *shell, char **cmd, int i);
 int		ft_leftleft(t_shell *shell, char **cmd, int i);
 int		is_redir_token(const char *t);
-
-//srcs/utils_token.c
-int		count_pipes(t_shell *shell);
-char	*copy_token(char *line, t_span sp);
-void	add_token(char **cmds, int *token_idx, char *line, t_span sp);
-int		ft_next_span(char *s, size_t *i, t_span *sp);
-size_t	alloc_tokens(char **cmds, char *line);
 
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);
