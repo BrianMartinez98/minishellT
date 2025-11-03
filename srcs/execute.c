@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/28 22:45:25 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:27:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,13 @@ void	ft_execute_pipes(t_shell *shell)
 		}
 		i++;
 	}
-	for (int j = 0; j < n; j++)
-		waitpid(pids[j], &status, 0);
-	if (WIFEXITED(status))
-		shell->last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		shell->last_status = 128 + WTERMSIG(status);
+	if (n>0) //Cambiado juancho: solo actualizar shell->last_status si realmente hubo procesos hijos.
+	{
+		for (int j = 0; j < n; j++)
+			waitpid(pids[j], &status, 0);
+		if (WIFEXITED(status))
+			shell->last_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->last_status = 128 + WTERMSIG(status);
+	}
 }
