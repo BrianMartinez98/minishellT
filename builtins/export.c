@@ -6,11 +6,16 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/29 18:01:36 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/03 13:47:23 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static int	is_valid_start(char c)
+{
+	return (ft_isalpha(c) || c == '_');
+}
 
 int	is_valid_key(const char *key)
 {
@@ -70,17 +75,6 @@ void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 		return ;
 	value = ft_strdup(equal + 1);
 	new_entry = NULL;
-
-	//REVISAR AQUIIIII
-
-	// if (is_quoted(value))
-	// {
-	// 	remove_quotes(value, is_quoted(value));
-	// 	new_entry = ft_strjoin3(key, "=", value);
-	// 	entry = new_entry;
-	// }
-
-	
 	index = find_env_index(shell->env, key);
 	if (index != -1)
 	{
@@ -98,25 +92,26 @@ void	ft_export(char **tokens, t_shell *shell)
 {
 	char	*equal;
 	int		i;
+	char	*key;
 
 	i = 1;
+	shell->last_status = 0;
+	if (!tokens[i])
+		return (ft_print_env(shell));
 	while (tokens[i])
 	{
 		equal = ft_strchr(tokens[i], '=');
 		if (equal)
-		{
-			if (!is_valid_key(tokens[i]))
-			{
-				printf("export: `%s': not a valid identifier\n",
-					tokens[i]);
-				shell->last_status = 1;
-			}
-			else
-			{
-				ft_env_set(shell, tokens[i], equal);
-				shell->last_status = 0;
-			}
-		}
+			key = ft_substr(tokens[i], 0, equal - tokens[i]);
+		else
+			key = ft_strdup(tokens[i]);
+		if (!is_valid_start(key[0]))
+			error_custom(shell, 1, "export: not a valid identifier", key);
+		else if (!is_valid_key(key))
+			error_custom(shell, 1, "export: not valid in this context:", key);
+		else
+			ft_env_set(shell, tokens[i], equal);
+		free(key);
 		i++;
 	}
 }

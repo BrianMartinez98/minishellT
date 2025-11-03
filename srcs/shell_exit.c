@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/29 12:06:16 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/03 12:42:19 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,30 +69,4 @@ int	ft_exit_shell(t_shell *shell)
 		close(shell->stdout_save);
 	ft_restore_term_settings(shell);
 	return (0);
-}
-
-static void	print_errors(t_errorlst error, char *error_msg[])
-{
-	write(2, "ERROR: ", 7);
-	if (error == FD)
-		perror("open");
-	else if (error >= 0 && error_msg[error])
-		write(2, error_msg[error], ft_strlen(error_msg[error]));
-	else
-		write(2, "Unknown error\n", 14);
-}
-
-void	handle_error(t_errorlst error, t_shell *shell)
-{
-	char	*error_msg[42];
-
-	error_msg[PIPES] = "Error en el pipe!\n";
-	error_msg[MALLOCERROR] = "Error Malloc!\n";
-	error_msg[FD] = "Fallo en el fd!\n";
-	error_msg[GETCWD] = "Error en GETCWD!\n";
-	error_msg[MSG] = "Error en el MSG!\n";
-	error_msg[NCMD] = "Command not found!\n";
-	print_errors(error, error_msg);
-	ft_exit_shell(shell);
-	exit(1);
 }

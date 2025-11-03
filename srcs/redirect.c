@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/09/12 12:45:22 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/03 00:42:17 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ int check_heredoc(char **cmd, t_shell *shell)
         {
             if (!cmd[i + 1] || cmd[i + 1][0] == '\0' || is_redir_token(cmd[i + 1]))
             {
-                fprintf(stderr, "minishell: syntax error near unexpected token `newline'\n");
+                //OJO fprintf no vale:
+				// usar ft_putstr_fd("error_msg ", STDERR);
+				fprintf(stderr, "minishell: syntax error near unexpected token `newline'\n");
                 return (-1);
             }
             value = ft_leftleft(shell, cmd, i + 1);
