@@ -37,4 +37,5 @@ int	main(int ac, char **av, char **env)
 		ft_execute_pipes(&shell);
 	}
 	ft_exit_shell(&shell);
+	exit(shell.last_status);
 }

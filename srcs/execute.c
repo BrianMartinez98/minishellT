@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/03 17:27:03 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:45:25 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 		printf("\033[0m\n");
 	}
 	if (!pathname && !is_builtin(tokens))
-	{
 		printf("minishell: Error: Command not found!\n");
-		exit(127);
-	}
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
 	exit(127);
@@ -70,6 +67,7 @@ static pid_t	execute_command(t_shell *shell, char **cmd,
 		return (-1);
 	if (is_builtin(tokens) && !has_next)
 	{
+		shell->builtin = 1;
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
 		handle_redirections(cmd, shell);
@@ -83,7 +81,6 @@ static pid_t	execute_command(t_shell *shell, char **cmd,
 		pid = ft_execute(tokens, cmd, shell);
 	return (pid);
 }
-
 
 void	ft_execute_pipes(t_shell *shell)
 {
@@ -120,13 +117,14 @@ void	ft_execute_pipes(t_shell *shell)
 		}
 		i++;
 	}
-	if (n>0) //Cambiado juancho: solo actualizar shell->last_status si realmente hubo procesos hijos.
+	for (int j = 0; j < n; j++)
+		waitpid(pids[j], &status, 0);
+	if (!shell->builtin)
 	{
-		for (int j = 0; j < n; j++)
-			waitpid(pids[j], &status, 0);
 		if (WIFEXITED(status))
 			shell->last_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			shell->last_status = 128 + WTERMSIG(status);
 	}
+	shell->builtin = 0;
 }

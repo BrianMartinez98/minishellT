@@ -60,9 +60,7 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 	{
 		if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
 			|| !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
-		{
 			i++;
-		}
 		else
 			(*tokens)[j++] = args[i];
 		i++;

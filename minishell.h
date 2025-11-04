@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/03 13:36:08 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/10/31 09:10:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	char			*cwd;
 	char			*prompt;
 	int				exit;
+	int				builtin;
 	int				eof;
 	int				last_status;
 	char			*line;
@@ -115,6 +116,9 @@ char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
 int		append_env(t_shell *shell, const char *entry);
 
+//builtins/exit.c
+void	ft_exit(t_shell *shell, char **cmd);
+
 //builtins/export.c
 int		is_valid_key(const char *key);
 void	ft_export(char **tokens, t_shell *shell);
@@ -127,14 +131,14 @@ void	ft_free_history(t_shell *shell);
 //builtins/unset.c
 void	ft_unset(char **tokens, t_shell *shell);
 
+//srcs/execute_builtin.c
+int		is_builtin(char **tokens);
+int		ft_execute_builtin(char **tokens, t_shell *shell);
+
 //srcs/errors.c
 void	error_custom(t_shell *shell, int err_code,
 			char *err_msg, char *err_key);
 void	handle_error(t_errorlst error, t_shell *shell);
-
-//srcs/execute_builtin.c
-int		is_builtin(char **tokens);
-int		ft_execute_builtin(char **tokens, t_shell *shell);
 
 //srcs/execute.c
 void	ft_execute_pipes(t_shell *shell);
@@ -152,6 +156,7 @@ void	restore_std(t_shell *shell);
 void	ft_free_array(char ***array);
 void	ft_free_matrix(char ****matrix);
 int		ft_exit_shell(t_shell *shell);
+void	handle_error(t_errorlst error, t_shell *shell);
 
 //srcs/shell.c
 t_shell	*ft_get_shell_address(t_shell *shell);

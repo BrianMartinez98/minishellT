@@ -15,27 +15,38 @@
 void	change_path(char **tokens, t_shell *shell)
 {
 	const char	*path;
-	char		*temp;
 
-	if (tokens[1] == NULL)
+	if (!tokens[1])
 	{
 		path = getenv("HOME");
 		if (!path)
-			perror("cd: HOME not set");
+		{
+			ft_putendl_fd("minishell: cd: HOME not set", STDERR);
+			shell->last_status = 1;
+			return ;
+		}
+	}
+	else if (tokens[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", STDERR);
+		shell->last_status = 1;
+		return ;
 	}
 	else
 		path = tokens[1];
 	if (chdir(path) != 0)
-		perror("cd");
-	if (shell->cwd)
-		free(shell->cwd);
-	temp = shell->cwd;
+	{
+		perror("minishell: cd");
+		shell->last_status = 1;
+		return;
+	}
+	free(shell->cwd);
 	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
 	{
-		perror("getcwd failed");
-		shell->cwd = temp;
-		temp = NULL;
+		perror("minishell: cd: getcwd failed");
+		shell->last_status = 1;
+		return ;
 	}
 	ft_build_prompt(shell);
 }

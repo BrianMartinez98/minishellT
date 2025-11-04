@@ -57,9 +57,7 @@ int check_heredoc(char **cmd, t_shell *shell)
         {
             if (!cmd[i + 1] || cmd[i + 1][0] == '\0' || is_redir_token(cmd[i + 1]))
             {
-                //OJO fprintf no vale:
-				// usar ft_putstr_fd("error_msg ", STDERR);
-				fprintf(stderr, "minishell: syntax error near unexpected token `newline'\n");
+				ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", STDERR);
                 return (-1);
             }
             value = ft_leftleft(shell, cmd, i + 1);

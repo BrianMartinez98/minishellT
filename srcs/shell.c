@@ -45,6 +45,7 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->hist = NULL;
 	shell->last_status = 0;
 	shell->exit = 0;
+	shell->builtin = 0;
 	shell->eof = 0;
 	shell->line = NULL;
 	shell->line2 = NULL;
