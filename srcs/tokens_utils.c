@@ -65,8 +65,19 @@ int	ft_next_span(char *s, size_t *i, t_span *sp)
 	if (!s[*i] || s[*i] == '|')
 		return (0);
 	sp->start = *i;
+	if (s[*i] == '<' || s[*i] == '>')
+	{
+		char	op = s[*i];
+		(*i)++;
+		if (s[*i] == op)
+			(*i)++;
+		sp->end = *i;
+		return (1);
+	}
 	while (s[*i] && !ft_isspace((unsigned char)s[*i]) && s[*i] != '|')
 	{
+		if (s[*i] == '<' || s[*i] == '>')
+			break ;
 		if (s[*i] == '"' || s[*i] == '\'')
 			*i = closed_quotes(s, *i);
 		(*i)++;
