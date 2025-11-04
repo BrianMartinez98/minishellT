@@ -47,23 +47,32 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 {
 	int	i;
 	int	j;
+	int	count;
 
 	i = 0;
 	j = 0;
-	while (args[i])
-		i++;
-	*tokens = malloc(sizeof(char *) * (i + 1));
+	count = 0;
+	while (args[count])
+		count++;
+	*tokens = malloc(sizeof(char *) * (count + 1));
 	if (!*tokens)
 		handle_error(MALLOCERROR, shell);
-	i = 0;
 	while (args[i])
 	{
 		if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
 			|| !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
+		{
 			i++;
-		else
-			(*tokens)[j++] = args[i];
+			if (args[i])
+				i++;
+			continue;
+		}
+		(*tokens)[j] = ft_strdup(args[i]);
+		if (!(*tokens)[j])
+			handle_error(MALLOCERROR, shell);
+		j++;
 		i++;
 	}
 	(*tokens)[j] = NULL;
 }
+
