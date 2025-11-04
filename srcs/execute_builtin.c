@@ -27,7 +27,7 @@ int	is_builtin(char **tokens)
 int	ft_execute_builtin(char **tokens, t_shell *shell)
 {
 	if (ft_strcmp(tokens[0], "exit") == 0)
-		shell->exit = 1;
+		ft_exit(shell, tokens);
 	else if (ft_strcmp(tokens[0], "pwd") == 0)
 		printf("%s\n", shell->cwd);
 	else if (ft_strcmp(tokens[0], "echo") == 0)

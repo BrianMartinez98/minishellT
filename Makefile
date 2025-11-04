@@ -34,6 +34,7 @@ LIBFT_LIB = $(LIBFT_DIR)/libft.a
 # SOURCES
 SRCS 	= builtins/echo.c \
 		builtins/environment.c \
+		builtins/exit.c \
 		builtins/export.c \
 		builtins/history.c \
 		builtins/unset.c \
