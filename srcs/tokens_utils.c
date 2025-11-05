@@ -60,53 +60,21 @@ void	add_token(char **cmds, int *token_idx, char *line, t_span sp)
 
 int	ft_next_span(char *s, size_t *i, t_span *sp)
 {
+	size_t	start;
+
+	if (!s || !i || !sp)
+		return (0);
+
+	/* Saltar espacios iniciales */
 	while (s[*i] && ft_isspace((unsigned char)s[*i]))
 		(*i)++;
 	if (!s[*i] || s[*i] == '|')
 		return (0);
 
-	sp->start = *i;
+	start = *i;
+	sp->start = start;
 
-	// Detectar operadores de redirección (<, <<, >, >>)
-	if (s[*i] == '<' || s[*i] == '>')
-	{
-		char op = s[*i];
-		(*i)++;
-		if (s[*i] == op) // << o >>
-			(*i)++;
-		sp->end = *i;
-		return (1);
-	}
-
-	// Leer palabra normal
-	while (s[*i] && !ft_isspace((unsigned char)s[*i]) && s[*i] != '|')
-	{
-		if (s[*i] == '<' || s[*i] == '>')
-			break;
-
-		if (s[*i] == '"' || s[*i] == '\'')
-		{
-			size_t prev = *i;
-			*i = closed_quotes(s, *i);
-			if (*i == prev) // sin cierre -> evitamos loop
-				break;
-		}
-		(*i)++;
-	}
-	sp->end = *i;
-	return (1);
-}
-
-
-/* Version anterior
-
-int	ft_next_span(char *s, size_t *i, t_span *sp)
-{
-	while (s[*i] && ft_isspace((unsigned char)s[*i]))
-		(*i)++;
-	if (!s[*i] || s[*i] == '|')
-		return (0);
-	sp->start = *i;
+	/* Detectar operadores de redirección (<, <<, >, >>) */
 	if (s[*i] == '<' || s[*i] == '>')
 	{
 		char	op = s[*i];
@@ -116,18 +84,50 @@ int	ft_next_span(char *s, size_t *i, t_span *sp)
 		sp->end = *i;
 		return (1);
 	}
+
+	/* Leer palabra normal, manejando comillas y escapes */
 	while (s[*i] && !ft_isspace((unsigned char)s[*i]) && s[*i] != '|')
 	{
-		if (s[*i] == '<' || s[*i] == '>')
-			break ;
-		if (s[*i] == '"' || s[*i] == '\'')
-			*i = closed_quotes(s, *i);
-		(*i)++;
+		if (s[*i] == '\\')
+		{
+			if (s[*i + 1])
+				(*i) += 2;
+			else
+				(*i)++;
+		}
+		else if (s[*i] == '\'')
+		{
+			(*i)++;
+			while (s[*i] && s[*i] != '\'')
+				(*i)++;
+			if (s[*i] == '\'')
+				(*i)++;
+		}
+		else if (s[*i] == '\"')
+		{
+			(*i)++;
+			while (s[*i] && s[*i] != '\"')
+			{
+				if (s[*i] == '\\' && s[*i + 1])
+					(*i) += 2;
+				else
+					(*i)++;
+			}
+			if (s[*i] == '\"')
+				(*i)++;
+		}
+		else
+			(*i)++;
 	}
+
+	/* Seguridad: evitar bucle infinito si no avanza */
+	if (*i == start)
+		(*i)++;
+
 	sp->end = *i;
 	return (1);
 }
-*/
+
 
 size_t	alloc_tokens(char **cmds, char *line)
 {
@@ -139,8 +139,16 @@ size_t	alloc_tokens(char **cmds, char *line)
 	token_idx = 0;
 	while (line[i] && line[i] != '|')
 	{
+		size_t prev_i = i;
 		if (!ft_next_span(line, &i, &sp))
-			break ;
+			break;
+		if (i == prev_i) 
+	{
+    // safety: evitar bucle infinito
+    i++;
+    continue;
+}
+
 		add_token(cmds, &token_idx, line, sp);
 	}
 	cmds[token_idx] = NULL;

@@ -74,7 +74,7 @@ all: subsystems shell
 subsystems: $(LIBFT_LIB)
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR) CFLAGS="$(CFLAGS) $(SANITIZE_FLAGS)" all
+	@$(MAKE) -C $(LIBFT_DIR) all
 
 
 # MINISHELL
@@ -124,4 +124,4 @@ fcleanlibs:
 
 re: fclean all
 
-.PHONY: all bonus clean cleanlibs fclean fcleanlibs re
+.PHONY: all bonus clean cleanlibs fclean fcleanlibs rehola
