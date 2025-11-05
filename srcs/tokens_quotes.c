@@ -14,27 +14,18 @@
 
 int	closed_quotes(char *line, int i)
 {
-	int		e;
-	char	quote_char;
-	int		in_quotes;
+	char	q = line[i];
+	int		e = i + 1;
 
-	quote_char = line[i];
-	e = i + 1;
-	in_quotes = 0;
 	while (line[e])
 	{
-		if (line[e] == quote_char)
-		{
-			in_quotes = 1;
-			break ;
-		}
-		else
-			e++;
+		if (line[e] == q)
+			return (e);
+		e++;
 	}
-	if (in_quotes)
-		return (e);
-	return (i);
+	return (i); // no se cerró la comilla
 }
+
 
 size_t	remove_quotes(char **cmd, t_span span)
 {

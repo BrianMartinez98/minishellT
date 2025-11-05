@@ -41,6 +41,12 @@ int	handle_redirections(char **cmd, t_shell *shell)
 			else if (ft_strcmp(cmd[i], ">>") == 0)
 				value = ft_adding(shell, cmd, i + 1);
 		}
+		if (value == -1)
+		{
+			shell->last_status = 1;
+			exit(shell->last_status);
+		}
+			
 		i++;
 	}
 	return (value);

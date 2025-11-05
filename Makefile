@@ -74,7 +74,8 @@ all: subsystems shell
 subsystems: $(LIBFT_LIB)
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR) all
+	@$(MAKE) -C $(LIBFT_DIR) CFLAGS="$(CFLAGS) $(SANITIZE_FLAGS)" all
+
 
 # MINISHELL
 $(EXEC_FILE_NAME): $(OBJS) $(LIBFT_LIB)

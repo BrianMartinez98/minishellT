@@ -12,6 +12,49 @@
 
 #include "../minishell.h"
 
+void	print_tokens(char **tokens)
+{
+	int	i;
+
+	if (!tokens)
+	{
+		printf("[DEBUG] tokens = (null)\n");
+		return ;
+	}
+	printf("\033[0;36m[DEBUG] Tokens:\033[0m\n");
+	for (i = 0; tokens[i]; i++)
+		printf("  [%d] '%s'\n", i, tokens[i]);
+}
+
+/**
+ * Imprime las variables de entorno actuales (para debug).
+ */
+void	print_shellenv(char **env)
+{
+	int	i;
+
+	if (!env)
+	{
+		printf("[DEBUG] env = (null)\n");
+		return ;
+	}
+	printf("\033[0;36m[DEBUG] Environment variables:\033[0m\n");
+	for (i = 0; env[i]; i++)
+		printf("  %s\n", env[i]);
+}
+
+/**
+ * Imprime la ruta completa del ejecutable encontrado.
+ */
+void	print_pathname(const char *pathname)
+{
+	printf("\033[0;36m[DEBUG] Pathname:\033[0m ");
+	if (pathname)
+		printf("'%s'\n", pathname);
+	else
+		printf("(null)\n");
+}
+
 static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 {
 	char	**paths;
@@ -24,9 +67,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 		dup2(shell->stdout_save, STDOUT_FILENO);
 	handle_redirections(cmd, shell);
 	paths = paths_finder(shell->env);
-	printf("El problema es en la pathfinder");
 	pathname = command_finder(tokens, paths);
-	printf("El problema es en la command_finder");
 	if (DEBUG)
 	{
 		printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
@@ -34,11 +75,10 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell)
 	}
 	if (!pathname && !is_builtin(tokens))
 		printf("minishell: Error: Command not found!\n");
-	//implementarprint_tokens(tokens);			
-	//implementarprint_shellenv(shell->env);		
-	//implementarprint_pathname(pathname);		
+	//print_tokens(tokens);			
+	//print_shellenv(shell->env);		
+	//print_pathname(pathname);		
 	execve(pathname, tokens, shell->env);
-	printf("El problema es en la execve");
 	perror(tokens[0]);
 	exit(127);
 }
@@ -112,9 +152,7 @@ void	ft_execute_pipes(t_shell *shell)
 		if (check_heredoc(shell->cmds[i], shell) == -1)
 			return ;
 		filter_args(shell->cmds[i], &tokens, shell);
-		//printf("El problema es en filter_args");
 		pid_t pid = execute_command(shell, shell->cmds[i], tokens, has_next);
-		//printf("El problema es execute");
 		if (pid > 0)
 			pids[n++] = pid;
 		free(tokens);
@@ -125,7 +163,6 @@ void	ft_execute_pipes(t_shell *shell)
 		}
 		i++;
 	}
-	//printf("Ejecucion completada");
 	for (int j = 0; j < n; j++)
 		waitpid(pids[j], &status, 0);
 	if (!shell->builtin)

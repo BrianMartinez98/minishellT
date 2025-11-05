@@ -73,6 +73,21 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 		j++;
 		i++;
 	}
+    while (args[i])
+    {
+        if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
+            || !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
+        {
+            i++;
+            if (args[i])
+                i++;
+            continue;
+        }
+        (*tokens)[j] = ft_strdup(args[i]);
+        if (!(*tokens)[j])
+            handle_error(MALLOCERROR, shell);
+        j++;
+        i++;
+    }
 	(*tokens)[j] = NULL;
 }
-

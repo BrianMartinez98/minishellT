@@ -51,6 +51,8 @@ void	handle_error(t_errorlst error, t_shell *shell)
 {
 	char	*error_msg[42];
 
+	printf("Hubo un error");
+
 	error_msg[PIPES] = "Error en el pipe!\n";
 	error_msg[MALLOCERROR] = "Error Malloc!\n";
 	error_msg[FD] = "Fallo en el fd!\n";

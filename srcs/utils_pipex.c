@@ -2,6 +2,21 @@
 
 #include "../minishell.h"
 
+void	free_paths(char **paths)
+{
+	int	i;
+
+	if (!paths)
+		return ;
+	i = 0;
+	while (paths[i])
+	{
+		free(paths[i]);
+		i++;
+	}
+	free(paths);
+}
+
 char	**paths_finder(char **env)
 {
 	int	i;
@@ -22,22 +37,35 @@ char	**paths_finder(char **env)
 	return (NULL);
 }
 
+static char	*get_pathname(char *path, char *command)
+{
+	char	*trimmed;
+	char	*temp;
+	char	*pathname;
+
+	trimmed = ft_strtrim(path, "\n");
+	if (!trimmed)
+		return (NULL);
+	temp = ft_strjoin(trimmed, "/");
+	free(trimmed);
+	if (!temp)
+		return (NULL);
+	pathname = ft_strjoin(temp, command);
+	free(temp);
+	return (pathname);
+}
+
 char	*command_finder(char **command, char **paths)
 {
 	int		i;
 	char	*pathname;
-	char	*temp;
 
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
-		temp = ft_strjoin(ft_strtrim(paths[i], "\n"), "/");
-		if (!temp)
-			return (NULL);
-		pathname = ft_strjoin(temp, command[0]);
-		free(temp);
+		pathname = get_pathname(paths[i], command[0]);
 		if (!pathname)
 			return (NULL);
 		if (access(pathname, X_OK) == 0)
