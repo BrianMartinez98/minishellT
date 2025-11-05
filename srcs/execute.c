@@ -6,13 +6,18 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/05  by ChatGPT_fix            ###   ########.fr       */
+/*   Updated: 2025/11/06  by ChatGPT_final         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <sys/wait.h>
 #include <errno.h>
+#include <unistd.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /* ---------- debug helpers (mantengo) ---------- */
 void	print_tokens(char **tokens)
@@ -53,6 +58,29 @@ void	print_pathname(const char *pathname)
 }
 
 /*
+ * Close all fds in child except the essential ones (keep1, keep2, keep3).
+ * This prevents inherited pipe ends from staying open in children that don't need them.
+ */
+static void	close_fds_except(int keep1, int keep2, int keep3)
+{
+	long	max_fd;
+	int	fd;
+
+	/* Try sysconf, fallback to a safe small upper bound */
+	max_fd = sysconf(_SC_OPEN_MAX);
+	if (max_fd == -1)
+		max_fd = 1024; /* fallback */
+
+	for (fd = 3; fd < (int)max_fd; fd++)
+	{
+		if (fd == keep1 || fd == keep2 || fd == keep3)
+			continue;
+		/* ignore errors */
+		close(fd);
+	}
+}
+
+/*
  * pid_child: código que corre en el hijo tras fork.
  * - in_fd: fd que debe convertirse en STDIN (o -1 para no tocar)
  * - out_fd: fd que debe convertirse en STDOUT (o -1 para no tocar)
@@ -86,11 +114,16 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 		}
 	}
 
-	/* cerrar fds originales que ya no se usan */
+	/* cerrar fds originales que ya no se usan (dup2 ya hizo copia si hacía falta) */
 	if (in_fd != -1)
 		close(in_fd);
 	if (out_fd != -1)
 		close(out_fd);
+
+	/* Cerrar cualquier fd heredado innecesario para evitar que el padre/otros procesos
+	   mantengan abiertos extremos de pipe dentro de este child. Aquí preservamos
+	   STDIN(0), STDOUT(1), STDERR(2). */
+	close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
 
 	/* aplicar redirecciones específicas del comando (files, heredoc) */
 	handle_redirections(cmd, shell);
@@ -152,7 +185,8 @@ static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell, int in_fd,
 
 /*
  * execute_command: ejecuta el comando:
- * - si es builtin y no tiene next (no está en pipeline) -> se ejecuta en padre
+ * - si es builtin y NO forma parte de NINGUN pipeline (no hay in_fd y no tiene next)
+ *     -> se ejecuta en el padre
  * - en cualquier otro caso -> fork_and_exec (child hará builtin o exec)
  *
  * in_fd/out_fd se pasan sólo al child (cuando se haga fork).
@@ -167,8 +201,19 @@ static pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_
 
 	if (!tokens || !tokens[0])
 		return (-2);
-	/* Si es builtin y NO forma parte de un pipeline -> ejecútalo en el padre */
-	if (is_builtin(tokens) && !has_next)
+
+	/*
+	 * Ejecutar builtin en el PADRE solo si:
+	 *  - es builtin
+	 *  - NO tiene siguiente comando (no has_next)
+	 *  - y NO tiene entrada desde un pipe (in_fd == -1)
+	 *
+	 * Esto garantiza que los builtins que forman parte de un pipeline
+	 * (p. ej. el último comando de un pipeline: cat | echo)
+	 * se ejecuten en un child, evitando que el padre mantenga abiertos
+	 * extremos de pipe y provoque deadlocks.
+	 */
+	if (is_builtin(tokens) && !has_next && in_fd == -1)
 	{
 		/* marcar que ejecutamos builtin en padre (mantener compatibilidad) */
 		shell->builtin = 1;
@@ -264,7 +309,9 @@ void	ft_execute_pipes(t_shell *shell)
 		if (has_next)
 		{
 			/* cerramos el extremo de escritura en el padre inmediatamente */
-			close(pipefd[1]);
+			/* protect: only close if it's a valid fd */
+			if (pipefd[1] >= 0)
+				close(pipefd[1]);
 			/* cerramos el anterior in_fd (si distinto de stdin) */
 			if (in_fd != -1)
 				close(in_fd);
@@ -281,6 +328,13 @@ void	ft_execute_pipes(t_shell *shell)
 			}
 		}
 		i++;
+	}
+
+	/* Asegurar que no quedan descriptores de pipe abiertos en el padre */
+	if (in_fd != -1)
+	{
+		close(in_fd);
+		in_fd = -1;
 	}
 
 	/* esperar a todos los hijos creados */
