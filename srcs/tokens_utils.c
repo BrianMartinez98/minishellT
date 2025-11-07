@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 22:52:05 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/31 10:17:55 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 13:08:30 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,27 +128,25 @@ int	ft_next_span(char *s, size_t *i, t_span *sp)
 	return (1);
 }
 
-
 size_t	alloc_tokens(char **cmds, char *line)
 {
 	size_t	i;
 	int		token_idx;
 	t_span	sp;
+	size_t	prev_i;
 
 	i = 0;
 	token_idx = 0;
 	while (line[i] && line[i] != '|')
 	{
-		size_t prev_i = i;
+		prev_i = i;
 		if (!ft_next_span(line, &i, &sp))
-			break;
-		if (i == prev_i) 
-	{
-    // safety: evitar bucle infinito
-    i++;
-    continue;
-}
-
+			break ;
+		if (i == prev_i)
+		{
+			i++;
+			continue ;
+		}
 		add_token(cmds, &token_idx, line, sp);
 	}
 	cmds[token_idx] = NULL;

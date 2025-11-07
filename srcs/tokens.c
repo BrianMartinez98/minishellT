@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/31 08:51:15 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:04:11 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,14 @@ void	split_line(t_shell *shell)
 	fill_cmds(shell);
 	if (DEBUG)
 	{
-		printf("\033[0;35mDEBUG: split_line, tokens que nos llegan:\033[0m\n");
+		printf(COL_MAGENTA "Tokens que nos llegan:\n" COL_RESET);
 		print_tokens_array(shell);
 	}
 	parse_cmds(shell);
+	remove_initial_empty_cmds(shell);
 	if (DEBUG)
 	{
-		printf("\033[0;35mTras Elimin Quotes & Expan Variables:\033[0m\n");
+		printf(COL_MAGENTA "Tras Elimin Quotes & Expan Variables:\n" COL_RESET);
 		print_tokens_array(shell);
 	}
 }

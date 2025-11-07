@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/20 22:45:52 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 13:53:45 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,19 @@ void	ft_print_env(t_shell *shell)
 	}
 	i = 0;
 	if (DEBUG)
-		printf("\033[0;35m[\033[0m\n");
+		printf(COL_MAGENTA "[\n" COL_RESET);
 	while (shell->env[i])
 	{
 		if (DEBUG)
-			printf("\033[0;35m  \"\033[0m");
+			printf(COL_MAGENTA "  \"" COL_RESET);
+		printf("%s", shell->env[i]);
 		if (DEBUG)
-			printf("%s\033[0;35m\"\033[0m\n", shell->env[i]);
-		else
-			printf("%s\n", shell->env[i]);
+			printf(COL_MAGENTA "\"" COL_RESET);
+		printf("\n");
 		i++;
 	}
 	if (DEBUG)
-		printf("\033[0;35m  NULL\n]\033[0m\n");
+		printf(COL_MAGENTA "  NULL\n]\n" COL_RESET);
 }
 
 char	*ft_getenv(t_shell *shell, const char *key)

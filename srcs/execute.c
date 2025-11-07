@@ -11,13 +11,21 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <sys/wait.h>
-#include <errno.h>
-#include <unistd.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
+
+static void	check_path_errors(t_shell *shell, char *pathname)
+{
+	struct stat	st;
+
+	if (stat(pathname, &st) == -1)
+	{
+		if (errno == ENOENT)
+			error_custom(shell, 127, "no such file or directory:", pathname);
+	}
+	else if (S_ISDIR(st.st_mode))
+		error_custom(shell, 126, "is a directory:", pathname);
+	else if (access(pathname, X_OK) != 0)
+		error_custom(shell, 126, "permission denied:", pathname);
+}
 
 void	free_tokens(char **tokens)
 {
@@ -112,43 +120,51 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 		close(out_fd);
 	handle_redirections(cmd, shell);
 	close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
+
 	if (is_builtin(tokens))
 	{
 		ft_execute_builtin(tokens, shell);
 		exit(shell->last_status & 0xFF);
 	}
+
 	paths = paths_finder(shell->env);
 	pathname = command_finder(tokens, paths);
+	free_paths(paths);
+
 	if (DEBUG)
-	{
-		printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
-		printf("\033[0m\n");
-	}
-	if (!pathname)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(tokens[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		exit(127);
-	}
+		printf(COL_MAGENTA "\nDEBUG execve:\npathname = %s\n" COL_RESET, pathname);
+
+	if (!pathname && !is_builtin(tokens))
+		error_custom(shell, 127, "minishell: command not found:", tokens[0]);
+	if (!tokens[0] || !*tokens[0])
+		exit(0);
+	if (is_path_like(pathname))
+		check_path_errors(shell, pathname);
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
+	if (errno == EACCES)
+		exit(126);
 	exit(127);
 }
 
-static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell, int in_fd, int out_fd)
+static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell,
+	int in_fd, int out_fd)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("fork");
-		shell->last_status = 1;
+		error_custom(shell, 1, "fork error", NULL);
 		return (-1);
 	}
 	if (pid == 0)
+	{
+		shell->is_child = 1;
 		pid_child(tokens, cmd, shell, in_fd, out_fd);
+	}
+	else
+		shell->is_child = 0;
 	return (pid);
 }
 
@@ -184,7 +200,8 @@ static pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_
 		close(saved_stdout);
 		return (-2);
 	}
-	pid = fork_and_exec(tokens, cmd, shell, in_fd, out_fd);
+	else
+		pid = fork_and_exec(tokens, cmd, shell, in_fd, out_fd);
 	return (pid);
 }
 

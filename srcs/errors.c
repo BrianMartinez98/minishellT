@@ -6,11 +6,22 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 12:42:53 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/03 14:25:45 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:19:35 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
+{
+	char	*tmp;
+	char	*res;
+
+	tmp = ft_strjoin(s1, s2);
+	res = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (res);
+}
 
 //CUSTOM ERROR FUNCTION
 void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
@@ -26,13 +37,16 @@ void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
 	err = ft_strjoin(temp_err, "\n");
 	if (DEBUG)
 	{
-		printf("\033[1;35mExit Error Code: %d\n", err_code);
-		printf("Error Message: %s\033[0m", err);
+		printf(COL_MAGENTA "Exit Error Code: %d\n" COL_RESET, err_code);
+		printf(COL_MAGENTA "Error Message: %s\n" COL_RESET, err);
 	}
+	ft_putstr_fd(COL_RESET, STDERR);
 	ft_putstr_fd(err, STDERR);
 	if (err_key)
 		free(temp_err);
 	free(err);
+	if (shell->is_child)
+		exit(err_code);
 }
 
 //SYSTEM ERROR FUNCTION

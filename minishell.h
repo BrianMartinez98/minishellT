@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/31 09:10:03 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:05:23 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # define SPACE			"\t\n\v\f\r "
 
 # define MAX_TOKENS 256
+
+# define COL_MAGENTA "\033[0;35m"
+# define COL_RESET "\033[0m"
 
 # define STDIN 0
 # define STDOUT 1
@@ -32,6 +35,7 @@
 # include "libs/libft/libft.h"
 # include <fcntl.h>
 # include <unistd.h>
+# include <limits.h>
 # include <string.h>
 # include <stdio.h>
 # include <ctype.h>
@@ -42,6 +46,7 @@
 # include <errno.h>
 # include <termios.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -98,6 +103,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	int				stdin_save;
 	int				stdout_save;
 	int				fd;
+	int				is_child;
 	size_t			len;
 	ssize_t			nread;
 	char			***cmds;
@@ -182,7 +188,9 @@ void	print_tokens_array(t_shell *shell);
 //srcs/tokens_quotes.c
 int		closed_quotes(char *line, int i);
 size_t	remove_quotes(char **cmd, t_span span);
-char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
+
+//srcs/tokens_remove.c
+void	remove_initial_empty_cmds(t_shell *shell);
 
 //srcs/tokens_utils.c
 int		count_pipes(t_shell *shell);
@@ -195,6 +203,8 @@ size_t	alloc_tokens(char **cmds, char *line);
 void	split_line(t_shell *shell);
 
 //src/utils_pipex.c
+int		is_path_like(const char *cmd);
+void	free_paths(char **paths);
 char	*command_finder(char **command, char **paths);
 char	**paths_finder(char **env);
 

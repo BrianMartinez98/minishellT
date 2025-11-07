@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:08:35 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/31 08:50:49 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 13:01:13 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,26 @@
 
 int	closed_quotes(char *line, int i)
 {
-	char	q = line[i];
-	int		e = i + 1;
+	int		e;
+	char	quote_char;
+	int		in_quotes;
 
+	quote_char = line[i];
+	e = i + 1;
+	in_quotes = 0;
 	while (line[e])
 	{
-		if (line[e] == q)
-			return (e);
-		e++;
+		if (line[e] == quote_char)
+		{
+			in_quotes = 1;
+			break ;
+		}
+		else
+			e++;
 	}
-	return (i); // no se cerró la comilla
+	if (in_quotes)
+		return (e);
+	return (i);
 }
 
 
@@ -50,13 +60,3 @@ size_t	remove_quotes(char **cmd, t_span span)
 	return (span.end - 1);
 }
 
-char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
-{
-	char	*tmp;
-	char	*res;
-
-	tmp = ft_strjoin(s1, s2);
-	res = ft_strjoin(tmp, s3);
-	free(tmp);
-	return (res);
-}
