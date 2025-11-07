@@ -27,55 +27,6 @@ static void	check_path_errors(t_shell *shell, char *pathname)
 		error_custom(shell, 126, "permission denied:", pathname);
 }
 
-void	free_tokens(char **tokens)
-{
-	int i;
-
-	if (!tokens)
-		return;
-	for (i = 0; tokens[i]; i++)
-		free(tokens[i]);
-	free(tokens);
-}
-
-/* ---------- debug helpers ---------- */
-void	print_tokens(char **tokens)
-{
-	int	i;
-
-	if (!tokens)
-	{
-		printf("[DEBUG] tokens = (null)\n");
-		return ;
-	}
-	printf("\033[0;36m[DEBUG] Tokens:\033[0m\n");
-	for (i = 0; tokens[i]; i++)
-		printf("  [%d] '%s'\n", i, tokens[i]);
-}
-
-void	print_shellenv(char **env)
-{
-	int	i;
-
-	if (!env)
-	{
-		printf("[DEBUG] env = (null)\n");
-		return ;
-	}
-	printf("\033[0;36m[DEBUG] Environment variables:\033[0m\n");
-	for (i = 0; env[i]; i++)
-		printf("  %s\n", env[i]);
-}
-
-void	print_pathname(const char *pathname)
-{
-	printf("\033[0;36m[DEBUG] Pathname:\033[0m ");
-	if (pathname)
-		printf("'%s'\n", pathname);
-	else
-		printf("(null)\n");
-}
-
 static void	close_fds_except(int keep1, int keep2, int keep3)
 {
 	long	max_fd;
@@ -239,7 +190,7 @@ void	ft_execute_pipes(t_shell *shell)
 		pid_t pid = execute_command(shell, shell->cmds[i], tokens, has_next, in_fd, out_fd);
 		if (pid > 0)
 			pids[n++] = pid;
-		free_tokens(tokens);
+		ft_free_array(&tokens);
 		if (has_next)
 		{
 			if (pipefd[1] >= 0)
