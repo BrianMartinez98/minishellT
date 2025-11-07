@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/06  by ChatGPT_final         ###   ########.fr       */
+/*   Updated: 2025/11/07  by ChatGPT_fixed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* ---------- debug helpers (mantengo) ---------- */
+void	free_tokens(char **tokens)
+{
+	int i;
+
+	if (!tokens)
+		return;
+	for (i = 0; tokens[i]; i++)
+		free(tokens[i]);
+	free(tokens);
+}
+
+/* ---------- debug helpers ---------- */
 void	print_tokens(char **tokens)
 {
 	int	i;
@@ -58,45 +69,35 @@ void	print_pathname(const char *pathname)
 }
 
 /*
- * Close all fds in child except the essential ones (keep1, keep2, keep3).
- * This prevents inherited pipe ends from staying open in children that don't need them.
+ * Cierra todos los fds excepto los esenciales.
  */
 static void	close_fds_except(int keep1, int keep2, int keep3)
 {
 	long	max_fd;
-	int	fd;
+	int		fd;
 
-	/* Try sysconf, fallback to a safe small upper bound */
 	max_fd = sysconf(_SC_OPEN_MAX);
 	if (max_fd == -1)
-		max_fd = 1024; /* fallback */
-
+		max_fd = 1024;
 	for (fd = 3; fd < (int)max_fd; fd++)
 	{
 		if (fd == keep1 || fd == keep2 || fd == keep3)
 			continue;
-		/* ignore errors */
 		close(fd);
 	}
 }
 
 /*
  * pid_child: código que corre en el hijo tras fork.
- * - in_fd: fd que debe convertirse en STDIN (o -1 para no tocar)
- * - out_fd: fd que debe convertirse en STDOUT (o -1 para no tocar)
- *
- * Nota: aquí se deben aplicar redirecciones, ejecutar builtin (si aplica en child)
- * o llamar a execve. Nunca regresar al padre: terminar con _exit(status).
  */
 static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int out_fd)
 {
 	char	**paths;
 	char	*pathname;
 
-	/* configurar señales en hijo */
 	ft_setup_signals_child();
 
-	/* redirigir stdin/stdout si necesitamos */
+	/* Redirigir stdin/stdout si es necesario */
 	if (in_fd != -1 && in_fd != STDIN_FILENO)
 	{
 		if (dup2(in_fd, STDIN_FILENO) == -1)
@@ -114,39 +115,33 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 		}
 	}
 
-	/* cerrar fds originales que ya no se usan (dup2 ya hizo copia si hacía falta) */
-	if (in_fd != -1)
+	/* Cerrar descriptores originales */
+	if (in_fd != -1 && in_fd != STDIN_FILENO)
 		close(in_fd);
-	if (out_fd != -1)
+	if (out_fd != -1 && out_fd != STDOUT_FILENO)
 		close(out_fd);
 
-	/* Cerrar cualquier fd heredado innecesario para evitar que el padre/otros procesos
-	   mantengan abiertos extremos de pipe dentro de este child. Aquí preservamos
-	   STDIN(0), STDOUT(1), STDERR(2). */
-	close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
-
-	/* aplicar redirecciones específicas del comando (files, heredoc) */
+	/* Aplicar redirecciones específicas */
 	handle_redirections(cmd, shell);
 
-	/* Si el token es builtin en el contexto de child (p. ej. parte de pipeline),
-	   ejecutarlo aquí y terminar con su status */
+	/* Cerrar fds innecesarios tras redirecciones */
+	close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
+
+	/* Ejecutar builtin si aplica */
 	if (is_builtin(tokens))
 	{
 		ft_execute_builtin(tokens, shell);
 		_exit(shell->last_status & 0xFF);
 	}
 
-	/* buscar ejecutable solo si no es builtin */
+	/* Buscar ejecutable */
 	paths = paths_finder(shell->env);
 	pathname = command_finder(tokens, paths);
-
 	if (DEBUG)
 	{
 		printf("\033[0;35m\nDEBUG execve:\npathname = %s\n", pathname);
 		printf("\033[0m\n");
 	}
-
-	/* si no encontramos comando, informar y salir con 127 */
 	if (!pathname)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -154,17 +149,13 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		_exit(127);
 	}
-
-	/* ejecutar */
 	execve(pathname, tokens, shell->env);
-	/* si execve retorna: error */
 	perror(tokens[0]);
 	_exit(127);
 }
 
 /*
- * fork_and_exec: hace fork y en hijo llama a pid_child con los fds
- * Devuelve pid del child (>0), -1 en error.
+ * fork_and_exec: hace fork y llama a pid_child en el hijo.
  */
 static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell, int in_fd, int out_fd)
 {
@@ -179,19 +170,11 @@ static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell, int in_fd,
 	}
 	if (pid == 0)
 		pid_child(tokens, cmd, shell, in_fd, out_fd);
-	/* padre */
 	return (pid);
 }
 
 /*
- * execute_command: ejecuta el comando:
- * - si es builtin y NO forma parte de NINGUN pipeline (no hay in_fd y no tiene next)
- *     -> se ejecuta en el padre
- * - en cualquier otro caso -> fork_and_exec (child hará builtin o exec)
- *
- * in_fd/out_fd se pasan sólo al child (cuando se haga fork).
- * Devuelve pid del child si creó uno (>0), -2 si no creó pid (builtin en padre),
- * -1 en error.
+ * execute_command: ejecuta un comando individual.
  */
 static pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, int in_fd, int out_fd)
 {
@@ -202,53 +185,43 @@ static pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_
 	if (!tokens || !tokens[0])
 		return (-2);
 
-	/*
-	 * Ejecutar builtin en el PADRE solo si:
-	 *  - es builtin
-	 *  - NO tiene siguiente comando (no has_next)
-	 *  - y NO tiene entrada desde un pipe (in_fd == -1)
-	 *
-	 * Esto garantiza que los builtins que forman parte de un pipeline
-	 * (p. ej. el último comando de un pipeline: cat | echo)
-	 * se ejecuten en un child, evitando que el padre mantenga abiertos
-	 * extremos de pipe y provoque deadlocks.
-	 */
+	/* Ejecutar builtin en el padre solo si no hay pipe */
 	if (is_builtin(tokens) && !has_next && in_fd == -1)
 	{
-		/* marcar que ejecutamos builtin en padre (mantener compatibilidad) */
 		shell->builtin = 1;
-
-		/* guardo/dup de stdio para poder aplicar redirecciones temporalmente */
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
 		if (saved_stdin == -1 || saved_stdout == -1)
 		{
 			perror("dup");
-			if (saved_stdin != -1) close(saved_stdin);
-			if (saved_stdout != -1) close(saved_stdout);
+			if (saved_stdin != -1)
+				close(saved_stdin);
+			if (saved_stdout != -1)
+				close(saved_stdout);
 			return (-1);
 		}
+
+		/* Reset explícito antes de aplicar redirecciones */
+		dup2(STDIN_FILENO, shell->stdin_save);
+		dup2(STDOUT_FILENO, shell->stdout_save);
+
 		handle_redirections(cmd, shell);
 		ft_execute_builtin(tokens, shell);
-		/* restaurar los fds originales en el padre */
+
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
 		close(saved_stdout);
-		/* no se creó pid */
 		return (-2);
 	}
-	/* caso normal: crear child (en child se ejecutará builtin si corresponde) */
+
+	/* Caso general: fork */
 	pid = fork_and_exec(tokens, cmd, shell, in_fd, out_fd);
 	return (pid);
 }
 
 /*
- * ft_execute_pipes: flujo robusto de pipeline:
- * - usa in_fd local para pasar read-end al siguiente comando
- * - crea pipe solo si hay siguiente comando
- * - controla cierres de fds en padre y en hijos
- * - restaura los saves del shell al final para prevenir colgados
+ * ft_execute_pipes: maneja pipelines completos con redirecciones.
  */
 void	ft_execute_pipes(t_shell *shell)
 {
@@ -259,30 +232,20 @@ void	ft_execute_pipes(t_shell *shell)
 	int		has_next;
 	int		status = 0;
 	pid_t	pids[256] = {0};
-	int		in_fd = -1; /* fd que alimenta la entrada del siguiente comando */
+	int		in_fd = -1;
 
-	/* Nota: recordar los valores originales por si otras partes los usan */
-	/* shell->stdin_save y stdout_save podrían usarse en otras partes del código,
-	   por eso los restauramos al final. */
 	n = 0;
 	i = 0;
 	while (shell->cmds[i])
 	{
 		has_next = (shell->cmds[i + 1] != NULL);
+		if (has_next && pipe(pipefd) == -1)
+			handle_error(PIPES, shell);
 
-		/* si hay siguiente comando: crear pipe */
-		if (has_next)
-		{
-			if (pipe(pipefd) == -1)
-				handle_error(PIPES, shell);
-		}
-
-		/* preparar heredoc / comprobaciones; si falla, limpiar y salir */
 		if (check_heredoc(shell->cmds[i], shell) == -1)
 		{
 			if (in_fd != -1)
 				close(in_fd);
-			/* cerrar cualquier pipe creado parcialmente */
 			if (has_next)
 			{
 				close(pipefd[0]);
@@ -291,36 +254,23 @@ void	ft_execute_pipes(t_shell *shell)
 			return ;
 		}
 
-		/* tokenizar/filtrar argumentos */
 		filter_args(shell->cmds[i], &tokens, shell);
-
-		/* determinar out_fd para el child: si hay next -> pipefd[1], sino STDOUT (-1 = no change) */
 		int out_fd = (has_next ? pipefd[1] : -1);
-
-		/* ejecutar comando: si se crea child, devuelve pid>0 */
 		pid_t pid = execute_command(shell, shell->cmds[i], tokens, has_next, in_fd, out_fd);
 		if (pid > 0)
 			pids[n++] = pid;
+		free_tokens(tokens);
 
-		/* liberamos tokens (padre) */
-		free(tokens);
-
-		/* en el padre: cerrar extremos que no necesitemos y preparar in_fd para siguiente */
 		if (has_next)
 		{
-			/* cerramos el extremo de escritura en el padre inmediatamente */
-			/* protect: only close if it's a valid fd */
 			if (pipefd[1] >= 0)
 				close(pipefd[1]);
-			/* cerramos el anterior in_fd (si distinto de stdin) */
 			if (in_fd != -1)
 				close(in_fd);
-			/* la lectura del pipe será la entrada para el siguiente comando */
 			in_fd = pipefd[0];
 		}
 		else
 		{
-			/* no hay siguiente: cerramos in_fd anterior si existe (ya no se necesita) */
 			if (in_fd != -1)
 			{
 				close(in_fd);
@@ -330,38 +280,32 @@ void	ft_execute_pipes(t_shell *shell)
 		i++;
 	}
 
-	/* Asegurar que no quedan descriptores de pipe abiertos en el padre */
 	if (in_fd != -1)
 	{
 		close(in_fd);
 		in_fd = -1;
 	}
 
-	/* esperar a todos los hijos creados */
 	for (int j = 0; j < n; j++)
 	{
 		if (waitpid(pids[j], &status, 0) == -1)
 			perror("waitpid");
 	}
 
-	/* restaurar saves del shell para evitar que el shell principal quede con fds alterados.
-	   Algunas partes del programa (o el main loop) pueden confiar en shell->stdin_save / stdout_save
-	   apuntando a los fd originales, por lo que los devolvemos a STDIN/STDOUT. */
+	/* Restaurar correctamente stdin/stdout del shell */
 	if (shell->stdin_save != STDIN_FILENO)
 	{
-		dup2(STDIN_FILENO, shell->stdin_save); /* no fatal si falla */
+		dup2(shell->stdin_save, STDIN_FILENO);
 		close(shell->stdin_save);
 		shell->stdin_save = STDIN_FILENO;
 	}
 	if (shell->stdout_save != STDOUT_FILENO)
 	{
-		dup2(STDOUT_FILENO, shell->stdout_save);
+		dup2(shell->stdout_save, STDOUT_FILENO);
 		close(shell->stdout_save);
 		shell->stdout_save = STDOUT_FILENO;
 	}
 
-	/* si no ejecutamos un builtin en el padre como último comando, actualizamos last_status
-	   tomando el status del último child (si hay) */
 	if (!shell->builtin)
 	{
 		if (WIFEXITED(status))
@@ -369,6 +313,5 @@ void	ft_execute_pipes(t_shell *shell)
 		else if (WIFSIGNALED(status))
 			shell->last_status = 128 + WTERMSIG(status);
 	}
-	/* reset del flag builtin (si se uso) */
 	shell->builtin = 0;
 }

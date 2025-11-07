@@ -49,18 +49,34 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 	int	j;
 	int	count;
 
-	i = 0;
-	j = 0;
+	if (!args || !tokens)
+		return ;
+	/* contar cuántos tokens "reales" (sin operadores ni sus targets) */
 	count = 0;
-	while (args[count])
+	i = 0;
+	while (args[i])
+	{
+		if (is_redir_token(args[i]))
+		{
+			/* skip operator and its target if present */
+			i++;
+			if (args[i])
+				i++;
+			continue;
+		}
 		count++;
+		i++;
+	}
+	/* reservar espacio */
 	*tokens = malloc(sizeof(char *) * (count + 1));
 	if (!*tokens)
 		handle_error(MALLOCERROR, shell);
+	/* rellenar */
+	i = 0;
+	j = 0;
 	while (args[i])
 	{
-		if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
-			|| !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
+		if (is_redir_token(args[i]))
 		{
 			i++;
 			if (args[i])
@@ -73,21 +89,5 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 		j++;
 		i++;
 	}
-    while (args[i])
-    {
-        if (!ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")
-            || !ft_strcmp(args[i], ">>") || !ft_strcmp(args[i], "<<"))
-        {
-            i++;
-            if (args[i])
-                i++;
-            continue;
-        }
-        (*tokens)[j] = ft_strdup(args[i]);
-        if (!(*tokens)[j])
-            handle_error(MALLOCERROR, shell);
-        j++;
-        i++;
-    }
 	(*tokens)[j] = NULL;
 }
