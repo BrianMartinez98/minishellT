@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:42:40 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:54:13 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	int				exit;
 	int				builtin;
 	int				eof;
+	int				status;
 	int				last_status;
 	char			*line;
 	char			*line2;
@@ -146,6 +147,10 @@ void	error_custom(t_shell *shell, int err_code,
 			char *err_msg, char *err_key);
 int		ft_error(const char *msg);
 void	handle_error(t_errorlst error, t_shell *shell);
+
+//srcs/execute_utils.c
+void	ft_wait_children(t_shell *shell, pid_t *pids, int n);
+void	restore_stdio(t_shell *shell);
 
 //srcs/execute.c
 void	ft_execute_pipes(t_shell *shell);

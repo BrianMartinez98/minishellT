@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/07 17:32:38 by jarregui         ###   ########.fr        #
+#    Updated: 2025/11/07 18:14:48 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS 	= builtins/echo.c \
 		builtins/cd.c \
 		srcs/errors.c \
 		srcs/execute_builtin.c \
+		srcs/execute_utils.c \
 		srcs/execute.c \
 		srcs/main.c \
 		srcs/readline.c \

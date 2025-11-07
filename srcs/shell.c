@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 13:56:24 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:35:54 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->cwd = NULL;
 	shell->prompt = NULL;
 	shell->hist = NULL;
+	shell->status = 0;
 	shell->last_status = 0;
 	shell->exit = 0;
 	shell->builtin = 0;

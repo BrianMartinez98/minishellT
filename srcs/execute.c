@@ -163,7 +163,6 @@ void	ft_execute_pipes(t_shell *shell)
 	int		i;
 	int		n;
 	int		has_next;
-	int		status = 0;
 	pid_t	pids[256] = {0};
 	int		in_fd = -1;
 
@@ -214,30 +213,7 @@ void	ft_execute_pipes(t_shell *shell)
 		close(in_fd);
 		in_fd = -1;
 	}
-	for (int j = 0; j < n; j++)
-	{
-		if (waitpid(pids[j], &status, 0) == -1)
-			perror("waitpid");
-	}
-	/* Restaurar correctamente stdin/stdout del shell */
-	if (shell->stdin_save != STDIN_FILENO)
-	{
-		dup2(shell->stdin_save, STDIN_FILENO);
-		close(shell->stdin_save);
-		shell->stdin_save = STDIN_FILENO;
-	}
-	if (shell->stdout_save != STDOUT_FILENO)
-	{
-		dup2(shell->stdout_save, STDOUT_FILENO);
-		close(shell->stdout_save);
-		shell->stdout_save = STDOUT_FILENO;
-	}
-	if (!shell->builtin)
-	{
-		if (WIFEXITED(status))
-			shell->last_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			shell->last_status = 128 + WTERMSIG(status);
-	}
-	shell->builtin = 0;
+
+	ft_wait_children(shell, pids, n);
+	restore_stdio(shell);
 }

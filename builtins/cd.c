@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:46:54 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:16:12 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:20:10 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	change_path(char **tokens, t_shell *shell)
 	else
 		path = tokens[1];
 	if (chdir(path) != 0)
-		return (error_custom(shell, 1, "cd", NULL));
+	{
+		error_custom(shell, 1, "cd: no such file or directory:", tokens[1]);
+		return ;
+	}
 	free(shell->cwd);
 	shell->cwd = getcwd(NULL, 0);
 	if (!shell->cwd)
