@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 12:42:53 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 14:19:35 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:41:58 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	return (res);
 }
 
-//CUSTOM ERROR FUNCTION
 void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
 {
 	char	*err;
@@ -49,7 +48,6 @@ void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
 		exit(err_code);
 }
 
-//SYSTEM ERROR FUNCTION
 static void	print_errors(t_errorlst error, char *error_msg[])
 {
 	write(2, "ERROR: ", 7);
@@ -61,12 +59,19 @@ static void	print_errors(t_errorlst error, char *error_msg[])
 		write(STDERR, "Unknown error\n", 14);
 }
 
+int	ft_error(const char *msg)
+{
+	if (msg)
+		handle_error(MSG, NULL);
+	return (1);
+}
+
 void	handle_error(t_errorlst error, t_shell *shell)
 {
 	char	*error_msg[42];
 
-	printf("Hubo un error");
-
+	if (DEBUG)
+		printf(COL_MAGENTA "Error gestionado por handle_error\n" COL_RESET);
 	error_msg[PIPES] = "Error en el pipe!\n";
 	error_msg[MALLOCERROR] = "Error Malloc!\n";
 	error_msg[FD] = "Fallo en el fd!\n";

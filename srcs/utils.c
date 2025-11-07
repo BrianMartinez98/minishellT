@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:49 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/06 23:00:26 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:48:08 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,48 +30,17 @@ void	ft_build_prompt(t_shell *shell)
 	free(tmp);
 }
 
-int	ft_error(const char *msg)
-{
-	if (msg)
-		handle_error(MSG, NULL);
-	return (1);
-}
-
 int	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n'
 		|| c == '\v' || c == '\f' || c == '\r');
 }
 
-void	filter_args(char **args, char ***tokens, t_shell *shell)
+static void	copy_non_redirs(char **args, char ***tokens, t_shell *shell)
 {
 	int	i;
 	int	j;
-	int	count;
 
-	if (!args || !tokens)
-		return ;
-	/* contar cuántos tokens "reales" (sin operadores ni sus targets) */
-	count = 0;
-	i = 0;
-	while (args[i])
-	{
-		if (is_redir_token(args[i]))
-		{
-			/* skip operator and its target if present */
-			i++;
-			if (args[i])
-				i++;
-			continue;
-		}
-		count++;
-		i++;
-	}
-	/* reservar espacio */
-	*tokens = malloc(sizeof(char *) * (count + 1));
-	if (!*tokens)
-		handle_error(MALLOCERROR, shell);
-	/* rellenar */
 	i = 0;
 	j = 0;
 	while (args[i])
@@ -81,13 +50,46 @@ void	filter_args(char **args, char ***tokens, t_shell *shell)
 			i++;
 			if (args[i])
 				i++;
-			continue;
+			continue ;
 		}
-		(*tokens)[j] = ft_strdup(args[i]);
-		if (!(*tokens)[j])
+		(*tokens)[j++] = ft_strdup(args[i++]);
+		if (!(*tokens)[j - 1])
 			handle_error(MALLOCERROR, shell);
-		j++;
-		i++;
 	}
 	(*tokens)[j] = NULL;
+}
+
+static int	count_non_redirs(char **args)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (args[i])
+	{
+		if (is_redir_token(args[i]))
+		{
+			i++;
+			if (args[i])
+				i++;
+			continue ;
+		}
+		count++;
+		i++;
+	}
+	return (count);
+}
+
+void	filter_args(char **args, char ***tokens, t_shell *shell)
+{
+	int	count;
+
+	if (!args || !tokens)
+		return ;
+	count = count_non_redirs(args);
+	*tokens = malloc(sizeof(char *) * (count + 1));
+	if (!*tokens)
+		handle_error(MALLOCERROR, shell);
+	copy_non_redirs(args, tokens, shell);
 }

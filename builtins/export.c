@@ -6,16 +6,11 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/03 13:47:23 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:06:51 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static int	is_valid_start(char c)
-{
-	return (ft_isalpha(c) || c == '_');
-}
 
 int	is_valid_key(const char *key)
 {
@@ -105,7 +100,7 @@ void	ft_export(char **tokens, t_shell *shell)
 			key = ft_substr(tokens[i], 0, equal - tokens[i]);
 		else
 			key = ft_strdup(tokens[i]);
-		if (!is_valid_start(key[0]))
+		if (!(ft_isalpha(key[0]) || key[0] == '_'))
 			error_custom(shell, 1, "export: not a valid identifier", key);
 		else if (!is_valid_key(key))
 			error_custom(shell, 1, "export: not valid in this context:", key);

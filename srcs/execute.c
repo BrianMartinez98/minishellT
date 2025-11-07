@@ -83,7 +83,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 	free_paths(paths);
 
 	if (DEBUG)
-		printf(COL_MAGENTA "\nDEBUG execve:\npathname = %s\n" COL_RESET, pathname);
+		printf(COL_MAGENTA "\npathname = %s\n" COL_RESET, pathname);
 
 	if (!pathname && !is_builtin(tokens))
 		error_custom(shell, 127, "minishell: command not found:", tokens[0]);

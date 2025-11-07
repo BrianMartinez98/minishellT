@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/07 17:03:58 by jarregui          #+#    #+#             */
+/*   Updated: 2025/11/07 17:03:59 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	ft_strisnum(const char *str)
@@ -21,12 +33,8 @@ int	ft_strisnum(const char *str)
 void	ft_exit(t_shell *shell, char **cmd)
 {
 	shell->exit = 1;
-	// ft_putstr_fd("exit ", STDERR);
 	if (cmd[1] && cmd[2])
-	{
-		shell->last_status = 1;
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR);
-	}
+		error_custom(shell, 1, "exit: too many arguments", NULL);
 	else if (cmd[1] && ft_strisnum(cmd[1]) == 0)
 	{
 		shell->last_status = 2;

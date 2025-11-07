@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_redirect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 13:28:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/03 13:38:52 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:37:18 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,14 @@ int	ft_leftleft(t_shell *shell, char **cmd, int i)
 	return (0);
 }
 
-int is_redir_token(const char *t)
+int	is_redir_token(const char *t)
 {
-    if (!t) return 0;
-    return (strcmp(t, "<") == 0
-         || strcmp(t, ">") == 0
-         || strcmp(t, "<<") == 0
-         || strcmp(t, ">>") == 0
-         || strcmp(t, "2>") == 0
-         || strcmp(t, "|") == 0);
+	if (!t)
+		return (0);
+	return (strcmp(t, "<") == 0
+		|| strcmp(t, ">") == 0
+		|| strcmp(t, "<<") == 0
+		|| strcmp(t, ">>") == 0
+		|| strcmp(t, "2>") == 0
+		|| strcmp(t, "|") == 0);
 }

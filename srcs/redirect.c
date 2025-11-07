@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/03 00:42:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:52:35 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,34 @@ int	handle_redirections(char **cmd, t_shell *shell)
 			shell->last_status = 1;
 			exit(shell->last_status);
 		}
-			
 		i++;
 	}
 	return (value);
 }
 
-int check_heredoc(char **cmd, t_shell *shell)
+int	check_heredoc(char **cmd, t_shell *shell)
 {
-    int i = 0;
-    int value = 0;
+	int	i;
+	int	value;
 
-    while (cmd[i])
-    {
-        if (strcmp(cmd[i], "<<") == 0)
-        {
-            if (!cmd[i + 1] || cmd[i + 1][0] == '\0' || is_redir_token(cmd[i + 1]))
-            {
-				ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", STDERR);
-                return (-1);
-            }
-            value = ft_leftleft(shell, cmd, i + 1);
-        }
-        i++;
-    }
-    return (value);
+	i = 0;
+	value = 0;
+	while (cmd[i])
+	{
+		if (strcmp(cmd[i], "<<") == 0)
+		{
+			if (!cmd[i + 1] || cmd[i + 1][0] == '\0' ||
+					is_redir_token(cmd[i + 1]))
+			{
+				ft_putendl_fd("syntax error near unexpected", STDERR);
+				ft_putendl_fd(" token `newline'\n", STDERR);
+				return (-1);
+			}
+			value = ft_leftleft(shell, cmd, i + 1);
+		}
+		i++;
+	}
+	return (value);
 }
 
 void	restore_std(t_shell *shell)

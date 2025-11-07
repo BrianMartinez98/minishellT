@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:08:35 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 13:01:13 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:34:16 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	closed_quotes(char *line, int i)
 	return (i);
 }
 
-
 size_t	remove_quotes(char **cmd, t_span span)
 {
 	char	*value;
@@ -59,4 +58,3 @@ size_t	remove_quotes(char **cmd, t_span span)
 	*cmd = new_cmd;
 	return (span.end - 1);
 }
-

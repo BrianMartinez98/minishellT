@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 15:05:23 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:42:40 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ int		ft_execute_builtin(char **tokens, t_shell *shell);
 //srcs/errors.c
 void	error_custom(t_shell *shell, int err_code,
 			char *err_msg, char *err_key);
+int		ft_error(const char *msg);
 void	handle_error(t_errorlst error, t_shell *shell);
 
 //srcs/execute.c
@@ -192,11 +193,13 @@ size_t	remove_quotes(char **cmd, t_span span);
 //srcs/tokens_remove.c
 void	remove_initial_empty_cmds(t_shell *shell);
 
+//srcs/tokens_span.c
+int		ft_next_span(char *s, size_t *i, t_span *sp);
+
 //srcs/tokens_utils.c
 int		count_pipes(t_shell *shell);
 char	*copy_token(char *line, t_span sp);
 void	add_token(char **cmds, int *token_idx, char *line, t_span sp);
-int		ft_next_span(char *s, size_t *i, t_span *sp);
 size_t	alloc_tokens(char **cmds, char *line);
 
 //srcs/tokens.c
@@ -217,7 +220,6 @@ int		is_redir_token(const char *t);
 
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);
-int		ft_error(const char *msg);
 int		ft_isspace(char c);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
 

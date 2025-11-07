@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juancho <juancho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 12:34:50 by jarregui          #+#    #+#             */
-/*   Updated: 2023/12/14 12:23:51 by juancho          ###   ########.fr       */
+/*   Updated: 2025/11/07 16:55:08 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
 char	*ft_strdup(const char *s1)
-{	
+{
 	char	*s2;
 	size_t	size;
 

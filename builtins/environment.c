@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 13:53:45 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:20:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,7 @@ int	append_env(t_shell *shell, const char *entry)
 	}
 	new_vars[count] = ft_strdup(entry);
 	if (!new_vars[count])
-	{
-		free(new_vars);
-		return (ft_error("Malloc failed for append_env"));
-	}
+		return (free(new_vars), ft_error("Malloc failed for append_env"));
 	new_vars[count + 1] = NULL;
 	free(shell->env);
 	shell->env = new_vars;
