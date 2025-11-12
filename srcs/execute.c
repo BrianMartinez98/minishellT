@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 15:14:59 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:56:24 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@ static void	close_fds_except(int keep1, int keep2, int keep3)
 	long	max_fd;
 	int		fd;
 
-	max_fd = sysconf(_SC_OPEN_MAX);
-	if (max_fd == -1)
-		max_fd = 1024;
-	for (fd = 3; fd < (int)max_fd; fd++)
+	fd = 3;
+	max_fd = 1024;
+	while (fd < (int)max_fd)
 	{
-		if (fd == keep1 || fd == keep2 || fd == keep3)
-			continue;
-		close(fd);
+		if (fd != keep1 && fd != keep2 && fd != keep3)
+			close(fd);
+		fd++;
 	}
 }
 
