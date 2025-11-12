@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_expand.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 22:30:31 by jarregui          #+#    #+#             */
-/*   Updated: 2025/10/31 10:22:11 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 13:59:59 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*get_env_value(t_shell *shell, const char *key)
+char	*get_env_value(t_shell *shell, const char *key)
 {
 	char	*value;
 

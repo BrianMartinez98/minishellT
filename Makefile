@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
+#    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/07 18:14:48 by jarregui         ###   ########.fr        #
+#    Updated: 2025/11/12 15:14:41 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ include libs/colors.mk
 # VARIABLES DECLARATION:
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-DEBUG_FLAGS = -g -DDEBUG=1
+# DEBUG_FLAGS = -g -DDEBUG=1
+DEBUG_FLAGS = -g
 SANITIZE_FLAGS = -g3 -fsanitize=address
 VALGRIND_FLAGS = -g
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
@@ -43,9 +44,12 @@ SRCS 	= builtins/echo.c \
 		srcs/execute_builtin.c \
 		srcs/execute_utils.c \
 		srcs/execute.c \
-		srcs/process_heredoc.c \
 		srcs/main.c \
 		srcs/readline.c \
+		srcs/redirect_expand.c \
+		srcs/redirect_helpers.c \
+		srcs/redirect_heredoc.c \
+		srcs/redirect_utils.c \
 		srcs/redirect.c \
 		srcs/shell_exit.c \
 		srcs/shell.c \
@@ -59,7 +63,6 @@ SRCS 	= builtins/echo.c \
 		srcs/tokens_utils.c \
 		srcs/tokens.c \
 		srcs/utils_pipex.c \
-		srcs/utils_redirect.c \
 		srcs/utils.c \
 		
 SRCS_BONUS 	= srcs/shell_bonus.c

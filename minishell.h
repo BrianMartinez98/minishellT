@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 18:54:13 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:33:44 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,20 +156,30 @@ void	restore_stdio(t_shell *shell);
 //srcs/execute.c
 void	ft_execute_pipes(t_shell *shell);
 
-
-/*
-//srcs/process_heredoc
-int		process_heredoc_line(char *delimiter, int pipe_write_fd);
-int		fill_heredoc_pipe(char *delimiter, int write_fd);
-void	heredoc_child(char *delimiter, int *pipe_fds);
-int		heredoc_parent(int *heredoc_fd, t_shell *shell, int *pipe_fds, pid_t pid);
-int		handle_single_heredoc(int *heredoc_fd, char *delimiter, t_shell *shell);
-void	print_heredoc_warning(char *delimiter);
-int		process_heredocs(t_shell *shell);*/
-
 //srcs/readline.c
 void	ft_readline(t_shell *shell);
 void	ft_free_line(t_shell *shell);
+
+//srcs/redirect_expand.c
+char	*expand_heredoc_line(const char *line, t_shell *sh);
+int		remove_quotes_and_check_expand(char **delimiter);
+
+//srcs/redirect_helpers.c
+char	*expand_heredoc_line(const char *line, t_shell *sh);
+
+//srcs/redirect_helpers.c
+char	*ft_strjoin_free(char *s1, char *s2, int free_flag);
+char	*ft_strjoin_char(char *s, char c);
+int		ft_redirect(t_shell *shell, char **cmd, int i);
+int		ft_adding(t_shell *shell, char **cmd, int i);
+int		is_redir_token(const char *t);
+
+//srcs/redirect_heredoc.c
+void	heredoc_child(t_shell *shell, int *pipefd, char *delimiter, int expand);
+
+//srcs/redirect_utils.c
+int		ft_left(t_shell *shell, char **cmd, int i);
+int		ft_leftleft(t_shell *shell, char **cmd, int i);
 
 //srcs/redirect.c
 int		handle_redirections(char **cmd, t_shell *shell);
@@ -195,6 +205,7 @@ void	ft_setup_signals_prompt(void);
 void	ft_setup_signals_child(void);
 
 //srcs/tokens_expand.c
+char	*get_env_value(t_shell *shell, const char *key);
 size_t	expand_var(t_shell *shell, char **cmd, t_span span);
 
 //srcs/tokens_parse.c
@@ -227,13 +238,6 @@ int		is_path_like(const char *cmd);
 void	free_paths(char **paths);
 char	*command_finder(char **command, char **paths);
 char	**paths_finder(char **env);
-
-//srcs/util_redirects.c
-int		ft_redirect(t_shell *shell, char **cmd, int i);
-int		ft_adding(t_shell *shell, char **cmd, int i);
-int		ft_left(t_shell *shell, char **cmd, int i);
-int		ft_leftleft(t_shell *shell, char **cmd, int i);
-int		is_redir_token(const char *t);
 
 //srcs/utils.c
 void	ft_build_prompt(t_shell *shell);

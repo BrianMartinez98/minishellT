@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:51:04 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:52:35 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 13:52:13 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	handle_redirections(char **cmd, t_shell *shell)
 	return (value);
 }
 
-/* ──────────────────────────────────────────────── */
-/* check_heredoc detecta tokens << y ejecuta el heredoc */
 int	check_heredoc(char **cmd, t_shell *shell)
 {
 	int	i;
@@ -64,15 +62,18 @@ int	check_heredoc(char **cmd, t_shell *shell)
 	{
 		if (ft_strcmp(cmd[i], "<<") == 0)
 		{
-			if (!cmd[i + 1] || cmd[i + 1][0] == '\0' || is_redir_token(cmd[i + 1]))
+			if (!cmd[i + 1] || cmd[i + 1][0] == '\0'
+					|| is_redir_token(cmd[i + 1]))
 			{
-				ft_putendl_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO);
+				ft_putendl_fd(
+					"minishell: syntax error near unexpected token `newline'",
+					STDERR_FILENO);
 				return (-1);
 			}
 			fd = ft_leftleft(shell, cmd, i);
 			if (fd == -1)
 				return (-1);
-			shell->heredoc_fd = fd; // guarda el fd de lectura
+			shell->heredoc_fd = fd;
 		}
 		i++;
 	}
