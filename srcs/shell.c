@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 18:35:54 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:29:44 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->len = 0;
 	shell->cmds = NULL;
 	shell->nread = 0;
+	shell->i = 0;
+	shell->n = 0;
 	ft_get_shell_address(shell);
 	ft_disable_echoctl(shell);
 }

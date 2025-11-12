@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_pipes.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/12 17:19:59 by jarregui          #+#    #+#             */
+/*   Updated: 2025/11/12 17:50:34 by jarregui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static void	cleanup_fds(int has_next, int pipefd[2], int in_fd)
@@ -28,49 +40,63 @@ static void	update_fds(int has_next, int pipefd[2], int *in_fd_ptr)
 	}
 }
 
-static int	execute_single_pipe(t_shell *shell, char **cmd, int index, int *in_fd_ptr,
-							pid_t *pids, int n)
+static void	init_fd(t_fd *fd, int *in_fd_ptr, int has_next, int pipefd[2])
+{
+	if (has_next)
+		fd->out = pipefd[1];
+	else
+		fd->out = -1;
+	fd->in = *in_fd_ptr;
+}
+
+static int	execute_single_pipe(t_shell *shell, int *in_fd_ptr, pid_t *pids)
 {
 	int		pipefd[2];
-	int		has_next = (shell->cmds[index + 1] != NULL);
+	int		has_next;
 	char	**tokens;
-	int		out_fd;
+	t_fd	fd;
 	pid_t	pid;
 
+	has_next = (shell->cmds[shell->i + 1] != NULL);
 	if (has_next && pipe(pipefd) == -1)
 		handle_error(PIPES, shell);
-	if (check_heredoc(cmd, shell) == -1)
+	if (check_heredoc(shell->cmds[shell->i], shell) == -1)
 	{
 		cleanup_fds(has_next, pipefd, *in_fd_ptr);
-		return (n);
+		return (shell->n);
 	}
-	filter_args(cmd, &tokens, shell);
-	if (has_next)
-		out_fd = pipefd[1];
-	else
-		out_fd = -1;
-	pid = execute_command(shell, cmd, tokens, has_next, *in_fd_ptr, out_fd);
+	filter_args(shell->cmds[shell->i], &tokens, shell);
+	init_fd(&fd, in_fd_ptr, has_next, pipefd);
+	pid = execute_command(shell, tokens, has_next, fd);
 	if (pid > 0)
-		pids[n++] = pid;
+		pids[shell->n++] = pid;
 	ft_free_array(&tokens);
 	update_fds(has_next, pipefd, in_fd_ptr);
-	return (n);
+	return (shell->n);
 }
 
 void	ft_execute_pipes(t_shell *shell)
 {
-	int		in_fd = -1;
-	pid_t	pids[256] = {0};
-	int		n = 0;
-	int		i = 0;
+	int		in_fd;
+	pid_t	pids[256];
+	int		i;
 
-	while (shell->cmds[i])
+	i = 0;
+	while (i < 256)
 	{
-		n = execute_single_pipe(shell, shell->cmds[i], i, &in_fd, pids, n);
+		pids[i] = 0;
 		i++;
+	}
+	in_fd = -1;
+	shell->i = 0;
+	shell->n = 0;
+	while (shell->cmds[shell->i])
+	{
+		shell->n = execute_single_pipe(shell, &in_fd, pids);
+		shell->i++;
 	}
 	if (in_fd != -1)
 		close(in_fd);
-	ft_wait_children(shell, pids, n);
+	ft_wait_children(shell, pids);
 	restore_stdio(shell);
 }

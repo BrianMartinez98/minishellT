@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 15:56:24 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:25:32 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,34 @@ static void	close_fds_except(int keep1, int keep2, int keep3)
 	}
 }
 
-void	redirection_fail(int in_fd, int out_fd)
+static void	redirection_fail(t_fd fd)
 {
-	if (in_fd != -1 && in_fd != STDIN_FILENO)
+	if (fd.in != -1 && fd.in != STDIN_FILENO)
 	{
-		if (dup2(in_fd, STDIN_FILENO) == -1)
+		if (dup2(fd.in, STDIN_FILENO) == -1)
 		{
-			close(in_fd);
+			close(fd.in);
 			perror("dup2 in_fd");
 			exit(1);
 		}
 	}
-	if (out_fd != -1 && out_fd != STDOUT_FILENO)
+	if (fd.out != -1 && fd.out != STDOUT_FILENO)
 	{
-		if (dup2(out_fd, STDOUT_FILENO) == -1)
+		if (dup2(fd.out, STDOUT_FILENO) == -1)
 		{
-			close(out_fd);
+			close(fd.out);
 			perror("dup2 out_fd");
 			exit(1);
 		}
 	}
 }
 
-static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int out_fd)
+static void	pid_child(char **tokens, char **cmd, t_shell *shell, t_fd fd)
 {
 	char	*pathname;
 
 	ft_setup_signals_child();
-	redirection_fail(in_fd, out_fd);
+	redirection_fail(fd);
 	if (shell->heredoc_fd != -1)
 	{
 		dup2(shell->heredoc_fd, STDIN_FILENO);
@@ -77,7 +77,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 }
 
 static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell,
-	int in_fd, int out_fd)
+	t_fd fd)
 {
 	pid_t	pid;
 
@@ -90,14 +90,14 @@ static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell,
 	if (pid == 0)
 	{
 		shell->is_child = 1;
-		pid_child(tokens, cmd, shell, in_fd, out_fd);
+		pid_child(tokens, cmd, shell, fd);
 	}
 	else
 		shell->is_child = 0;
 	return (pid);
 }
 
-pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, int in_fd, int out_fd)
+pid_t	execute_command(t_shell *shell, char **tokens, int has_next, t_fd fd)
 {
 	int		saved_stdin;
 	int		saved_stdout;
@@ -105,7 +105,7 @@ pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, i
 
 	if (!tokens || !tokens[0])
 		return (-2);
-	if (is_builtin(tokens) && !has_next && in_fd == -1)
+	if (is_builtin(tokens) && !has_next && fd.in == -1)
 	{
 		shell->builtin = 1;
 		saved_stdin = dup(STDIN_FILENO);
@@ -114,7 +114,7 @@ pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, i
 			return (error_check(saved_stdin, saved_stdout));
 		dup2(STDIN_FILENO, shell->stdin_save);
 		dup2(STDOUT_FILENO, shell->stdout_save);
-		handle_redirections(cmd, shell);
+		handle_redirections(shell->cmds[shell->i], shell);
 		ft_execute_builtin(tokens, shell);
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
@@ -122,6 +122,6 @@ pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, i
 		return (-2);
 	}
 	else
-		pid = fork_and_exec(tokens, cmd, shell, in_fd, out_fd);
+		pid = fork_and_exec(tokens, shell->cmds[shell->i], shell, fd);
 	return (pid);
 }

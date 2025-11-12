@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 18:41:31 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 18:55:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:31:35 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ static void	handle_sig(t_shell *shell, char *msg, int status)
 	shell->last_status = status;
 }
 
-void	ft_wait_children(t_shell *shell, pid_t *pids, int n)
+void	ft_wait_children(t_shell *shell, pid_t *pids)
 {
 	int	j;
 	int	sig;
 
 	j = 0;
 	shell->status = 0;
-	while (j < n)
+	while (j < shell->n)
 	{
 		if (waitpid(pids[j], &shell->status, 0) == -1)
 			perror("waitpid");

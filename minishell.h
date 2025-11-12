@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 15:33:44 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:31:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ typedef struct s_span
 	size_t			end;
 }	t_span;
 
+typedef struct s_fd
+{
+	int				in;
+	int				out;
+}	t_fd;
+
 typedef enum e_errorlst //para los errores que pueden surgir
 {
 	PIPES,
@@ -109,6 +115,8 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	ssize_t			nread;
 	char			***cmds;
 	int				heredoc_fd;
+	int				i;
+	int				n;
 }	t_shell;
 
 //builtins/cd.c
@@ -153,13 +161,13 @@ void	handle_error(t_errorlst error, t_shell *shell);
 void	ft_execute_pipes(t_shell *shell);
 
 //srcs/execute_utils.c
-void	ft_wait_children(t_shell *shell, pid_t *pids, int n);
+void	ft_wait_children(t_shell *shell, pid_t *pids);
 void	restore_stdio(t_shell *shell);
 int		error_check(int saved_stdin, int saved_stdout);
 void	close_saved_fd(int saved_stdin, int saved_stdout);
 
 //srcs/execute.c
-pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, int in_fd, int out_fd);
+pid_t	execute_command(t_shell *shell, char **tokens, int has_next, t_fd fd);
 
 //srcs/readline.c
 void	ft_readline(t_shell *shell);
