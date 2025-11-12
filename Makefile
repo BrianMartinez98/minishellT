@@ -42,6 +42,7 @@ SRCS 	= builtins/echo.c \
 		builtins/cd.c \
 		srcs/errors.c \
 		srcs/execute_builtin.c \
+		srcs/execute_pipes.c \
 		srcs/execute_utils.c \
 		srcs/execute.c \
 		srcs/main.c \
@@ -62,6 +63,7 @@ SRCS 	= builtins/echo.c \
 		srcs/tokens_span.c \
 		srcs/tokens_utils.c \
 		srcs/tokens.c \
+		srcs/utils_path.c \
 		srcs/utils_pipex.c \
 		srcs/utils.c \
 		

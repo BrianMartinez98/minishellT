@@ -66,3 +66,19 @@ void	restore_stdio(t_shell *shell)
 	}
 	shell->builtin = 0;
 }
+
+int	error_check(int saved_stdin, int saved_stdout)
+{
+	perror("dup");
+	if (saved_stdin != -1)
+		close(saved_stdin);
+	if (saved_stdout != -1)
+		close(saved_stdout);
+	return (-1);
+}
+
+void	close_saved_fd(int saved_stdin, int saved_stdout)
+{
+	close(saved_stdin);
+	close(saved_stdout);
+}

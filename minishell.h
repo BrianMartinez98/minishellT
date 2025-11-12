@@ -149,12 +149,17 @@ void	error_custom(t_shell *shell, int err_code,
 int		ft_error(const char *msg);
 void	handle_error(t_errorlst error, t_shell *shell);
 
+//srcs/execute_pipes.c
+void	ft_execute_pipes(t_shell *shell);
+
 //srcs/execute_utils.c
 void	ft_wait_children(t_shell *shell, pid_t *pids, int n);
 void	restore_stdio(t_shell *shell);
+int		error_check(int saved_stdin, int saved_stdout);
+void	close_saved_fd(int saved_stdin, int saved_stdout);
 
 //srcs/execute.c
-void	ft_execute_pipes(t_shell *shell);
+pid_t	execute_command(t_shell *shell, char **cmd, char **tokens, int has_next, int in_fd, int out_fd);
 
 //srcs/readline.c
 void	ft_readline(t_shell *shell);
@@ -243,5 +248,8 @@ char	**paths_finder(char **env);
 void	ft_build_prompt(t_shell *shell);
 int		ft_isspace(char c);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
+
+//srcs/utils.c
+char	*ft_execve_prep(char **tokens, t_shell *shell);
 
 #endif
