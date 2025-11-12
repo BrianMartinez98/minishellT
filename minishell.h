@@ -108,6 +108,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 	size_t			len;
 	ssize_t			nread;
 	char			***cmds;
+	int				heredoc_fd;
 }	t_shell;
 
 //builtins/cd.c
@@ -154,6 +155,17 @@ void	restore_stdio(t_shell *shell);
 
 //srcs/execute.c
 void	ft_execute_pipes(t_shell *shell);
+
+
+/*
+//srcs/process_heredoc
+int		process_heredoc_line(char *delimiter, int pipe_write_fd);
+int		fill_heredoc_pipe(char *delimiter, int write_fd);
+void	heredoc_child(char *delimiter, int *pipe_fds);
+int		heredoc_parent(int *heredoc_fd, t_shell *shell, int *pipe_fds, pid_t pid);
+int		handle_single_heredoc(int *heredoc_fd, char *delimiter, t_shell *shell);
+void	print_heredoc_warning(char *delimiter);
+int		process_heredocs(t_shell *shell);*/
 
 //srcs/readline.c
 void	ft_readline(t_shell *shell);

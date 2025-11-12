@@ -43,6 +43,7 @@ SRCS 	= builtins/echo.c \
 		srcs/execute_builtin.c \
 		srcs/execute_utils.c \
 		srcs/execute.c \
+		srcs/process_heredoc.c \
 		srcs/main.c \
 		srcs/readline.c \
 		srcs/redirect.c \

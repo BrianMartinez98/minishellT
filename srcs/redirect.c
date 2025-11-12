@@ -51,29 +51,32 @@ int	handle_redirections(char **cmd, t_shell *shell)
 	return (value);
 }
 
+/* ──────────────────────────────────────────────── */
+/* check_heredoc detecta tokens << y ejecuta el heredoc */
 int	check_heredoc(char **cmd, t_shell *shell)
 {
 	int	i;
-	int	value;
+	int	fd;
 
 	i = 0;
-	value = 0;
+	fd = -1;
 	while (cmd[i])
 	{
-		if (strcmp(cmd[i], "<<") == 0)
+		if (ft_strcmp(cmd[i], "<<") == 0)
 		{
-			if (!cmd[i + 1] || cmd[i + 1][0] == '\0' ||
-					is_redir_token(cmd[i + 1]))
+			if (!cmd[i + 1] || cmd[i + 1][0] == '\0' || is_redir_token(cmd[i + 1]))
 			{
-				ft_putendl_fd("syntax error near unexpected", STDERR);
-				ft_putendl_fd(" token `newline'\n", STDERR);
+				ft_putendl_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO);
 				return (-1);
 			}
-			value = ft_leftleft(shell, cmd, i + 1);
+			fd = ft_leftleft(shell, cmd, i);
+			if (fd == -1)
+				return (-1);
+			shell->heredoc_fd = fd; // guarda el fd de lectura
 		}
 		i++;
 	}
-	return (value);
+	return (0);
 }
 
 void	restore_std(t_shell *shell)

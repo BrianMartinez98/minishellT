@@ -23,28 +23,6 @@ static void	init_cmds(t_shell *shell)
 		handle_error(MALLOCERROR, shell);
 }
 
-void	fix_heredoc_no_command(char **cmd_tokens, t_shell *shell)
-{
-	int	i;
-
-	if (!cmd_tokens)
-		return ;
-	if (cmd_tokens[0] && ft_strcmp(cmd_tokens[0], "<<") == 0)
-	{
-		i = 0;
-		while (cmd_tokens[i])
-			i++;
-		while (i > 0)
-		{
-			cmd_tokens[i] = cmd_tokens[i - 1];
-			i--;
-		}
-		cmd_tokens[0] = ft_strdup("cat");
-		if (!cmd_tokens[0])
-			handle_error(MALLOCERROR, shell);
-	}
-}
-
 static void	fill_cmds(t_shell *shell)
 {
 	size_t	i;
@@ -69,7 +47,6 @@ static void	fill_cmds(t_shell *shell)
 				handle_error(MALLOCERROR, shell);
 		}
 		i += alloc_tokens(shell->cmds[j], &shell->line[i]);
-		fix_heredoc_no_command(shell->cmds[j], shell);
 	}
 	shell->cmds[j + 1] = NULL;
 }

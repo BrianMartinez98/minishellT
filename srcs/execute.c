@@ -69,6 +69,12 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, int in_fd, int 
 		close(in_fd);
 	if (out_fd != -1 && out_fd != STDOUT_FILENO)
 		close(out_fd);
+	if (shell->heredoc_fd != -1)
+	{
+		dup2(shell->heredoc_fd, STDIN_FILENO);
+		close(shell->heredoc_fd);
+		shell->heredoc_fd = -1;
+	}
 	handle_redirections(cmd, shell);
 	close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
 
