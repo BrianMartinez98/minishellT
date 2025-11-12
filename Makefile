@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/12 18:21:52 by jarregui         ###   ########.fr        #
+#    Updated: 2025/11/12 21:24:35 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # SOURCES
 SRCS 	= builtins/echo.c \
+		builtins/environment_init.c \
 		builtins/environment.c \
 		builtins/exit.c \
 		builtins/export.c \

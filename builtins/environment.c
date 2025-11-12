@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:20:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:24:04 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	ft_env_init(t_shell *shell, char **env_array)
-{
-	int		i;
-	int		num_variables;
-
-	i = 0;
-	num_variables = 0;
-	if (!env_array)
-		shell->env = NULL;
-	else
-	{
-		while (env_array[num_variables])
-			num_variables++;
-		shell->env = malloc(sizeof(char *) * (num_variables + 1));
-		if (!shell->env)
-			return (ft_error("Memory allocation failed for env copy"));
-		while (i < num_variables)
-		{
-			shell->env[i] = ft_strdup(env_array[i]);
-			if (!shell->env[i])
-				return (ft_error("Memory allocation failed for env entry"));
-			i++;
-		}
-		shell->env[num_variables] = NULL;
-	}
-	return (num_variables);
-}
 
 void	ft_print_env(t_shell *shell)
 {

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 17:31:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:23:46 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,10 @@ void	change_path(char **tokens, t_shell *shell);
 //builtins/echo.c
 void	ft_echo(char **tokens, t_shell *shell);
 
-//builtins/environment.c
+//builtins/environment_init.c
 int		ft_env_init(t_shell *shell, char **env_array);
+
+//builtins/environment.c
 void	ft_print_env(t_shell *shell);
 char	*ft_getenv(t_shell *shell, const char *key);
 void	ft_free_env(t_shell *shell);
