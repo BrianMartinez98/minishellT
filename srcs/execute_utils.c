@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 18:41:31 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 17:31:35 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 14:40:32 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,30 @@ int	error_check(int saved_stdin, int saved_stdout)
 	return (-1);
 }
 
-void	close_saved_fd(int saved_stdin, int saved_stdout)
+pid_t	fork_and_exec_builtin(char **tokens, t_shell *shell, t_fd fd)
 {
-	close(saved_stdin);
-	close(saved_stdout);
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
+		return (error_custom(shell, 1, "fork error", NULL));
+	if (pid == 0)
+	{
+		shell->is_child = 1;
+		ft_setup_signals_child();
+		redirection_fail(fd);
+		if (shell->heredoc_fd != -1)
+		{
+			dup2(shell->heredoc_fd, STDIN_FILENO);
+			close(shell->heredoc_fd);
+			shell->heredoc_fd = -1;
+		}
+		handle_redirections(shell->cmds[shell->i], shell);
+		close_fds_except(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
+		ft_execute_builtin(tokens, shell);
+		exit(shell->last_status % 256);
+	}
+	else
+		shell->is_child = 0;
+	return (pid);
 }

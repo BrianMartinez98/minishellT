@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 10:11:06 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:09:20 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	close_fds_except(int keep1, int keep2, int keep3)
+void	close_fds_except(int keep1, int keep2, int keep3)
 {
 	long	max_fd;
 	int		fd;
@@ -27,7 +27,7 @@ static void	close_fds_except(int keep1, int keep2, int keep3)
 	}
 }
 
-static void	redirection_fail(t_fd fd)
+void	redirection_fail(t_fd fd)
 {
 	if (fd.in != -1 && fd.in != STDIN_FILENO)
 	{
@@ -99,28 +99,12 @@ static pid_t	fork_and_exec(char **tokens, char **cmd, t_shell *shell,
 
 pid_t	execute_command(t_shell *shell, char **tokens, int has_next, t_fd fd)
 {
-	int		saved_stdin;
-	int		saved_stdout;
 	pid_t	pid;
 
 	if (!tokens || !tokens[0])
 		return (-2);
 	if (is_builtin(tokens) && !has_next && fd.in == -1)
-	{
-		shell->builtin = 1;
-		saved_stdin = dup(STDIN_FILENO);
-		saved_stdout = dup(STDOUT_FILENO);
-		if (saved_stdin == -1 || saved_stdout == -1)
-			return (error_check(saved_stdin, saved_stdout));
-		dup2(STDIN_FILENO, shell->stdin_save);
-		dup2(STDOUT_FILENO, shell->stdout_save);
-		handle_redirections(shell->cmds[shell->i], shell);
-		ft_execute_builtin(tokens, shell);
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close_saved_fd(saved_stdin, saved_stdout);
-		return (-2);
-	}
+		pid = fork_and_exec_builtin(tokens, shell, fd);
 	else
 		pid = fork_and_exec(tokens, shell->cmds[shell->i], shell, fd);
 	return (pid);

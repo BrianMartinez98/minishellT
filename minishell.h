@@ -6,7 +6,7 @@
 /*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 13:40:15 by brimarti         ###   ########.fr       */
+/*   Updated: 2025/11/13 14:43:03 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct s_shell //para los datos que necesitaremos en la minishell
 }	t_shell;
 
 //builtins/cd.c
-void	change_path(char **tokens, t_shell *shell);
+int		change_path(char **tokens, t_shell *shell);
 
 //builtins/echo.c
 void	ft_echo(char **tokens, t_shell *shell);
@@ -158,7 +158,7 @@ int		is_builtin(char **tokens);
 int		ft_execute_builtin(char **tokens, t_shell *shell);
 
 //srcs/errors.c
-void	error_custom(t_shell *shell, int err_code,
+int		error_custom(t_shell *shell, int err_code,
 			char *err_msg, char *err_key);
 int		ft_error(const char *msg);
 void	handle_error(t_errorlst error, t_shell *shell);
@@ -170,9 +170,11 @@ void	ft_execute_pipes(t_shell *shell);
 void	ft_wait_children(t_shell *shell, pid_t *pids);
 void	restore_stdio(t_shell *shell);
 int		error_check(int saved_stdin, int saved_stdout);
-void	close_saved_fd(int saved_stdin, int saved_stdout);
+pid_t	fork_and_exec_builtin(char **tokens, t_shell *shell, t_fd fd);
 
 //srcs/execute.c
+void	close_fds_except(int keep1, int keep2, int keep3);
+void	redirection_fail(t_fd fd);
 pid_t	execute_command(t_shell *shell, char **tokens, int has_next, t_fd fd);
 
 //srcs/readline.c

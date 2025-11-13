@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 12:42:53 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:41:58 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 14:36:24 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	return (res);
 }
 
-void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
+int	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
 {
 	char	*err;
 	char	*temp_err;
@@ -46,6 +46,7 @@ void	error_custom(t_shell *shell, int err_code, char *err_msg, char *err_key)
 	free(err);
 	if (shell->is_child)
 		exit(err_code);
+	return (-1);
 }
 
 static void	print_errors(t_errorlst error, char *error_msg[])

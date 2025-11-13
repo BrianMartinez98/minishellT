@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 13:28:43 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 15:33:28 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:10:02 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 int	ft_left(t_shell *shell, char **cmd, int i)
 {
 	shell->fd = open(cmd[i], O_RDONLY);
+	if (shell->fd == -1)
+	{
+		perror("open");
+		return (-1);
+	}
 	if (shell->fd < 0)
 	{
 		perror(cmd[i]);
