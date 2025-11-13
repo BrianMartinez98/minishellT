@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 21:23:46 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 10:17:39 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,6 @@ int		ft_isspace(char c);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
 
 //srcs/utils.c
-char	*ft_execve_prep(char **tokens, t_shell *shell);
+char	*ft_execve_prep(char ***tkns_ptr, t_shell *shell);
 
 #endif

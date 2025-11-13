@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 17:25:32 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 10:11:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	pid_child(char **tokens, char **cmd, t_shell *shell, t_fd fd)
 		ft_execute_builtin(tokens, shell);
 		exit(shell->last_status % 256);
 	}
-	pathname = ft_execve_prep(tokens, shell);
+	pathname = ft_execve_prep(&tokens, shell);
 	execve(pathname, tokens, shell->env);
 	perror(tokens[0]);
 	if (errno == EACCES)
