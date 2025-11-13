@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
+#    By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/12 21:24:35 by jarregui         ###   ########.fr        #
+#    Updated: 2025/11/13 13:01:28 by brimarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DEBUG_FLAGS = -g -DDEBUG=1
 # DEBUG_FLAGS = -g
 SANITIZE_FLAGS = -g3 -fsanitize=address
 VALGRIND_FLAGS = -g
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
+VALGRIND = valgrind --suppressions=readline.supp --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log
 # VALGRIND = valgrind --leak-check=summary
 PROY_NAME =	MINISHELL
 EXEC_FILE_NAME = minishell
@@ -84,7 +84,7 @@ all: subsystems shell
 subsystems: $(LIBFT_LIB)
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR) CFLAGS="$(CFLAGS)" all
+	@$(MAKE) -C -g $(LIBFT_DIR) CFLAGS="$(CFLAGS)" all
 
 
 # MINISHELL

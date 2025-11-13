@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:30:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 15:04:11 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 13:27:57 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,51 @@ static void	init_cmds(t_shell *shell)
 		handle_error(MALLOCERROR, shell);
 }
 
+static int	syntax_pipe(t_shell *shell, int i)
+{
+	int	index;
+
+	index = i + 1;
+	shell->flag = 0;
+	while (shell->line[index] == ' ')
+		index++;
+	if (shell->line[index] == '|' || shell->line[index] == '\0')
+	{
+		shell->flag = 1;
+		ft_putendl_fd("Minishell: parse error near `|'", 2);
+		shell->last_status = 1;
+		ft_free_array(shell->cmds);
+	}
+	return (shell->flag);
+}
+
 static void	fill_cmds(t_shell *shell)
 {
 	size_t	i;
-	int		j;
 
 	i = 0;
-	j = 0;
+	shell->n = 0;
 	while (shell->line[i])
 	{
 		while (shell->line[i] == ' ')
 			i++;
 		if (shell->line[i] == '|')
 		{
+			if (syntax_pipe(shell, i))
+				return ;
 			i++;
-			j++;
+			shell->n++;
 			continue ;
 		}
-		if (!shell->cmds[j])
+		if (!shell->cmds[shell->n])
 		{
-			shell->cmds[j] = malloc(sizeof(char *) * (MAX_TOKENS + 1));
-			if (!shell->cmds[j])
+			shell->cmds[shell->n] = malloc(sizeof(char *) * (MAX_TOKENS + 1));
+			if (!shell->cmds[shell->n])
 				handle_error(MALLOCERROR, shell);
 		}
-		i += alloc_tokens(shell->cmds[j], &shell->line[i]);
+		i += alloc_tokens(shell->cmds[shell->n], &shell->line[i]);
 	}
-	shell->cmds[j + 1] = NULL;
+	shell->cmds[shell->n + 1] = NULL;
 }
 
 void	split_line(t_shell *shell)

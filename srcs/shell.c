@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:00:40 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/12 17:29:44 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 12:54:13 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ void	ft_restore_term_settings(t_shell *shell)
 	tcsetattr(STDIN_FILENO, TCSANOW, &shell->termios_saved);
 }
 
+static void	extra_init(t_shell *shell)
+{
+	shell->fd = -1;
+	shell->heredoc_fd = -1;
+	shell->is_child = 0;
+	shell->len = 0;
+	shell->cmds = NULL;
+	shell->nread = 0;
+	shell->i = 0;
+	shell->n = 0;
+	shell->flag = 0;
+}
+
 void	ft_init_shell(t_shell *shell, char **env)
 {
 	if (ft_env_init(shell, env) && DEBUG)
@@ -53,13 +66,7 @@ void	ft_init_shell(t_shell *shell, char **env)
 	shell->stdin_save = STDIN_FILENO;
 	shell->stdout_save = STDOUT_FILENO;
 	restore_std(shell);
-	shell->fd = 0;
-	shell->is_child = 0;
-	shell->len = 0;
-	shell->cmds = NULL;
-	shell->nread = 0;
-	shell->i = 0;
-	shell->n = 0;
+	extra_init(shell);
 	ft_get_shell_address(shell);
 	ft_disable_echoctl(shell);
 }
