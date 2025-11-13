@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 17:03:58 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:03:59 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:45:50 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_exit(t_shell *shell, char **cmd)
 		ft_putendl_fd(": numeric argument required", STDERR);
 	}
 	else if (cmd[1])
-		shell->last_status = ft_atoi(cmd[1]);
+		shell->last_status = ft_atoi(cmd[1]) % 256;
 	else
 		shell->last_status = 0;
 }

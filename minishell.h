@@ -6,7 +6,7 @@
 /*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 14:43:03 by brimarti         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:58:07 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ void	ft_unset(char **tokens, t_shell *shell);
 
 //srcs/execute_builtin.c
 int		is_builtin(char **tokens);
+int		is_echo(char **tokens);
 int		ft_execute_builtin(char **tokens, t_shell *shell);
 
 //srcs/errors.c

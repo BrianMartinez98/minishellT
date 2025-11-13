@@ -6,7 +6,7 @@
 /*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:47:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 15:09:20 by brimarti         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:57:40 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,14 @@ pid_t	execute_command(t_shell *shell, char **tokens, int has_next, t_fd fd)
 
 	if (!tokens || !tokens[0])
 		return (-2);
-	if (is_builtin(tokens) && !has_next && fd.in == -1)
+	if (is_echo(tokens) && !has_next && fd.in == -1)
 		pid = fork_and_exec_builtin(tokens, shell, fd);
+	else if (is_builtin(tokens))
+	{
+		handle_redirections(shell->cmds[shell->i], shell);
+		ft_execute_builtin(tokens, shell);
+		pid = -1;
+	}
 	else
 		pid = fork_and_exec(tokens, shell->cmds[shell->i], shell, fd);
 	return (pid);
