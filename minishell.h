@@ -6,7 +6,7 @@
 /*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 10:54:48 by brimarti         ###   ########.fr       */
+/*   Updated: 2025/11/13 13:40:15 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,11 @@ int		append_env(t_shell *shell, const char *entry);
 //builtins/exit.c
 void	ft_exit(t_shell *shell, char **cmd);
 
-//builtins/export.c
+//builtins/export_utils.c
 int		is_valid_key(const char *key);
+int		is_valid_value(char *equal);
+
+//builtins/export.c
 void	ft_export(char **tokens, t_shell *shell);
 
 //builtins/history.c
@@ -261,6 +264,6 @@ int		ft_isspace(char c);
 void	filter_args(char **args, char ***tokens, t_shell *shell);
 
 //srcs/utils.c
-char	*ft_execve_prep(char **tokens, t_shell *shell);
+char	*ft_execve_prep(char ***tkns_ptr, t_shell *shell);
 
 #endif

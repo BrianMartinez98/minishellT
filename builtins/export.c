@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:54:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/07 17:06:51 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 12:16:52 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	is_valid_key(const char *key)
-{
-	int	i;
-
-	i = 0;
-	if (!key || (!ft_isalpha(key[0]) && key[0] != '_'))
-		return (0);
-	while (key[i] && key[i] != '=')
-	{
-		if (!ft_isalnum(key[i]) && key[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static int	find_env_index(char **envp, const char *key)
 {
@@ -61,7 +45,6 @@ void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 	int		index;
 	char	*key;
 	char	*value;
-	char	*new_entry;
 
 	if (!shell || !entry)
 		return ;
@@ -69,7 +52,6 @@ void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 	if (!key)
 		return ;
 	value = ft_strdup(equal + 1);
-	new_entry = NULL;
 	index = find_env_index(shell->env, key);
 	if (index != -1)
 	{
@@ -80,33 +62,42 @@ void	ft_env_set(t_shell *shell, const char *entry, char *equal)
 		append_env(shell, entry);
 	free(value);
 	free(key);
-	free(new_entry);
+}
+
+static void	export_token(t_shell *shell, char *token)
+{
+	char	*equal;
+	char	*key;
+
+	equal = ft_strchr(token, '=');
+	if (equal)
+		key = ft_substr(token, 0, equal - token);
+	else
+		key = ft_strdup(token);
+	if (!(ft_isalpha(key[0]) || key[0] == '_'))
+		error_custom(shell, 1, "export: not a valid identifier", key);
+	else if (!is_valid_key(key))
+		error_custom(shell, 1, "export: not valid in this context:", key);
+	else if (equal && !is_valid_value(equal))
+		error_custom(shell, 2, "syntax error near unexpected token", NULL);
+	else
+		ft_env_set(shell, token, equal);
+	free(key);
 }
 
 void	ft_export(char **tokens, t_shell *shell)
 {
-	char	*equal;
-	int		i;
-	char	*key;
+	int	i;
 
-	i = 1;
+	if (!shell || !tokens)
+		return ;
 	shell->last_status = 0;
-	if (!tokens[i])
+	if (!tokens[1])
 		return (ft_print_env(shell));
+	i = 1;
 	while (tokens[i])
 	{
-		equal = ft_strchr(tokens[i], '=');
-		if (equal)
-			key = ft_substr(tokens[i], 0, equal - tokens[i]);
-		else
-			key = ft_strdup(tokens[i]);
-		if (!(ft_isalpha(key[0]) || key[0] == '_'))
-			error_custom(shell, 1, "export: not a valid identifier", key);
-		else if (!is_valid_key(key))
-			error_custom(shell, 1, "export: not valid in this context:", key);
-		else
-			ft_env_set(shell, tokens[i], equal);
-		free(key);
+		export_token(shell, tokens[i]);
 		i++;
 	}
 }

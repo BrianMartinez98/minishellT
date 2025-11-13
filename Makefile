@@ -6,7 +6,7 @@
 #    By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/13 13:01:28 by brimarti         ###   ########.fr        #
+#    Updated: 2025/11/13 13:38:00 by brimarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS 	= builtins/echo.c \
 		builtins/environment_init.c \
 		builtins/environment.c \
 		builtins/exit.c \
+		builtins/export_utils.c \
 		builtins/export.c \
 		builtins/history.c \
 		builtins/unset.c \
