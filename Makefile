@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/12 21:24:35 by jarregui         ###   ########.fr        #
+#    Updated: 2025/11/13 12:07:44 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS 	= builtins/echo.c \
 		builtins/environment_init.c \
 		builtins/environment.c \
 		builtins/exit.c \
+		builtins/export_utils.c \
 		builtins/export.c \
 		builtins/history.c \
 		builtins/unset.c \

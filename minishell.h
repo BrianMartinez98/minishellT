@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:13:22 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 10:17:39 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/11/13 12:07:20 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,11 @@ int		append_env(t_shell *shell, const char *entry);
 //builtins/exit.c
 void	ft_exit(t_shell *shell, char **cmd);
 
-//builtins/export.c
+//builtins/export_utils.c
 int		is_valid_key(const char *key);
+int		is_valid_value(char *equal);
+
+//builtins/export.c
 void	ft_export(char **tokens, t_shell *shell);
 
 //builtins/history.c
