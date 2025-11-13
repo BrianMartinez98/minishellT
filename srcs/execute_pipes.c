@@ -6,7 +6,7 @@
 /*   By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 17:19:59 by jarregui          #+#    #+#             */
-/*   Updated: 2025/11/13 13:24:42 by brimarti         ###   ########.fr       */
+/*   Updated: 2025/11/13 19:32:13 by brimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ static int	execute_single_pipe(t_shell *shell, int *in_fd_ptr, pid_t *pids)
 	filter_args(shell->cmds[shell->i], &tokens, shell);
 	init_fd(&fd, in_fd_ptr, has_next, pipefd);
 	pid = execute_command(shell, tokens, has_next, fd);
+	if (shell->heredoc_fd != -1)
+	{
+		close(shell->heredoc_fd);
+		shell->heredoc_fd = -1;
+	}
 	if (pid > 0)
 		pids[shell->n++] = pid;
 	ft_free_array(&tokens);
@@ -79,6 +84,9 @@ void	ft_execute_pipes(t_shell *shell)
 {
 	int		in_fd;
 	pid_t	pids[256];
+
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 
 	shell->i = 0;
 	while (shell->i < 256)
@@ -97,5 +105,7 @@ void	ft_execute_pipes(t_shell *shell)
 	if (in_fd != -1)
 		close(in_fd);
 	ft_wait_children(shell, pids);
+	signal(SIGINT, ft_sigint_handler);
+	signal(SIGQUIT, ft_sigquit_handler);
 	restore_stdio(shell);
 }
