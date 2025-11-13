@@ -6,7 +6,7 @@
 #    By: brimarti <brimarti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 18:59:16 by jarregui          #+#    #+#              #
-#    Updated: 2025/11/13 13:38:00 by brimarti         ###   ########.fr        #
+#    Updated: 2025/11/13 13:44:07 by brimarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,7 @@ all: subsystems shell
 subsystems: $(LIBFT_LIB)
 
 $(LIBFT_LIB):
-	@$(MAKE) -C -g $(LIBFT_DIR) CFLAGS="$(CFLAGS)" all
+	@$(MAKE) -C $(LIBFT_DIR) CFLAGS="$(CFLAGS)" all
 
 
 # MINISHELL
